@@ -1,6 +1,7 @@
 // src/app/components/tos-viewer/tos-viewer.ts
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef, HostListener } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, HostListener, Inject, PLATFORM_ID } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { isPlatformBrowser } from '@angular/common';
 import { NlpApiService, NLPAnalysisResponse, ClauseDetection } from '../../services/nlp-api';
 import { TrackingService } from '../../services/tracking';
 
@@ -43,12 +44,16 @@ export class TosViewerComponent implements OnInit, OnDestroy {
 
   constructor(
     private nlpApi: NlpApiService,
-    private tracking: TrackingService
+    private tracking: TrackingService,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
   ngOnInit(): void {
-    this.loadTosDocument();
-    this.initializeTracking();
+    // Only run on browser to avoid SSR issues
+    if (isPlatformBrowser(this.platformId)) {
+      this.loadTosDocument();
+      this.initializeTracking();
+    }
   }
 
   ngOnDestroy(): void {
@@ -133,7 +138,7 @@ If you have any questions about these Terms, please contact us at support@exampl
    * Handle scroll events for tracking
    */
   @HostListener('window:scroll', ['$event'])
-  onScroll(): void {
+  onScroll(event?: Event): void {
     const element = this.tosContainer?.nativeElement;
     if (!element) return;
 
@@ -264,6 +269,16 @@ If you have any questions about these Terms, please contact us at support@exampl
    * Escape HTML to prevent XSS
    */
   private escapeHtml(text: string): string {
+    if (typeof document === 'undefined') {
+      // Server-side rendering fallback
+      return text
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;')
+        .replace(/\n/g, '<br>');
+    }
     const div = document.createElement('div');
     div.textContent = text;
     return div.innerHTML.replace(/\n/g, '<br>');
@@ -316,7 +331,7 @@ If you have any questions about these Terms, please contact us at support@exampl
     });
 
     // Optionally highlight temporarily
-    // You could add a temporary highlight class here
+    // add a highlight class here
   }
 
   /**

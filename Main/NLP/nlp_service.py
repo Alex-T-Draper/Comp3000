@@ -3,7 +3,7 @@ from sumy.parsers.plaintext import PlaintextParser
 from sumy.nlp.tokenizers import Tokenizer
 from sumy.summarizers.text_rank import TextRankSummarizer
 import yake
-from transformers import pipeline
+from transformers import pipeline, AutoModelForSeq2SeqLM, AutoTokenizer
 from typing import List, Dict
 
 # Extractive summary (TextRank)
@@ -213,12 +213,44 @@ def compute_risk_score(detected_clauses: Dict[str, List[Dict]]) -> Dict:
         "normalized_percent": normalized
     }
 
-# Abstractive summariser (chunking)
-try:
-    abstractive = pipeline("summarization", model="sshleifer/distilbart-cnn-12-6")
-except Exception as e:
-    abstractive = None
-    print("Abstractive model not available:", e)
+# Abstractive summary models for comparison
+SUMMARIZATION_MODELS = {
+    "distilbart-cnn-12-6": "sshleifer/distilbart-cnn-12-6",
+    "bart-large-cnn": "facebook/bart-large-cnn",
+    "pegasus-cnn": "google/pegasus-cnn_dailymail",
+    "t5-base": "t5-base",
+    "bart-large-cnn-samsum": "philschmid/bart-large-cnn-samsum",
+    "led-base-16384": "allenai/led-base-16384-arxiv",
+}
+
+# Cache for loaded models
+_model_cache = {}
+
+def get_summarization_model(model_name: str = "distilbart-cnn-12-6"):
+    """Load or retrieve a cached summarization model"""
+    if model_name not in SUMMARIZATION_MODELS:
+        raise ValueError(f"Model '{model_name}' not found. Available: {list(SUMMARIZATION_MODELS.keys())}")
+    
+    if model_name not in _model_cache:
+        try:
+            model_path = SUMMARIZATION_MODELS[model_name]
+            tokenizer = AutoTokenizer.from_pretrained(model_path)
+            model = AutoModelForSeq2SeqLM.from_pretrained(model_path)
+            # Create a simple wrapper for the model
+            _model_cache[model_name] = {
+                'model': model,
+                'tokenizer': tokenizer,
+                'name': model_name
+            }
+            print(f"Loaded model: {model_name}")
+        except Exception as e:
+            print(f"Failed to load model '{model_name}': {e}")
+            _model_cache[model_name] = None
+    
+    return _model_cache[model_name]
+
+# Load default model for backward compatibility
+abstractive = get_summarization_model("distilbart-cnn-12-6")
 
 def chunk_text(text: str, max_chars: int = 2500) -> List[str]:
     paragraphs = [p.strip() for p in text.split("\n\n") if p.strip()]
@@ -234,19 +266,47 @@ def chunk_text(text: str, max_chars: int = 2500) -> List[str]:
         chunks.append(current)
     return chunks
 
-def abstractive_summary(text: str, max_length: int = 120, min_length: int = 30) -> str:
-    if not abstractive:
+def abstractive_summary(text: str, max_length: int = 120, min_length: int = 30, model_name: str = "distilbart-cnn-12-6") -> str:
+    """Generate abstractive summary using specified model"""
+    model_data = get_summarization_model(model_name)
+    if not model_data:
         return ""
+    
+    model = model_data['model']
+    tokenizer = model_data['tokenizer']
+    
     chunks = chunk_text(text)
     summaries = []
+    
     for c in chunks:
-        out = abstractive(c, max_length=max_length, min_length=min_length, truncation=True)
-        summaries.append(out[0]["summary_text"])
+        inputs = tokenizer(c, max_length=1024, truncation=True, return_tensors="pt")
+        summary_ids = model.generate(inputs["input_ids"], max_length=max_length, min_length=min_length, num_beams=4)
+        summary = tokenizer.batch_decode(summary_ids, skip_special_tokens=True)[0]
+        summaries.append(summary)
+    
     combined = " ".join(summaries)
-    if len(combined.split()) > 250 and abstractive:
-        out = abstractive(combined, max_length=160, min_length=60, truncation=True)
-        return out[0]["summary_text"]
+    
+    if len(combined.split()) > 250:
+        inputs = tokenizer(combined, max_length=1024, truncation=True, return_tensors="pt")
+        summary_ids = model.generate(inputs["input_ids"], max_length=160, min_length=60, num_beams=4)
+        return tokenizer.batch_decode(summary_ids, skip_special_tokens=True)[0]
+    
     return combined
+
+def compare_summarization_models(text: str, model_names: List[str] = None) -> Dict[str, str]:
+    """Compare summarization results from multiple models"""
+    if model_names is None:
+        model_names = list(SUMMARIZATION_MODELS.keys())
+    
+    results = {}
+    for model_name in model_names:
+        try:
+            summary = abstractive_summary(text, model_name=model_name)
+            results[model_name] = summary
+        except Exception as e:
+            results[model_name] = f"Error: {str(e)}"
+    
+    return results
 
 # Clause Grouping Configuration
 CLAUSE_GROUPS = {
