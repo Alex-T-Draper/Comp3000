@@ -1,4 +1,4 @@
-// src/app/services/tracking.ts
+// src/app/services/tracking.ts - Updated for database backend
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -12,7 +12,7 @@ export interface ScrollEvent {
 export interface UserMetrics {
   // Session info
   sessionId: string;
-  userId: string;
+  userId: string;  // User's name
   tosId: string;
   conditionGroup: 'control' | 'treatment';
   
@@ -53,7 +53,7 @@ export interface UserMetrics {
 export class TrackingService {
   private metrics: UserMetrics;
   private scrollTrackingInterval: any;
-  private apiUrl = 'http://127.0.0.1:8000/api'; // Your research backend API
+  private apiUrl = 'http://127.0.0.1:8000/api'; // Your FastAPI backend
 
   constructor(private http: HttpClient) {
     this.metrics = this.initializeMetrics();
@@ -62,10 +62,10 @@ export class TrackingService {
   /**
    * Initialize a new tracking session
    */
-  startSession(userId: string, tosId: string, tosText: string, tosTitle: string, conditionGroup: 'control' | 'treatment' = 'treatment'): void {
+  startSession(userName: string, tosId: string, tosText: string, tosTitle: string, conditionGroup: 'control' | 'treatment' = 'treatment'): void {
     this.metrics = {
       sessionId: this.generateSessionId(),
-      userId,
+      userId: userName,  // Use the user's name
       tosId,
       tosTitle,
       conditionGroup,
@@ -78,9 +78,6 @@ export class TrackingService {
       summaryGenerated: false,
       clausesClicked: []
     };
-
-    // Start tracking scroll every 2 seconds
-    this.startScrollTracking();
   }
 
   /**
@@ -145,7 +142,24 @@ export class TrackingService {
    */
   saveMetrics(): Observable<any> {
     this.endSession();
-    return this.http.post(`${this.apiUrl}/metrics`, this.metrics);
+    
+    // Convert dates to ISO strings for JSON serialization
+    const metricsToSave = {
+      ...this.metrics,
+      timeStarted: this.metrics.timeStarted.toISOString(),
+      timeEnded: this.metrics.timeEnded?.toISOString(),
+      summaryGeneratedAt: this.metrics.summaryGeneratedAt?.toISOString(),
+      scrollEvents: this.metrics.scrollEvents.map(e => ({
+        ...e,
+        timestamp: e.timestamp.toISOString()
+      })),
+      clausesClicked: this.metrics.clausesClicked.map(c => ({
+        ...c,
+        timestamp: c.timestamp.toISOString()
+      }))
+    };
+    
+    return this.http.post(`${this.apiUrl}/metrics`, metricsToSave);
   }
 
   /**
