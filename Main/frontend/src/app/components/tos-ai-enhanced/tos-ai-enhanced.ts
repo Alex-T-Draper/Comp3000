@@ -1,4 +1,4 @@
-// src/app/components/tos-viewer/tos-viewer.ts
+// src/app/components/tos-ai-enhanced/tos-ai-enhanced.ts
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NlpApiService, NLPAnalysisResponse, ClauseDetection } from '../../services/nlp-api';
@@ -13,13 +13,13 @@ interface HighlightedSection {
 }
 
 @Component({
-  selector: 'app-tos-viewer',
+  selector: 'app-tos-ai-enhanced',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './tos-viewer.html',
-  styleUrls: ['./tos-viewer.scss']
+  templateUrl: './tos-ai-enhanced.html',
+  styleUrls: ['./tos-ai-enhanced.scss']
 })
-export class TosViewerComponent implements OnInit, OnDestroy {
+export class TosAiEnhancedComponent implements OnInit, OnDestroy {
   @ViewChild('tosContainer', { static: false }) tosContainer!: ElementRef;
 
   // ToS content
@@ -128,7 +128,7 @@ If you have any questions about these Terms, please contact us at support@exampl
       this.tosId,
       this.tosText,
       this.tosTitle,
-      'treatment'
+      'ai-enhanced'
     );
   }
 

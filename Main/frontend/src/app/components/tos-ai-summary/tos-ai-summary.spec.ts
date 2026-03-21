@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TosViewer } from './tos-viewer';
+import { TosAiSummary } from './tos-ai-summary';
 
-describe('TosViewer', () => {
-  let component: TosViewer;
-  let fixture: ComponentFixture<TosViewer>;
+describe('TosAiSummary', () => {
+  let component: TosAiSummary;
+  let fixture: ComponentFixture<TosAiSummary>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TosViewer]
+      imports: [TosAiSummary]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(TosViewer);
+    fixture = TestBed.createComponent(TosAiSummary);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

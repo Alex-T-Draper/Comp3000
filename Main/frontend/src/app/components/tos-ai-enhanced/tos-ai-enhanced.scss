@@ -1,6 +1,6 @@
-// src/app/components/tos-viewer/tos-viewer.component.scss
+// src/app/components/tos-ai-enhanced/tos-ai-enhanced.scss
 
-.tos-viewer-container {
+.tos-ai-enhanced-container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 2rem;
@@ -489,7 +489,7 @@
 
 // Responsive
 @media (max-width: 768px) {
-  .tos-viewer-container {
+  .tos-ai-enhanced-container {
     padding: 1rem;
   }
 

@@ -14,7 +14,7 @@ export interface UserMetrics {
   sessionId: string;
   userId: string;  // User's name
   tosId: string;
-  conditionGroup: 'control' | 'treatment';
+  conditionGroup: 'control' | 'scroll-gate' | 'formatted' | 'ai-summary' | 'ai-enhanced';
   
   // Document info
   tosLength: number; // word count
@@ -62,7 +62,7 @@ export class TrackingService {
   /**
    * Initialize a new tracking session
    */
-  startSession(userName: string, tosId: string, tosText: string, tosTitle: string, conditionGroup: 'control' | 'treatment' = 'treatment'): void {
+  startSession(userName: string, tosId: string, tosText: string, tosTitle: string, conditionGroup: 'control' | 'scroll-gate' | 'formatted' | 'ai-summary' | 'ai-enhanced' = 'control'): void {
     this.metrics = {
       sessionId: this.generateSessionId(),
       userId: userName,  // Use the user's name
@@ -177,7 +177,7 @@ export class TrackingService {
       userId: '',
       tosId: '',
       tosTitle: '',
-      conditionGroup: 'treatment',
+      conditionGroup: 'control',
       tosLength: 0,
       timeStarted: new Date(),
       didReadComplete: false,

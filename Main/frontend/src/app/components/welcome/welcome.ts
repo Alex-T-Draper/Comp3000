@@ -51,7 +51,7 @@ export class WelcomeComponent {
           sessionStorage.setItem('userId', response.userId);
           
           // Navigate to ToS viewer
-          this.router.navigate(['/tos']);
+          this.router.navigate(['/tos-plain']);
         },
         error: (err) => {
           console.error('Error creating user:', err);

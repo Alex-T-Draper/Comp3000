@@ -1,0 +1,27 @@
+<!-- src/app/components/tos-plain/tos-plain.html -->
+<div class="tos-container">
+  
+  <!-- Header -->
+  <div class="header">
+    <h1>{{ tosTitle }}</h1>
+    <p class="subtitle">Condition 1: Standard Reading</p>
+  </div>
+
+  <!-- ToS Document -->
+  <div class="tos-document" #tosContainer>
+    <div class="tos-text">{{ tosText }}</div>
+  </div>
+
+  <!-- Finish Button -->
+  <div class="actions">
+    <button 
+      class="btn-finish"
+      (click)="finishReading()">
+      ✓ I've Finished Reading
+    </button>
+    <p class="helper-text">
+      Click when you're done reading to continue to the next part
+    </p>
+  </div>
+
+</div>

@@ -1,0 +1,56 @@
+<!-- src/app/components/tos-scroll-required/tos-scroll-required.html -->
+<div class="tos-container">
+
+  <!-- Header -->
+  <div class="header">
+    <h1>{{ tosTitle }}</h1>
+    <p class="subtitle">Condition 2: Scroll Required</p>
+  </div>
+  
+  <!-- Header with Scroll Progress -->
+  <div class="scroll-progress">
+    <div class="progress-label">
+      <span>Scroll Progress:</span>
+      <span class="progress-percent" [class.complete]="hasScrolledToBottom">
+        {{ scrollDepth | number:'1.0-0' }}%
+      </span>
+    </div>
+    <div class="progress-bar-container">
+      <div 
+        class="progress-bar-fill" 
+        [style.width.%]="scrollDepth"
+        [class.complete]="hasScrolledToBottom">
+      </div>
+    </div>
+    <p class="progress-hint" *ngIf="!hasScrolledToBottom">
+      ⬇️ Please scroll to the bottom to continue
+    </p>
+    <p class="progress-complete" *ngIf="hasScrolledToBottom">
+      ✓ You may now continue
+    </p>
+  </div>
+
+  <!-- ToS Document -->
+  <div class="tos-document" #tosContainer>
+    <div class="tos-text">{{ tosText }}</div>
+  </div>
+
+  <!-- Continue Button (disabled until scrolled to bottom) -->
+  <div class="actions">
+    <button 
+      class="btn-continue"
+      [class.disabled]="!canProceed()"
+      [disabled]="!canProceed()"
+      (click)="finishReading()">
+      <span *ngIf="canProceed()">✓ Continue</span>
+      <span *ngIf="!canProceed()">🔒 Scroll to Bottom First</span>
+    </button>
+    <p class="helper-text" *ngIf="!canProceed()">
+      You must scroll through the entire document before continuing
+    </p>
+    <p class="helper-text" *ngIf="canProceed()">
+      Click to continue to the next part
+    </p>
+  </div>
+
+</div>

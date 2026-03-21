@@ -1,0 +1,191 @@
+// src/app/components/tos-scroll-required/tos-scroll-required.scss
+
+.tos-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  min-height: 100vh;
+}
+
+// Header
+.header {
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 2px solid #e0e0e0;
+
+  h1 {
+    font-size: 2rem;
+    color: #333;
+    margin: 0 0 0.5rem 0;
+  }
+
+  .subtitle {
+    color: #666;
+    font-size: 0.9rem;
+    margin: 0 0 1.5rem 0;
+    font-style: italic;
+  }
+}
+
+// Scroll Progress Indicator
+.scroll-progress {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: #f8f9fa;
+  border: 2px solid #dee2e6;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+    font-weight: 500;
+    color: #495057;
+
+    .progress-percent {
+      font-size: 1.2rem;
+      color: #007bff;
+      font-weight: 600;
+
+      &.complete {
+        color: #28a745;
+      }
+    }
+  }
+
+  .progress-bar-container {
+    height: 24px;
+    background: #e9ecef;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #007bff, #0056b3);
+    transition: width 0.3s ease, background 0.3s ease;
+
+    &.complete {
+      background: linear-gradient(90deg, #28a745, #1e7e34);
+    }
+  }
+
+  .progress-hint {
+    margin: 0;
+    color: #6c757d;
+    font-size: 0.9rem;
+    text-align: center;
+  }
+
+  .progress-complete {
+    margin: 0;
+    color: #28a745;
+    font-size: 0.9rem;
+    text-align: center;
+    font-weight: 600;
+  }
+}
+
+// ToS Document
+.tos-document {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.tos-text {
+  line-height: 1.8;
+  color: #333;
+  white-space: pre-wrap;
+  font-size: 1rem;
+}
+
+// Actions
+.actions {
+  text-align: center;
+  margin-top: 2rem;
+  padding: 2rem 0;
+
+  .btn-continue {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 1.25rem 2.5rem;
+    font-size: 1.2rem;
+    font-weight: 600;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    transition: all 0.3s;
+
+    &:hover:not(.disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+    }
+
+    &:active:not(.disabled) {
+      transform: translateY(0);
+    }
+
+    &.disabled,
+    &:disabled {
+      background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%);
+      cursor: not-allowed;
+      box-shadow: 0 2px 8px rgba(127, 140, 141, 0.3);
+      opacity: 0.7;
+
+      &:hover {
+        transform: none;
+        box-shadow: 0 2px 8px rgba(127, 140, 141, 0.3);
+      }
+    }
+  }
+
+  .helper-text {
+    margin-top: 1rem;
+    color: #666;
+    font-size: 0.9rem;
+  }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .tos-container {
+    padding: 1rem;
+  }
+
+  .tos-document {
+    padding: 1.5rem;
+  }
+
+  .header h1 {
+    font-size: 1.5rem;
+  }
+
+  .btn-continue {
+    font-size: 1.1rem;
+    padding: 1rem 2rem;
+  }
+
+  .scroll-progress {
+    padding: 0.75rem;
+
+    .progress-label {
+      font-size: 0.9rem;
+
+      .progress-percent {
+        font-size: 1.1rem;
+      }
+    }
+  }
+}
