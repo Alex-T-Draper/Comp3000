@@ -32,6 +32,7 @@ export class TosFormattedComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    window.scrollTo(0, 0);
     // Get user name from session storage
     this.userId = sessionStorage.getItem('userName') || 'anonymous';
     this.loadTosDocument();
@@ -216,9 +217,8 @@ If you have any questions about these Terms, please contact us at support@exampl
     this.tracking.saveMetrics().subscribe({
       next: () => {
         console.log('Condition 3 (Formatted) metrics saved');
-        // Navigate to Condition 4 (when we build it)
-        alert('Condition 3 complete! (Condition 4 coming next)');
-        // TODO: this.router.navigate(['/tos-ai-summary']);
+        // Navigate to Condition 4
+        this.router.navigate(['/tos-ai-summary']);
       },
       error: (err: any) => {
         console.error('Error saving metrics:', err);

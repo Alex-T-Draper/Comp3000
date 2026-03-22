@@ -1,30 +1,45 @@
-// src/app/components/tos-ai-summary/tos-ai-summary.ts
+// src/app/components/tos-ai-hover/tos-ai-hover.ts
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { TrackingService } from '../../services/tracking';
 import { NlpApiService, NLPAnalysisResponse } from '../../services/nlp-api';
 
+interface TooltipData {
+  category: string;
+  title: string;
+  explanation: string;
+  severity: 'high' | 'medium' | 'low';
+  x: number;
+  y: number;
+}
+
 @Component({
-  selector: 'app-tos-ai-summary',
+  selector: 'app-tos-ai-hover',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './tos-ai-summary.html',
-  styleUrls: ['./tos-ai-summary.scss']
+  templateUrl: './tos-ai-hover.html',
+  styleUrls: ['./tos-ai-hover.scss']
 })
-export class TosAiSummaryComponent implements OnInit, OnDestroy {
+export class TosAiHoverComponent implements OnInit, OnDestroy {
   @ViewChild('tosContainer', { static: false }) tosContainer!: ElementRef;
 
   // ToS content
   tosText: string = '';
   tosTitle: string = '';
-  tosId: string = 'ai-summary-tos-004';
+  tosId: string = 'ai-hover-tos-006';
+  highlightedHtml: SafeHtml = '';
 
   // NLP Analysis
   analysis: NLPAnalysisResponse | null = null;
   isLoading: boolean = false;
   error: string | null = null;
   summaryGenerated: boolean = false;
+
+  // Tooltip
+  tooltip: TooltipData | null = null;
+  private currentClauseId: string | null = null;
 
   // Tracking
   userId: string = '';
@@ -33,12 +48,12 @@ export class TosAiSummaryComponent implements OnInit, OnDestroy {
   constructor(
     private tracking: TrackingService,
     private nlpApi: NlpApiService,
-    private router: Router
+    private router: Router,
+    private sanitizer: DomSanitizer
   ) {}
 
   ngOnInit(): void {
     window.scrollTo(0, 0);
-    // Get user name from session storage
     this.userId = sessionStorage.getItem('userName') || 'anonymous';
     this.loadTosDocument();
     this.initializeTracking();
@@ -53,9 +68,8 @@ export class TosAiSummaryComponent implements OnInit, OnDestroy {
    */
   loadTosDocument(): void {
     this.tosTitle = 'Service Terms of Service';
-    this.tosId = 'ai-summary-tos-004';
+    this.tosId = 'ai-hover-tos-006';
     
-    // Sample ToS text - in production, load from backend
     this.tosText = `Terms of Service
 
 Last updated: January 2025
@@ -100,6 +114,10 @@ We may update these Terms from time to time. We will notify you of any material 
 These Terms are governed by the laws of the United Kingdom. Any disputes will be resolved in the courts of England and Wales.
 
 If you have any questions about these Terms, please contact us at support@example.com.`;
+
+    this.highlightedHtml = this.sanitizer.bypassSecurityTrustHtml(
+      this.escapeHtml(this.tosText)
+    );
   }
 
   /**
@@ -111,7 +129,7 @@ If you have any questions about these Terms, please contact us at support@exampl
       this.tosId,
       this.tosText,
       this.tosTitle,
-      'ai-summary' // Condition type
+      'ai-hover' // Condition type
     );
   }
 
@@ -127,11 +145,9 @@ If you have any questions about these Terms, please contact us at support@exampl
     const documentHeight = document.documentElement.scrollHeight;
     const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
     
-    // Calculate scroll depth as percentage
     const scrollableHeight = documentHeight - windowHeight;
     this.scrollDepth = scrollableHeight > 0 ? (scrollTop / scrollableHeight) * 100 : 0;
 
-    // Track scroll
     this.tracking.trackScroll(this.scrollDepth, scrollTop);
   }
 
@@ -141,12 +157,17 @@ If you have any questions about these Terms, please contact us at support@exampl
   generateSummary(): void {
     this.isLoading = true;
     this.error = null;
+    this.tooltip = null;
+    this.currentClauseId = null;
 
     this.nlpApi.analyzeTos(this.tosText, 6, false).subscribe({
       next: (response: any) => {
         this.analysis = response;
         this.summaryGenerated = true;
         this.isLoading = false;
+
+        // Apply subtle highlighting with hover
+        this.applyHoverHighlighting();
 
         // Track summary generation
         const categories = Object.keys(response.grouped_clauses);
@@ -164,6 +185,124 @@ If you have any questions about these Terms, please contact us at support@exampl
   }
 
   /**
+   * Apply subtle highlighting with hover capability
+   */
+  applyHoverHighlighting(): void {
+    if (!this.analysis) return;
+
+    interface Segment {
+      start: number;
+      end: number;
+      category: string;
+      severity: 'high' | 'medium' | 'low';
+      title: string;
+      explanation: string;
+    }
+
+    const segments: Segment[] = [];
+
+    // Use the positions returned by the NLP API (they come from the same tosText we sent)
+    Object.entries(this.analysis.grouped_clauses).forEach(([, group]: [string, any]) => {
+      Object.entries(group.categories).forEach(([categoryName, category]: [string, any]) => {
+        category.detections.forEach((detection: any) => {
+          const start: number = detection.context?.position?.start ?? -1;
+          const end: number   = detection.context?.position?.end   ?? -1;
+          // Skip if positions are invalid or out of bounds
+          if (start < 0 || end <= start || end > this.tosText.length) return;
+
+          segments.push({
+            start,
+            end,
+            category: categoryName,
+            severity: group.severity as 'high' | 'medium' | 'low',
+            title: category.metadata.title,
+            explanation: category.metadata.explanation
+          });
+        });
+      });
+    });
+
+    // Sort rightmost-first, then remove overlapping segments
+    segments.sort((a, b) => b.start - a.start);
+    const noOverlap: Segment[] = [];
+    let boundary = Infinity;
+    for (const seg of segments) {
+      if (seg.end <= boundary) {
+        noOverlap.push(seg);
+        boundary = seg.start;
+      }
+    }
+
+    // Sort left-to-right for a single-pass HTML build
+    noOverlap.sort((a, b) => a.start - b.start);
+
+    // Build HTML in one pass — no position-shifting issues
+    let html = '';
+    let pos = 0;
+    let clauseIndex = 0;
+
+    for (const seg of noOverlap) {
+      // Plain text before this segment
+      html += this.escapeHtml(this.tosText.substring(pos, seg.start));
+      // Highlighted span
+      const cssClass = `clause-${seg.severity}`;
+      const id = `clause-${clauseIndex++}`;
+      const content = this.escapeHtml(this.tosText.substring(seg.start, seg.end));
+      html += `<span class="${cssClass}" data-clause-id="${id}" data-category="${seg.category}" data-title="${this.escapeAttribute(seg.title)}" data-explanation="${this.escapeAttribute(seg.explanation)}" data-severity="${seg.severity}">${content}</span>`;
+      pos = seg.end;
+    }
+    // Remaining plain text
+    html += this.escapeHtml(this.tosText.substring(pos));
+
+    this.highlightedHtml = this.sanitizer.bypassSecurityTrustHtml(html);
+  }
+
+  /**
+   * Detect clause hover via document-level mousemove.
+   * document:* HostListeners always run inside Angular's zone,
+   * so change detection fires automatically.
+   */
+  @HostListener('document:mousemove', ['$event'])
+  onDocumentMouseMove(event: MouseEvent): void {
+    const target = (event.target as HTMLElement).closest('[data-clause-id]') as HTMLElement | null;
+    const newId = target ? target.getAttribute('data-clause-id') : null;
+
+    if (newId === this.currentClauseId) return;
+    this.currentClauseId = newId;
+
+    if (!target) {
+      this.tooltip = null;
+      return;
+    }
+
+    const rect = target.getBoundingClientRect();
+    this.tooltip = {
+      category: target.getAttribute('data-category') || '',
+      title: target.getAttribute('data-title') || '',
+      explanation: target.getAttribute('data-explanation') || '',
+      severity: target.getAttribute('data-severity') as 'high' | 'medium' | 'low',
+      x: Math.min(rect.left, window.innerWidth - 340),
+      y: Math.min(rect.bottom + 10, window.innerHeight - 160)
+    };
+  }
+
+  /**
+   * Escape HTML
+   */
+  private escapeHtml(text: string): string {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML.replace(/\n/g, '<br>');
+  }
+
+  /**
+   * Escape HTML attributes
+   */
+  private escapeAttribute(text: string): string {
+    return text.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  }
+
+  /**
    * Get severity color
    */
   getSeverityColor(severity: string): string {
@@ -176,7 +315,7 @@ If you have any questions about these Terms, please contact us at support@exampl
   }
 
   /**
-   * Get risk level category
+   * Get risk level
    */
   getRiskLevel(score: number): string {
     if (score >= 60) return 'high';
@@ -185,13 +324,13 @@ If you have any questions about these Terms, please contact us at support@exampl
   }
 
   /**
-   * Get risk description based on score
+   * Get risk description
    */
   getRiskDescription(score: number): string {
     if (score >= 60) {
       return 'This Terms of Service contains several high-risk clauses that require careful attention.';
     } else if (score >= 30) {
-      return 'This Terms of Service has moderate risk. Review the highlighted sections carefully.';
+      return 'This Terms of Service has moderate risk. Review the sections carefully.';
     } else {
       return 'This Terms of Service has relatively low risk compared to typical agreements.';
     }
@@ -203,9 +342,10 @@ If you have any questions about these Terms, please contact us at support@exampl
   finishReading(): void {
     this.tracking.saveMetrics().subscribe({
       next: () => {
-        console.log('Condition 4 (AI Summary) metrics saved');
-        // Navigate to Condition 5
-        this.router.navigate(['/tos-ai-enhanced']);
+        console.log('Condition 6 (AI Hover) metrics saved');
+        alert('Study complete! Thank you for participating.');
+        // TODO: Navigate to thank you page
+        // this.router.navigate(['/thank-you']);
       },
       error: (err: any) => {
         console.error('Error saving metrics:', err);

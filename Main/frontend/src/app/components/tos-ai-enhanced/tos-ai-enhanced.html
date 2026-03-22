@@ -1,200 +1,154 @@
 <!-- src/app/components/tos-ai-enhanced/tos-ai-enhanced.html -->
-<div class="tos-ai-enhanced-container">
+<div class="tos-container">
   
   <!-- Header -->
   <div class="header">
     <h1>{{ tosTitle }}</h1>
-    <div class="reading-stats" *ngIf="!summaryGenerated">
-      <span class="stat">
-        <i class="icon-scroll"></i>
-        Scroll Progress: {{ scrollDepth | number:'1.0-0' }}%
-      </span>
+    <p class="subtitle">Condition 5: AI Enhanced (Highlighting + Summary Panel)</p>
+  </div>
+
+  <!-- Single Column (Before Summary) -->
+  <div class="single-column" *ngIf="!summaryGenerated">
+    <div class="tos-document" #tosContainer>
+      <div class="tos-text">{{ tosText }}</div>
+    </div>
+    
+    <!-- Generate Summary Button -->
+    <div class="action-section">
+      <button 
+        class="btn-generate"
+        (click)="generateSummary()"
+        [disabled]="isLoading">
+        <span *ngIf="!isLoading">🤖 Generate AI Summary</span>
+        <span *ngIf="isLoading">⏳ Analyzing...</span>
+      </button>
+      <p class="helper-text">Click to see an AI analysis of this document</p>
     </div>
   </div>
 
-  <!-- ToS Document Display -->
-  <div class="tos-document-container" #tosContainer>
-    <div 
-      class="tos-text" 
-      [class.highlighted]="summaryGenerated"
-      [innerHTML]="highlightedHtml">
+  <!-- Two Column Layout (After Summary Generated) -->
+  <div class="content-wrapper" *ngIf="summaryGenerated && analysis">
+    
+    <!-- ToS Document with Highlighting (Left) -->
+    <div class="tos-column">
+      <div class="tos-document" #tosContainer>
+        <div 
+          class="tos-text highlighted" 
+          [innerHTML]="highlightedHtml">
+        </div>
+      </div>
+
+      <div class="legend">
+        <h4>Legend:</h4>
+        <div class="legend-items">
+          <span class="legend-item">
+            <span class="color-box high"></span>
+            High Risk
+          </span>
+          <span class="legend-item">
+            <span class="color-box medium"></span>
+            Medium Risk
+          </span>
+          <span class="legend-item">
+            <span class="color-box low"></span>
+            Low Risk
+          </span>
+        </div>
+        <p class="legend-note">Click highlighted text for details</p>
+      </div>
     </div>
+
+    <!-- AI Summary Panel (Right) -->
+    <div class="summary-column">
+      
+      <div class="summary-panel">
+        <h2>📊 AI Analysis</h2>
+
+        <!-- Overall Risk Score -->
+        <div class="risk-card">
+          <h3>Overall Risk Score</h3>
+          <div class="risk-value" [class]="'risk-' + getRiskLevel(analysis.risk.normalized_percent)">
+            {{ analysis.risk.normalized_percent }}%
+          </div>
+          <div class="risk-bar">
+            <div 
+              class="risk-fill" 
+              [style.width.%]="analysis.risk.normalized_percent"
+              [class]="'risk-' + getRiskLevel(analysis.risk.normalized_percent)">
+            </div>
+          </div>
+          <p class="risk-desc">{{ getRiskDescription(analysis.risk.normalized_percent) }}</p>
+        </div>
+
+        <!-- Key Points -->
+        <div class="key-points">
+          <h3>📝 Key Points</h3>
+          <ul>
+            <li *ngFor="let bullet of analysis.bullets">{{ bullet }}</li>
+          </ul>
+        </div>
+
+        <!-- Grouped Clauses -->
+        <div class="clause-groups">
+          <h3>🔍 Detected Clauses</h3>
+          
+          <div 
+            *ngFor="let group of analysis.grouped_clauses | keyvalue"
+            class="clause-group"
+            [class]="'severity-' + group.value.severity">
+            
+            <div class="group-header">
+              <span class="group-icon">{{ group.value.icon }}</span>
+              <div class="group-info">
+                <h4>{{ group.key }}</h4>
+                <p>{{ group.value.description }}</p>
+              </div>
+              <span class="severity-badge" [class]="'badge-' + group.value.severity">
+                {{ group.value.severity | uppercase }}
+              </span>
+            </div>
+
+            <div class="categories">
+              <div 
+                *ngFor="let category of group.value.categories | keyvalue"
+                class="category">
+                <strong>{{ category.value.metadata.title }}</strong>
+                <p>{{ category.value.metadata.user_summary }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Keywords -->
+        <div class="keywords">
+          <h3>🏷️ Key Terms</h3>
+          <div class="keyword-tags">
+            <span *ngFor="let keyword of analysis.keywords" class="tag">
+              {{ keyword }}
+            </span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
   </div>
 
-  <!-- Generate Summary Button -->
-  <div class="action-section" *ngIf="!summaryGenerated">
+  <!-- Finish Button -->
+  <div class="actions">
     <button 
-      class="btn-generate-summary"
-      (click)="generateSummary()"
-      [disabled]="isLoading">
-      <span *ngIf="!isLoading">
-        <i class="icon-sparkles"></i>
-        Generate AI Summary
-      </span>
-      <span *ngIf="isLoading">
-        <i class="icon-spinner"></i>
-        Analyzing...
-      </span>
+      class="btn-finish"
+      (click)="proceedToNextPhase()">
+      ✓ I've Finished Reading
     </button>
     <p class="helper-text">
-      Click to see an AI-generated analysis of this Terms of Service
+      Click when you're done to continue to the next part
     </p>
   </div>
 
   <!-- Error Message -->
   <div class="error-message" *ngIf="error">
-    <i class="icon-alert"></i>
-    {{ error }}
-  </div>
-
-  <!-- Summary Panel (appears after generation) -->
-  <div class="summary-panel" *ngIf="summaryGenerated && analysis">
-    
-    <div class="summary-header">
-      <h2>
-        <i class="icon-document"></i>
-        AI-Generated Analysis
-      </h2>
-      <div class="legend">
-        <span class="legend-item">
-          <span class="color-box high"></span>
-          High Risk
-        </span>
-        <span class="legend-item">
-          <span class="color-box medium"></span>
-          Medium Risk
-        </span>
-        <span class="legend-item">
-          <span class="color-box low"></span>
-          Low Risk
-        </span>
-      </div>
-    </div>
-
-    <!-- Overall Risk Score -->
-    <div class="risk-score-card">
-      <div class="risk-header">
-        <h3>Overall Risk Score</h3>
-        <div class="risk-value" [class]="'risk-' + getRiskLevel(analysis.risk.normalized_percent)">
-          {{ analysis.risk.normalized_percent }}%
-        </div>
-      </div>
-      <div class="risk-bar">
-        <div 
-          class="risk-fill" 
-          [style.width.%]="analysis.risk.normalized_percent"
-          [class]="'risk-' + getRiskLevel(analysis.risk.normalized_percent)">
-        </div>
-      </div>
-      <p class="risk-description">
-        {{ getRiskDescription(analysis.risk.normalized_percent) }}
-      </p>
-    </div>
-
-    <!-- Key Points -->
-    <div class="key-points-section">
-      <h3>
-        <i class="icon-list"></i>
-        Key Points Summary
-      </h3>
-      <ul class="key-points-list">
-        <li *ngFor="let bullet of analysis.bullets">{{ bullet }}</li>
-      </ul>
-    </div>
-
-    <!-- Grouped Clauses -->
-    <div class="grouped-clauses-section">
-      <h3>
-        <i class="icon-layers"></i>
-        Detected Clauses by Category
-      </h3>
-
-      <div class="clause-groups">
-        <div 
-          *ngFor="let group of analysis.grouped_clauses | keyvalue"
-          class="clause-group"
-          [class]="'severity-' + group.value.severity">
-          
-          <div class="group-header">
-            <span class="group-icon">{{ group.value.icon }}</span>
-            <div class="group-info">
-              <h4>{{ group.key }}</h4>
-              <p class="group-description">{{ group.value.description }}</p>
-            </div>
-            <span class="severity-badge" [class]="'badge-' + group.value.severity">
-              {{ group.value.severity | uppercase }}
-            </span>
-          </div>
-
-          <div class="group-categories">
-            <div 
-              *ngFor="let category of group.value.categories | keyvalue"
-              class="category-item">
-              
-              <div class="category-header">
-                <h5>{{ category.value.metadata.title }}</h5>
-                <span class="mention-count">{{ category.value.detections.length }} mention(s)</span>
-              </div>
-
-              <p class="category-summary">{{ category.value.metadata.user_summary }}</p>
-              
-              <div class="category-explanation">
-                <strong>What this means:</strong> {{ category.value.metadata.explanation }}
-              </div>
-
-              <!-- Show detected sentences -->
-              <div class="detected-sentences">
-                <div 
-                  *ngFor="let detection of category.value.detections; let i = index"
-                  class="detection-item">
-                  <span class="detection-index">{{ i + 1 }}.</span>
-                  <span class="detection-text">"{{ detection.sentence }}"</span>
-                  <button 
-                    class="btn-show-context"
-                    (click)="showContext(detection)">
-                    View in document
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Keywords -->
-    <div class="keywords-section">
-      <h3>
-        <i class="icon-tag"></i>
-        Key Terms
-      </h3>
-      <div class="keywords-list">
-        <span 
-          *ngFor="let keyword of analysis.keywords"
-          class="keyword-tag">
-          {{ keyword }}
-        </span>
-      </div>
-    </div>
-
-    <div class="completion-section">
-      <button 
-        class="btn-finish"
-        (click)="proceedToNextPhase()">
-        📝 Finish Study & Save Data
-      </button>
-    </div>
-
-  </div>
-
-  <!-- Instructions/Info Box -->
-  <div class="info-box" *ngIf="!summaryGenerated">
-    <h4>📖 Instructions</h4>
-    <p>
-      Please read through the Terms of Service above. When you're ready, 
-      click "Generate AI Summary" to see an analysis of the key points and 
-      important clauses.
-    </p>
+    ⚠️ {{ error }}
   </div>
 
 </div>

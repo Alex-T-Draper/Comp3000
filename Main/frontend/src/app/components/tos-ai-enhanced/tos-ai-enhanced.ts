@@ -1,6 +1,7 @@
 // src/app/components/tos-ai-enhanced/tos-ai-enhanced.ts
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { NlpApiService, NLPAnalysisResponse, ClauseDetection } from '../../services/nlp-api';
 import { TrackingService } from '../../services/tracking';
 
@@ -43,13 +44,13 @@ export class TosAiEnhancedComponent implements OnInit, OnDestroy {
 
   constructor(
     private nlpApi: NlpApiService,
-    private tracking: TrackingService
-  ) {
-    // Get user name from session storage
-    this.userId = sessionStorage.getItem('userName') || 'anonymous';
-  }
+    private tracking: TrackingService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
+    window.scrollTo(0, 0);
+    this.userId = sessionStorage.getItem('userName') || 'anonymous';
     this.loadTosDocument();
     this.initializeTracking();
   }
@@ -317,9 +318,6 @@ If you have any questions about these Terms, please contact us at support@exampl
       top: position,
       behavior: 'smooth'
     });
-
-    // Optionally highlight temporarily
-    // You could add a temporary highlight class here
   }
 
   /**
@@ -329,7 +327,8 @@ If you have any questions about these Terms, please contact us at support@exampl
     this.tracking.saveMetrics().subscribe({
       next: () => {
         console.log('Metrics saved successfully');
-        // Navigate to next phase of your study
+        // Navigate to condition 6
+        this.router.navigate(['/tos-ai-hover']);
       },
       error: (err: any) => {
         console.error('Error saving metrics:', err);

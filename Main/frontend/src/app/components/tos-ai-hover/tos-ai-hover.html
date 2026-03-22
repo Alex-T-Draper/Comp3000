@@ -1,50 +1,74 @@
-<!-- src/app/components/tos-ai-summary/tos-ai-summary.html -->
+<!-- Hover Tooltip — outside all *ngIf blocks so it's always in the change detection tree -->
+<div 
+  class="tooltip"
+  *ngIf="tooltip"
+  [style.left.px]="tooltip.x"
+  [style.top.px]="tooltip.y"
+  [ngClass]="'tooltip-' + tooltip.severity">
+  
+  <div class="tooltip-header">
+    <span class="tooltip-icon">
+      {{ tooltip.severity === 'high' ? '🔴' : tooltip.severity === 'medium' ? '🟡' : '🟢' }}
+    </span>
+    <div class="tooltip-title-section">
+      <div class="tooltip-category">{{ tooltip.title }}</div>
+      <div class="tooltip-risk">{{ tooltip.severity | uppercase }} RISK</div>
+    </div>
+  </div>
+  
+  <div class="tooltip-body">
+    <p>{{ tooltip.explanation }}</p>
+  </div>
+</div>
+
+
 <div class="tos-container">
   
   <!-- Header -->
   <div class="header">
     <h1>{{ tosTitle }}</h1>
-    <p class="subtitle">Condition 4: AI Summary Panel</p>
+    <p class="subtitle">Condition 6: AI Hover Tooltips + Summary Panel</p>
   </div>
 
-  <!-- Single Column Layout (Before Summary) -->
+  <!-- Single Column (Before Summary) -->
   <div class="single-column" *ngIf="!summaryGenerated">
-    <div class="tos-document" #tosContainer>
+    <div class="tos-document">
       <div class="tos-text">{{ tosText }}</div>
     </div>
     
-    <!-- Generate Summary Button -->
     <div class="action-section">
       <button 
         class="btn-generate"
         (click)="generateSummary()"
         [disabled]="isLoading">
-        <span *ngIf="!isLoading">🤖 Generate AI Summary</span>
+        <span *ngIf="!isLoading">🤖 Generate AI Analysis</span>
         <span *ngIf="isLoading">⏳ Analyzing...</span>
       </button>
-      <p class="helper-text">Click to see an AI analysis of this document</p>
+      <p class="helper-text">Click to see AI analysis with hover tooltips</p>
     </div>
   </div>
 
-  <!-- Two Column Layout (After Summary Generated) -->
+  <!-- Two Column Layout (After Summary) -->
   <div class="content-wrapper" *ngIf="summaryGenerated && analysis">
     
-    <!-- ToS Document (Plain Text) -->
+    <!-- ToS Column (Left) -->
     <div class="tos-column">
       <div class="tos-document" #tosContainer>
-        <div class="tos-text">{{ tosText }}</div>
+        <div 
+          class="tos-text" 
+          [innerHTML]="highlightedHtml">
+        </div>
       </div>
     </div>
 
-    <!-- AI Summary Panel -->
+    <!-- Summary Panel (Right) -->
     <div class="summary-column">
-      
       <div class="summary-panel">
         <h2>📊 AI Analysis</h2>
 
-        <!-- Overall Risk Score -->
+        <!-- Risk Score -->
         <div class="risk-card">
-          <h3>Risk Score</h3>
+          <h3>Overall Risk Score</h3>
           <div class="risk-value" [class]="'risk-' + getRiskLevel(analysis.risk.normalized_percent)">
             {{ analysis.risk.normalized_percent }}%
           </div>
@@ -120,7 +144,7 @@
       ✓ I've Finished Reading
     </button>
     <p class="helper-text">
-      Click when you're done to continue to the next part
+      Click when you're done to complete the study
     </p>
   </div>
 

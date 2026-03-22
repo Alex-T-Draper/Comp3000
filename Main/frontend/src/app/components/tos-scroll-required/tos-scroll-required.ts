@@ -33,6 +33,8 @@ export class TosScrollRequiredComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    // Always scroll to top when component loads
+    window.scrollTo(0, 0);
     this.loadTosDocument();
     this.initializeTracking();
   }

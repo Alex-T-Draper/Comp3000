@@ -26,12 +26,11 @@ export class TosPlainComponent implements OnInit, OnDestroy {
   constructor(
     private tracking: TrackingService,
     private router: Router
-  ) {
-    // Get user name from session storage
-    this.userId = sessionStorage.getItem('userName') || 'anonymous';
-  }
+  ) {}
 
   ngOnInit(): void {
+    window.scrollTo(0, 0);
+    this.userId = sessionStorage.getItem('userName') || 'anonymous';
     this.loadTosDocument();
     this.initializeTracking();
   }

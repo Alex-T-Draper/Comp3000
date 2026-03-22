@@ -1,4 +1,4 @@
-// src/app/components/tos-ai-enhanced/tos-ai-enhanced.scss
+// src/app/components/tos-ai-hover/tos-ai-hover.scss
 
 .tos-container {
   max-width: 1400px;
@@ -28,7 +28,7 @@
   }
 }
 
-// Single column layout (before summary)
+// Single column (before summary)
 .single-column {
   max-width: 800px;
   margin: 0 auto 2rem;
@@ -83,7 +83,7 @@
   }
 }
 
-// Two-column layout (after summary)
+// Two-column layout
 .content-wrapper {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -95,15 +95,16 @@
   }
 }
 
-// ToS Column (Left - with highlighting)
+// ToS Column
 .tos-column {
+  position: relative;
+
   .tos-document {
     background: #fff;
     border: 1px solid #ddd;
     border-radius: 8px;
     padding: 2rem;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    margin-bottom: 1rem;
   }
 
   .tos-text {
@@ -111,105 +112,122 @@
     color: #333;
     font-size: 1rem;
 
-    // Highlighting styles
-    ::ng-deep .highlight-high {
-      background: #ffe6e6;
-      border-bottom: 2px solid #ff4444;
-      padding: 2px 4px;
-      border-radius: 3px;
-      cursor: pointer;
-      transition: all 0.2s;
+    // Subtle clause highlighting (wavy underline)
+    ::ng-deep .clause-high {
+      text-decoration: underline wavy #dc3545;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 3px;
+      cursor: help;
+      transition: background 0.2s;
 
       &:hover {
-        background: #ffcccc;
+        background: rgba(220, 53, 69, 0.1);
       }
     }
 
-    ::ng-deep .highlight-medium {
-      background: #fff9e6;
-      border-bottom: 2px solid #ffb347;
-      padding: 2px 4px;
-      border-radius: 3px;
-      cursor: pointer;
-      transition: all 0.2s;
+    ::ng-deep .clause-medium {
+      text-decoration: underline wavy #ffc107;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 3px;
+      cursor: help;
+      transition: background 0.2s;
 
       &:hover {
-        background: #fff3cd;
+        background: rgba(255, 193, 7, 0.1);
       }
     }
 
-    ::ng-deep .highlight-low {
-      background: #e8f5e9;
-      border-bottom: 2px solid #66bb6a;
-      padding: 2px 4px;
-      border-radius: 3px;
-      cursor: pointer;
-      transition: all 0.2s;
+    ::ng-deep .clause-low {
+      text-decoration: underline wavy #28a745;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 3px;
+      cursor: help;
+      transition: background 0.2s;
 
       &:hover {
-        background: #c8e6c9;
+        background: rgba(40, 167, 69, 0.1);
       }
-    }
-  }
-
-  .legend {
-    background: #f8f9fa;
-    border: 1px solid #dee2e6;
-    border-radius: 8px;
-    padding: 1rem;
-
-    h4 {
-      margin: 0 0 0.75rem 0;
-      font-size: 0.9rem;
-      color: #495057;
-    }
-
-    .legend-items {
-      display: flex;
-      gap: 1.5rem;
-      flex-wrap: wrap;
-      margin-bottom: 0.5rem;
-
-      .legend-item {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        font-size: 0.85rem;
-        color: #495057;
-
-        .color-box {
-          width: 40px;
-          height: 20px;
-          border-radius: 4px;
-
-          &.high {
-            background: #ffe6e6;
-            border: 2px solid #ff4444;
-          }
-
-          &.medium {
-            background: #fff9e6;
-            border: 2px solid #ffb347;
-          }
-
-          &.low {
-            background: #e8f5e9;
-            border: 2px solid #66bb6a;
-          }
-        }
-      }
-    }
-
-    .legend-note {
-      margin: 0.5rem 0 0 0;
-      font-size: 0.8rem;
-      color: #6c757d;
-      font-style: italic;
     }
   }
 }
 
-// Summary Panel (Right - sticky)
+// Google Docs-style Tooltip
+.tooltip {
+  position: fixed;
+  z-index: 9999;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  width: 320px;
+  pointer-events: none;
+  animation: tooltipFadeIn 0.2s ease-out;
+
+  &.tooltip-high {
+    border-left: 4px solid #dc3545;
+  }
+
+  &.tooltip-medium {
+    border-left: 4px solid #ffc107;
+  }
+
+  &.tooltip-low {
+    border-left: 4px solid #28a745;
+  }
+
+  .tooltip-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 1rem;
+    border-bottom: 1px solid #e9ecef;
+
+    .tooltip-icon {
+      font-size: 1.5rem;
+      flex-shrink: 0;
+    }
+
+    .tooltip-title-section {
+      flex: 1;
+
+      .tooltip-category {
+        font-weight: 600;
+        color: #333;
+        font-size: 0.95rem;
+        margin-bottom: 0.25rem;
+      }
+
+      .tooltip-risk {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: #666;
+      }
+    }
+  }
+
+  .tooltip-body {
+    padding: 1rem;
+
+    p {
+      margin: 0;
+      color: #495057;
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+  }
+}
+
+@keyframes tooltipFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Summary Panel (copied from tos-ai-summary)
 .summary-column {
   position: sticky;
   top: 2rem;
@@ -242,7 +260,6 @@
   }
 }
 
-// Risk Card
 .risk-card {
   background: white;
   border-radius: 8px;
@@ -291,7 +308,6 @@
   }
 }
 
-// Key Points
 .key-points {
   background: white;
   border-radius: 8px;
@@ -310,7 +326,6 @@
   }
 }
 
-// Clause Groups
 .clause-groups {
   .clause-group {
     background: white;
@@ -390,7 +405,6 @@
   }
 }
 
-// Keywords
 .keywords {
   background: white;
   border-radius: 8px;
@@ -447,7 +461,6 @@
   }
 }
 
-// Error Message
 .error-message {
   background: #ffebee;
   border: 1px solid #ef5350;
@@ -464,6 +477,10 @@
     padding: 1rem;
   }
 
+  .tooltip {
+    width: 280px;
+  }
+
   .tos-document, .summary-panel {
     padding: 1.5rem;
   }
@@ -475,9 +492,5 @@
   .btn-finish {
     font-size: 1.1rem;
     padding: 1rem 2rem;
-  }
-
-  .legend .legend-items {
-    gap: 1rem;
   }
 }
