@@ -76,13 +76,21 @@ def summarize(req: SummRequest):
 @app.post("/api/users")
 def create_or_get_user(user: UserCreate):
     """
-    Create a new user or get existing user by name
+    Create a new user - returns error if name already exists
     """
-    user_data = db.get_user_by_name(user.name)
+    # Check if name already exists
+    if db.is_user_name_taken(user.name):
+        raise HTTPException(
+            status_code=400, 
+            detail="Name already exists. Please choose a different name."
+        )
+    
+    # Create new user
+    user_id = db.create_user(user.name)
     return {
-        "userId": user_data["id"],
-        "name": user_data["name"],
-        "message": "User found" if user_data else "User created"
+        "userId": user_id,
+        "name": user.name,
+        "message": "User created"
     }
 
 @app.get("/api/users/{user_name}")

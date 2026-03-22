@@ -103,19 +103,19 @@ def create_user(name: str) -> int:
     return user_id
 
 def get_user_by_name(name: str):
-    """Get user by name or create if doesn't exist"""
+    """Get user by name"""
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM users WHERE name = ?", (name,))
     user = cursor.fetchone()
     conn.close()
     
-    if user:
-        return dict(user)
-    else:
-        # Create new user
-        user_id = create_user(name)
-        return {"id": user_id, "name": name}
+    return dict(user) if user else None
+
+
+def is_user_name_taken(name: str) -> bool:
+    """Return True if user name already exists"""
+    return get_user_by_name(name) is not None
 
 def save_session_data(user_id: int, metrics: dict):
     """Save session metrics to database"""

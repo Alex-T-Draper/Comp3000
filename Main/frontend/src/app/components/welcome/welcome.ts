@@ -1,5 +1,5 @@
 // src/app/components/welcome/welcome.ts
-import { Component } from '@angular/core';
+import { Component, ViewChild, ElementRef, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -12,7 +12,9 @@ import { HttpClient } from '@angular/common/http';
   templateUrl: './welcome.html',
   styleUrls: ['./welcome.scss']
 })
-export class WelcomeComponent {
+export class WelcomeComponent implements AfterViewInit {
+  @ViewChild('userNameInput') userNameInput?: ElementRef<HTMLInputElement>;
+
   userName: string = '';
   isLoading: boolean = false;
   error: string | null = null;
@@ -21,8 +23,13 @@ export class WelcomeComponent {
 
   constructor(
     private router: Router,
-    private http: HttpClient
+    private http: HttpClient,
+    private cdr: ChangeDetectorRef
   ) {}
+
+  ngAfterViewInit() {
+    // ViewChild is ready
+  }
 
   /**
    * Validate and start the study
@@ -42,21 +49,46 @@ export class WelcomeComponent {
     this.isLoading = true;
     this.error = null;
 
-    // Create/get user in database
+    // Create user in database
     this.http.post(`${this.apiUrl}/users`, { name: this.userName.trim() })
       .subscribe({
         next: (response: any) => {
-          // Store user name in session storage for use in ToS viewer
+          // Store user name in session storage
           sessionStorage.setItem('userName', this.userName.trim());
           sessionStorage.setItem('userId', response.userId);
           
-          // Navigate to ToS viewer
+          // Navigate to first condition
           this.router.navigate(['/tos-plain']);
         },
         error: (err) => {
           console.error('Error creating user:', err);
-          this.error = 'Failed to start study. Please try again.';
+          
+          // ALWAYS re-enable the form
           this.isLoading = false;
+          
+          // Force Angular to detect the change
+          this.cdr.detectChanges();
+          
+          // Check for duplicate name error
+          if (err?.status === 400 && err?.error?.detail?.includes('already exists')) {
+            this.error = 'This name is already taken. Please choose a different name.';
+            this.userName = ''; // Clear the input
+            
+            // Force another change detection after clearing
+            this.cdr.detectChanges();
+            
+            // Focus input after a brief delay
+            setTimeout(() => {
+              const input = this.userNameInput?.nativeElement;
+              if (input) {
+                input.focus();
+              }
+            }, 100);
+          } else if (err?.error?.detail) {
+            this.error = err.error.detail;
+          } else {
+            this.error = 'Failed to start study. Please try again.';
+          }
         }
       });
   }

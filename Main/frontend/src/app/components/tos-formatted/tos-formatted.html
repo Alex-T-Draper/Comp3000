@@ -1,1 +1,46 @@
-<p>tos-formatted works!</p>
+<!-- src/app/components/tos-formatted/tos-formatted.html -->
+<div class="tos-container">
+  
+  <!-- Header -->
+  <div class="header">
+    <h1>{{ tosTitle }}</h1>
+    <p class="subtitle">Condition 3: Formatted Text</p>
+  </div>
+
+  <!-- Legend -->
+  <div class="legend">
+    <h3>Legend:</h3>
+    <div class="legend-items">
+      <div class="legend-item">
+        <span class="highlight-sample high"></span>
+        <span>High Risk</span>
+      </div>
+      <div class="legend-item">
+        <span class="highlight-sample medium"></span>
+        <span>Medium Risk</span>
+      </div>
+      <div class="legend-item">
+        <strong class="bold-sample">Bold</strong>
+        <span>Important</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ToS Document with Formatting -->
+  <div class="tos-document" #tosContainer>
+    <div class="tos-text" [innerHTML]="formattedHtml"></div>
+  </div>
+
+  <!-- Finish Button -->
+  <div class="actions">
+    <button 
+      class="btn-finish"
+      (click)="finishReading()">
+      ✓ I've Finished Reading
+    </button>
+    <p class="helper-text">
+      Click when you're done reading to continue to the next part
+    </p>
+  </div>
+
+</div>
