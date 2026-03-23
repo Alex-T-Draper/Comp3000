@@ -15,6 +15,9 @@ from nlp_service import (
     _model_cache
 )
 
+RESULTS_DIR = os.path.join(os.path.dirname(__file__), "results")
+os.makedirs(RESULTS_DIR, exist_ok=True)
+
 def detect_device():
     """Detect available compute device and print GPU info if available"""
     if torch.cuda.is_available():
@@ -103,7 +106,7 @@ def test_all_models_single_doc(text: str, doc_label: str):
 
     return results
 
-def test_all_models_all_docs(output_file: str = "model_comparison_results.json"):
+def test_all_models_all_docs(output_file: str = os.path.join(RESULTS_DIR, "model_comparison_results.json")):
     """
     Run every model against every ToS document.
     Produces per-document results and aggregate statistics per model.
@@ -206,7 +209,7 @@ def compare_two_models(model1: str, model2: str):
         print(f"    {s2[:150]}...")
 
 def test_cpu_vs_gpu(model_names=None, doc_filename="ecommerce_tos",
-                    output_file="cpu_vs_gpu_results.json"):
+                    output_file=os.path.join(RESULTS_DIR, "cpu_vs_gpu_results.json")):
     """
     Benchmark each model on both CPU and GPU for a single document.
     Prints a side-by-side timing comparison and saves results to JSON.
@@ -298,9 +301,9 @@ if __name__ == "__main__":
     if gpu_device:
         test_cpu_vs_gpu()
 
-    # Uncomment to test a single model on one document:
+    # Test a single model on one document
     # text = load_tos_text("ecommerce_tos")
     # test_single_model(text, "distilbart-cnn-12-6")
 
-    # Uncomment to compare two models across all documents:
+    # Compare two models across all documents
     # compare_two_models("distilbart-cnn-12-6", "bart-large-cnn")
