@@ -287,7 +287,7 @@ export class TosFormattedComponent implements OnInit, OnDestroy {
       next: () => {
         console.log('Condition 3 (Formatted) metrics saved');
         // Navigate to Condition 4
-        this.router.navigate(['/tos-ai-summary']);
+        this.router.navigate(['/distractor-math-quiz']);
       },
       error: (err: any) => {
         console.error('Error saving metrics:', err);

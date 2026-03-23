@@ -1,0 +1,51 @@
+<!-- src/app/components/distractor-math-quiz/distractor-math-quiz.html -->
+<div class="distractor-container">
+  
+  <!-- Header -->
+  <div class="header" *ngIf="!isComplete">
+    <h1>🧮 Math Challenge</h1>
+    <p class="subtitle">Solve these quick math problems</p>
+    <div class="stats">
+      <span class="progress">Question {{ getProgress() }}</span>
+      <span class="timer" [class.warning]="timeLeft <= 15">⏱️ {{ timeLeft }}s</span>
+    </div>
+  </div>
+
+  <!-- Game Area -->
+  <div class="game-area" *ngIf="!isComplete">
+    <div class="question-card">
+      <div class="question">{{ getCurrentQuestion().question }}</div>
+      
+      <div class="options">
+        <button 
+          *ngFor="let option of getCurrentQuestion().options"
+          class="option"
+          [class.selected]="selectedAnswer === option"
+          [class.correct]="showFeedback && isCorrect(option)"
+          [class.incorrect]="showFeedback && selectedAnswer === option && !isCorrect(option)"
+          (click)="selectAnswer(option)"
+          [disabled]="showFeedback">
+          {{ option }}
+        </button>
+      </div>
+
+      <button 
+        class="btn-submit"
+        (click)="submitAnswer()"
+        [disabled]="selectedAnswer === null || showFeedback">
+        Submit Answer
+      </button>
+    </div>
+  </div>
+
+  <!-- Completion Screen -->
+  <div class="completion-screen" *ngIf="isComplete">
+    <h1>⏰ Time's Up!</h1>
+    <p class="score">You got {{ correctCount }} out of {{ questions.length }} correct</p>
+    <p class="percentage">{{ (correctCount / questions.length * 100).toFixed(0) }}% accuracy</p>
+    <button class="btn-continue" (click)="continue()">
+      Continue to Next Section →
+    </button>
+  </div>
+
+</div>

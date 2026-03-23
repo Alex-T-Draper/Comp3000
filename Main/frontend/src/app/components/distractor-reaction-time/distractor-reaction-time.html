@@ -1,0 +1,74 @@
+<!-- src/app/components/distractor-reaction-time/distractor-reaction-time.html -->
+<div class="distractor-container">
+  
+  <!-- Instructions -->
+  <div class="instructions-screen" *ngIf="phase === 'instructions'">
+    <h1>⚡ Reaction Challenge</h1>
+    <div class="instructions-box">
+      <h2>How to Play:</h2>
+      <ul>
+        <li>Words will flash on the screen</li>
+        <li>Press <kbd>SPACE</kbd> when you see: <strong>READ</strong>, <strong>STUDY</strong>, or <strong>LEARN</strong></li>
+        <li><strong>Don't press</strong> for other words!</li>
+        <li>Be quick and accurate</li>
+      </ul>
+      <button class="btn-start" (click)="startGame()">
+        Start Game ⚡
+      </button>
+    </div>
+  </div>
+
+  <!-- Playing -->
+  <div class="playing-screen" *ngIf="phase === 'playing'">
+    <!-- Progress bar -->
+    <div class="progress-bar">
+      <div class="progress-fill" [style.width.%]="getProgress()"></div>
+    </div>
+    
+    <div class="word-display">
+      <div class="word" *ngIf="currentWord" [class.target]="isTargetWord">
+        {{ currentWord }}
+      </div>
+      <div class="instruction" *ngIf="!currentWord">
+        Get ready...
+      </div>
+    </div>
+
+    <div class="hint">
+      Press <kbd>SPACE</kbd> for: READ, STUDY, LEARN
+    </div>
+
+    <div class="score-display">
+      <span class="score-item correct">✓ {{ score }}</span>
+      <span class="score-item miss">✗ {{ misses }}</span>
+      <span class="score-item false">⚠ {{ falseAlarms }}</span>
+    </div>
+  </div>
+
+  <!-- Completion Screen -->
+  <div class="completion-screen" *ngIf="phase === 'complete'">
+    <h1>🎯 Great Reflexes!</h1>
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-value">{{ score }}</div>
+        <div class="stat-label">Correct Hits</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">{{ misses }}</div>
+        <div class="stat-label">Misses</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">{{ falseAlarms }}</div>
+        <div class="stat-label">False Alarms</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">{{ getAccuracy() }}%</div>
+        <div class="stat-label">Accuracy</div>
+      </div>
+    </div>
+    <button class="btn-continue" (click)="continue()">
+      Continue to Next Section →
+    </button>
+  </div>
+
+</div>

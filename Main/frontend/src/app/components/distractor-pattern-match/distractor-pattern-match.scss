@@ -1,0 +1,264 @@
+// src/app/components/distractor-pattern-match/distractor-pattern-match.scss
+
+.distractor-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #4285F4 0%, #34A853 100%);
+  padding: 2rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.header {
+  text-align: center;
+  color: white;
+  margin-bottom: 2rem;
+
+  h1 {
+    font-size: 2.5rem;
+    margin: 0 0 0.5rem 0;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+
+  .subtitle {
+    font-size: 1.2rem;
+    margin: 0 0 1rem 0;
+    opacity: 0.9;
+  }
+
+  .round {
+    font-size: 1rem;
+    margin: 0;
+    opacity: 0.8;
+    font-weight: 600;
+  }
+}
+
+.game-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+
+.instruction {
+  text-align: center;
+  color: white;
+
+  h2 {
+    font-size: 2rem;
+    margin: 0 0 0.5rem 0;
+  }
+
+  p {
+    font-size: 1.2rem;
+    margin: 0;
+    opacity: 0.9;
+  }
+
+  .countdown {
+    font-size: 4rem;
+    font-weight: 700;
+    margin-top: 1rem;
+    animation: pulse 1s infinite;
+  }
+}
+
+.grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: white;
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  overflow: visible;
+
+  .row {
+    display: flex;
+    gap: 10px;
+    overflow: visible;
+
+    .cell {
+      width: 80px;
+      height: 80px;
+      border-radius: 10px;
+      border: 3px solid #e0e0e0;
+      transition: all 0.3s;
+      position: relative;
+      overflow: visible;
+
+      &.clickable {
+        cursor: pointer;
+
+        &:hover {
+          transform: scale(1.05);
+          border-color: #4285F4;
+        }
+      }
+
+      &.selected {
+        border-color: #4285F4;
+      }
+
+      &.correct {
+        border-color: #34A853;
+        border-width: 5px;
+        animation: successPulse 0.5s;
+      }
+
+      &.incorrect {
+        border-color: #EA4335;
+        border-width: 5px;
+        animation: shake 0.5s;
+      }
+    }
+  }
+}
+
+.color-palette {
+  display: flex;
+  gap: 12px;
+  background: white;
+  padding: 12px 20px;
+  border-radius: 50px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+
+  .palette-option {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 3px solid transparent;
+    transition: all 0.2s;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+
+    &:hover {
+      transform: scale(1.15);
+    }
+
+    &.active {
+      border-color: #333;
+      transform: scale(1.15);
+      box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
+    }
+  }
+}
+
+.btn-submit {
+  padding: 1.25rem 2.5rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+  background: white;
+  color: #4285F4;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s;
+
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.completion-screen {
+  text-align: center;
+  color: white;
+
+  h1 {
+    font-size: 3rem;
+    margin: 0 0 1rem 0;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+
+  .score {
+    font-size: 1.5rem;
+    margin: 0 0 0.5rem 0;
+    opacity: 0.9;
+  }
+
+  .percentage {
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0 0 2rem 0;
+  }
+
+  .btn-continue {
+    padding: 1.25rem 2.5rem;
+    font-size: 1.2rem;
+    font-weight: 600;
+    background: white;
+    color: #4285F4;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    }
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+@keyframes successPulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-10px);
+  }
+  75% {
+    transform: translateX(10px);
+  }
+}
+
+@media (max-width: 768px) {
+  .header h1 {
+    font-size: 2rem;
+  }
+
+  .grid .row .cell {
+    width: 60px;
+    height: 60px;
+  }
+
+  .instruction .countdown {
+    font-size: 3rem;
+  }
+
+  .completion-screen h1 {
+    font-size: 2rem;
+  }
+}

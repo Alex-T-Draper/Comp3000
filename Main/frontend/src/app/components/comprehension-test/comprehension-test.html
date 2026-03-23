@@ -1,0 +1,106 @@
+<!-- src/app/components/comprehension-test/comprehension-test.html -->
+<div class="test-container">
+  
+  <!-- Introduction -->
+  <div class="intro-screen" *ngIf="currentSection === 'intro'">
+    <div class="intro-box">
+      <h1>📋 One Last Thing...</h1>
+      <p class="intro-text">
+        Before you finish, we'd like to ask a few quick questions about what you just read. 
+        This will only take <strong>2-3 minutes</strong>.
+      </p>
+      <p class="intro-note">
+        Don't worry - this isn't a test of your memory! We're just interested in your 
+        general impressions and understanding.
+      </p>
+      <button class="btn-start" (click)="startTest()">
+        Start Questions →
+      </button>
+    </div>
+  </div>
+
+  <!-- Recognition Questions -->
+  <div class="question-screen" *ngIf="currentSection === 'recognition'">
+    <div class="header">
+      <h2>Part 1: Recognition</h2>
+      <p class="progress">Question {{ getRecognitionProgress() }}</p>
+    </div>
+
+    <div class="question-card">
+      <p class="instruction">Was this statement in any of the Terms of Service you read?</p>
+      
+      <div class="statement">
+        "{{ getCurrentRecognitionQuestion().statement }}"
+      </div>
+
+      <div class="answer-buttons">
+        <button 
+          class="btn-answer true"
+          (click)="answerRecognition('true')">
+          ✓ Yes, I saw this
+        </button>
+        <button 
+          class="btn-answer false"
+          (click)="answerRecognition('false')">
+          ✗ No, this wasn't in it
+        </button>
+        <button 
+          class="btn-answer unsure"
+          (click)="answerRecognition('unsure')">
+          ? I don't remember
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Confidence Questions -->
+  <div class="question-screen" *ngIf="currentSection === 'confidence'">
+    <div class="header">
+      <h2>Part 2: Confidence</h2>
+      <p class="progress">Question {{ getConfidenceProgress() }}</p>
+    </div>
+
+    <div class="question-card">
+      <div class="confidence-question">
+        {{ getCurrentConfidenceQuestion().question }}
+      </div>
+
+      <div class="confidence-scale">
+        <button 
+          *ngFor="let rating of [1, 2, 3, 4, 5]"
+          class="confidence-btn"
+          [class.selected]="getCurrentConfidenceQuestion().userAnswer === rating"
+          (click)="answerConfidence(rating)">
+          <div class="rating-number">{{ rating }}</div>
+          <div class="rating-label">{{ getConfidenceLabel(rating) }}</div>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Completion Screen -->
+  <div class="completion-screen" *ngIf="currentSection === 'complete'">
+    <div class="completion-box">
+      <h1>✅ Thank You!</h1>
+      <p class="completion-text">
+        Your responses have been recorded.
+      </p>
+      
+      <div class="results-summary">
+        <div class="result-item">
+          <div class="result-label">Recognition Score</div>
+          <div class="result-value">{{ calculateRecognitionScore() }}%</div>
+        </div>
+        <div class="result-item">
+          <div class="result-label">Average Confidence</div>
+          <div class="result-value">{{ calculateAverageConfidence() }} / 5</div>
+        </div>
+      </div>
+
+      <button class="btn-continue" (click)="continue()">
+        Continue to Feedback Survey →
+      </button>
+    </div>
+  </div>
+
+</div>

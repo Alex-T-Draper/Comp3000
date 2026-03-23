@@ -174,7 +174,7 @@ export class TosAiSummaryComponent implements OnInit, OnDestroy {
       next: () => {
         console.log('Condition 4 (AI Summary) metrics saved');
         // Navigate to Condition 5
-        this.router.navigate(['/tos-ai-enhanced']);
+        this.router.navigate(['/distractor-reaction-time']);
       },
       error: (err: any) => {
         console.error('Error saving metrics:', err);

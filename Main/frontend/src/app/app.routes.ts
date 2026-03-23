@@ -8,6 +8,13 @@ import { TosFormattedComponent } from './components/tos-formatted/tos-formatted'
 import { TosAiSummaryComponent } from './components/tos-ai-summary/tos-ai-summary';
 import { TosAiHoverComponent } from './components/tos-ai-hover/tos-ai-hover';
 import { ThankYouComponent } from './components/thank-you/thank-you';
+import { DistractorWordScrambleComponent } from './components/distractor-word-scramble/distractor-word-scramble';
+import { DistractorPatternMatchComponent } from './components/distractor-pattern-match/distractor-pattern-match';
+import { DistractorMathQuizComponent } from './components/distractor-math-quiz/distractor-math-quiz';
+import { DistractorReactionTimeComponent } from './components/distractor-reaction-time/distractor-reaction-time';
+import { DistractorSpotDifferenceComponent } from './components/distractor-spot-difference/distractor-spot-difference';
+import { ComprehensionTestComponent } from './components/comprehension-test/comprehension-test';
+
 
 export const routes: Routes = [
   { path: '', component: WelcomeComponent },
@@ -19,5 +26,11 @@ export const routes: Routes = [
   { path: 'tos-ai-enhanced', component: TosAiEnhancedComponent },
   { path: 'tos-ai-hover', component: TosAiHoverComponent },
   { path: 'thank-you', component: ThankYouComponent },
+  { path: 'distractor-word-scramble', component: DistractorWordScrambleComponent },
+  { path: 'distractor-pattern-match', component: DistractorPatternMatchComponent },
+  { path: 'distractor-math-quiz', component: DistractorMathQuizComponent },
+  { path: 'distractor-reaction-time', component: DistractorReactionTimeComponent },
+  { path: 'distractor-spot-difference', component: DistractorSpotDifferenceComponent },
+  { path: 'comprehension-test', component: ComprehensionTestComponent },
   { path: '**', redirectTo: '' }
 ];

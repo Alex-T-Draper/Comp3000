@@ -101,7 +101,7 @@ export class TosPlainComponent implements OnInit, OnDestroy {
     this.tracking.saveMetrics().subscribe({
       next: () => {
         console.log('Condition 1 (Plain) metrics saved');
-        this.router.navigate(['/tos-scroll-required']);
+        this.router.navigate(['/distractor-word-scramble']);
       },
       error: (err: any) => {
         console.error('Error saving metrics:', err);

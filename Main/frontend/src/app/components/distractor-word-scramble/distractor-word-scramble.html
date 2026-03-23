@@ -1,0 +1,50 @@
+<!-- src/app/components/distractor-word-scramble/distractor-word-scramble.html -->
+<div class="distractor-container">
+  
+  <!-- Instructions -->
+  <div class="header" *ngIf="!isComplete">
+    <h1>🎯 Word Scramble</h1>
+    <p class="subtitle">Unscramble these shopping-related words</p>
+    <p class="progress">Question {{ getProgress() }}</p>
+  </div>
+
+  <!-- Game Area -->
+  <div class="game-area" *ngIf="!isComplete">
+    <div class="word-card">
+      <div class="scrambled-word">{{ getCurrentWord().scrambled }}</div>
+      
+      <div class="input-section">
+        <input 
+          type="text" 
+          [(ngModel)]="userAnswer"
+          (keyup.enter)="checkAnswer()"
+          [disabled]="showFeedback"
+          placeholder="Type your answer..."
+          autofocus
+          class="answer-input">
+        
+        <button 
+          class="btn-submit"
+          (click)="checkAnswer()"
+          [disabled]="!userAnswer || showFeedback">
+          Submit
+        </button>
+      </div>
+
+      <!-- Feedback -->
+      <div class="feedback" *ngIf="showFeedback" [class.correct]="feedback.includes('✓')">
+        {{ feedback }}
+      </div>
+    </div>
+  </div>
+
+  <!-- Completion Screen -->
+  <div class="completion-screen" *ngIf="isComplete">
+    <h1>✅ Great Job!</h1>
+    <p class="score">You got {{ correctCount }} out of {{ words.length }} correct</p>
+    <button class="btn-continue" (click)="continue()">
+      Continue to Next Section →
+    </button>
+  </div>
+
+</div>

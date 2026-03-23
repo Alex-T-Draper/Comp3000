@@ -1,0 +1,135 @@
+<!-- src/app/components/distractor-spot-difference/distractor-spot-difference.html -->
+<div class="distractor-container">
+  
+  <!-- Header -->
+  <div class="header" *ngIf="!isComplete">
+    <h1>👀 Spot the Difference</h1>
+    <p class="subtitle">Find 5 differences in this fitness tracker interface</p>
+    <div class="stats">
+      <span class="found">Found: {{ foundCount }} / {{ totalDifferences }}</span>
+      <span class="timer" [class.warning]="timeLeft <= 15">⏱️ {{ timeLeft }}s</span>
+    </div>
+  </div>
+
+  <!-- Game Area -->
+  <div class="game-area" *ngIf="!isComplete">
+    <div class="images-container" [class.wrong-click]="clickedWrong">
+      <!-- Image 1 (Original) -->
+      <div class="image-wrapper">
+        <div class="label">Image 1</div>
+        <div class="fitness-mockup image-1" (click)="handleClick($event, 1)">
+          <!-- SVG Fitness Tracker Mockup -->
+          <svg viewBox="0 0 300 400" xmlns="http://www.w3.org/2000/svg">
+            <!-- Background -->
+            <rect width="300" height="400" fill="#1a1a1a" rx="20"/>
+            
+            <!-- Header -->
+            <text x="150" y="40" text-anchor="middle" fill="white" font-size="20" font-weight="bold">Workout Tracker</text>
+            
+            <!-- Play button (DIFFERENCE 1: Triangle vs Circle) -->
+            <circle cx="75" cy="80" r="20" fill="#4CAF50"/>
+            <polygon points="70,70 70,90 85,80" fill="white"/>
+            
+            <!-- Heart icon (DIFFERENCE 2: Red vs Gray) -->
+            <path d="M 225 70 L 235 60 Q 245 50 255 60 L 245 70 L 235 80 L 225 70 Z" fill="#f44336"/>
+            
+            <!-- Song/Workout title (DIFFERENCE 3: Different text) -->
+            <text x="150" y="130" text-anchor="middle" fill="white" font-size="16">Morning Cardio</text>
+            
+            <!-- Stats box -->
+            <rect x="50" y="160" width="200" height="80" fill="#2a2a2a" rx="10"/>
+            <text x="150" y="185" text-anchor="middle" fill="#4CAF50" font-size="14">Calories Burned</text>
+            <text x="150" y="215" text-anchor="middle" fill="white" font-size="28" font-weight="bold">342</text>
+            
+            <!-- Progress bar (DIFFERENCE 4: Different position/length) -->
+            <rect x="50" y="280" width="200" height="8" fill="#2a2a2a" rx="4"/>
+            <rect x="50" y="280" width="140" height="8" fill="#4CAF50" rx="4"/>
+            
+            <!-- Time -->
+            <text x="150" y="310" text-anchor="middle" fill="#888" font-size="14">28:45 / 45:00</text>
+            
+            <!-- Volume slider (DIFFERENCE 5: Different position) -->
+            <rect x="50" y="340" width="200" height="4" fill="#2a2a2a" rx="2"/>
+            <rect x="50" y="340" width="120" height="4" fill="white" rx="2"/>
+            <circle cx="170" cy="342" r="8" fill="white"/>
+          </svg>
+          
+          <!-- Markers for found differences -->
+          <div 
+            *ngFor="let diff of differences"
+            class="difference-marker"
+            [class.found]="diff.found"
+            [style.left.%]="diff.x"
+            [style.top.%]="diff.y">
+            ✓
+          </div>
+        </div>
+      </div>
+
+      <!-- Image 2 (With differences) -->
+      <div class="image-wrapper">
+        <div class="label">Image 2</div>
+        <div class="fitness-mockup image-2" (click)="handleClick($event, 2)">
+          <!-- SVG Fitness Tracker Mockup with differences -->
+          <svg viewBox="0 0 300 400" xmlns="http://www.w3.org/2000/svg">
+            <!-- Background -->
+            <rect width="300" height="400" fill="#1a1a1a" rx="20"/>
+            
+            <!-- Header -->
+            <text x="150" y="40" text-anchor="middle" fill="white" font-size="20" font-weight="bold">Workout Tracker</text>
+            
+            <!-- Play button (DIFFERENCE 1: Circle instead of triangle) -->
+            <circle cx="75" cy="80" r="20" fill="#4CAF50"/>
+            <circle cx="75" cy="80" r="8" fill="white"/>
+            
+            <!-- Heart icon (DIFFERENCE 2: Gray instead of red) -->
+            <path d="M 225 70 L 235 60 Q 245 50 255 60 L 245 70 L 235 80 L 225 70 Z" fill="#888"/>
+            
+            <!-- Song/Workout title (DIFFERENCE 3: Different text) -->
+            <text x="150" y="130" text-anchor="middle" fill="white" font-size="16">Evening Run</text>
+            
+            <!-- Stats box -->
+            <rect x="50" y="160" width="200" height="80" fill="#2a2a2a" rx="10"/>
+            <text x="150" y="185" text-anchor="middle" fill="#4CAF50" font-size="14">Calories Burned</text>
+            <text x="150" y="215" text-anchor="middle" fill="white" font-size="28" font-weight="bold">342</text>
+            
+            <!-- Progress bar (DIFFERENCE 4: Longer) -->
+            <rect x="50" y="280" width="200" height="8" fill="#2a2a2a" rx="4"/>
+            <rect x="50" y="280" width="170" height="8" fill="#4CAF50" rx="4"/>
+            
+            <!-- Time -->
+            <text x="150" y="310" text-anchor="middle" fill="#888" font-size="14">28:45 / 45:00</text>
+            
+            <!-- Volume slider (DIFFERENCE 5: Further right) -->
+            <rect x="50" y="340" width="200" height="4" fill="#2a2a2a" rx="2"/>
+            <rect x="50" y="340" width="160" height="4" fill="white" rx="2"/>
+            <circle cx="210" cy="342" r="8" fill="white"/>
+          </svg>
+          
+          <!-- Markers for found differences -->
+          <div 
+            *ngFor="let diff of differences"
+            class="difference-marker"
+            [class.found]="diff.found"
+            [style.left.%]="diff.x"
+            [style.top.%]="diff.y">
+            ✓
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="hint">💡 Click on a difference when you find it!</p>
+  </div>
+
+  <!-- Completion Screen -->
+  <div class="completion-screen" *ngIf="isComplete">
+    <h1>{{ getSuccessMessage() }}</h1>
+    <p class="score">You found {{ foundCount }} out of {{ totalDifferences }} differences</p>
+    <p class="time">Time taken: {{ 60 - timeLeft }} seconds</p>
+    <button class="btn-continue" (click)="continue()">
+      Continue to Final Section →
+    </button>
+  </div>
+
+</div>

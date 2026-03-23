@@ -1,0 +1,96 @@
+<!-- src/app/components/distractor-pattern-match/distractor-pattern-match.html -->
+<div class="distractor-container">
+  
+  <!-- Header -->
+  <div class="header" *ngIf="phase !== 'complete'">
+    <h1>🎨 Pattern Memory</h1>
+    <p class="subtitle">Memorize the pattern, then recreate it!</p>
+    <p class="round">Round {{ currentRound }} / {{ totalRounds }}</p>
+  </div>
+
+  <!-- Memorize Phase -->
+  <div class="game-area" *ngIf="phase === 'memorize'">
+    <div class="instruction">
+      <h2>Memorize this pattern!</h2>
+      <p class="countdown">{{ countdown }}</p>
+    </div>
+    
+    <div class="grid">
+      <div class="row" *ngFor="let row of pattern; let i = index">
+        <div 
+          class="cell"
+          *ngFor="let color of row; let j = index"
+          [style.background-color]="color">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recall Phase -->
+  <div class="game-area" *ngIf="phase === 'recall'">
+    <div class="instruction">
+      <h2>Recreate the pattern!</h2>
+      <p>Select a color, then click a cell to fill it</p>
+    </div>
+    
+    <!-- Color palette -->
+    <div class="color-palette">
+      <div 
+        class="palette-option"
+        *ngFor="let color of colors"
+        [style.background-color]="color"
+        [class.active]="selectedColor === color"
+        (click)="selectColor(color)">
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="row" *ngFor="let row of grid; let i = index">
+        <div 
+          class="cell clickable"
+          *ngFor="let cell of row; let j = index"
+          [style.background-color]="cell.color"
+          [class.selected]="cell.selected"
+          (click)="fillCell(i, j)">
+        </div>
+      </div>
+    </div>
+
+    <button 
+      class="btn-submit"
+      (click)="submitAnswer()"
+      [disabled]="!allCellsSelected()">
+      Submit Answer
+    </button>
+  </div>
+
+  <!-- Feedback Phase -->
+  <div class="game-area" *ngIf="phase === 'feedback'">
+    <div class="instruction">
+      <h2>Results</h2>
+    </div>
+    
+    <div class="grid">
+      <div class="row" *ngFor="let row of grid; let i = index">
+        <div 
+          class="cell"
+          *ngFor="let cell of row; let j = index"
+          [style.background-color]="cell.color"
+          [class.correct]="isCellCorrect(i, j)"
+          [class.incorrect]="!isCellCorrect(i, j)">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Completion Screen -->
+  <div class="completion-screen" *ngIf="phase === 'complete'">
+    <h1>🎯 Well Done!</h1>
+    <p class="score">You matched {{ score }} out of {{ totalRounds * 9 }} cells</p>
+    <p class="percentage">{{ getScorePercentage() }}% accuracy</p>
+    <button class="btn-continue" (click)="continue()">
+      Continue to Next Section →
+    </button>
+  </div>
+
+</div>

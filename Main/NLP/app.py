@@ -1,6 +1,8 @@
-# app.py - Updated with user tracking and database
+# app.py
+import json
 import logging
 import os
+import sqlite3
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import Response, PlainTextResponse
@@ -205,6 +207,49 @@ def export_csv():
         headers={"Content-Disposition": "attachment; filename=tos_research_data.csv"}
     )
 
+@app.post("/api/comprehension-test")
+async def save_comprehension_test(data: dict):
+    """Save comprehension test results"""
+    try:
+        conn = sqlite3.connect('tos_research.db')
+        c = conn.cursor()
+        
+        # Create table if it doesn't exist
+        c.execute('''
+            CREATE TABLE IF NOT EXISTS comprehension_tests (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_name TEXT NOT NULL,
+                timestamp TEXT NOT NULL,
+                recognition_score INTEGER,
+                avg_confidence REAL,
+                recognition_answers TEXT,
+                confidence_answers TEXT,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        ''')
+        
+        # Insert test results
+        c.execute('''
+            INSERT INTO comprehension_tests 
+            (user_name, timestamp, recognition_score, avg_confidence, recognition_answers, confidence_answers)
+            VALUES (?, ?, ?, ?, ?, ?)
+        ''', (
+            data.get('userName'),
+            data.get('timestamp'),
+            data.get('recognitionScore'),
+            data.get('avgConfidence'),
+            json.dumps(data.get('recognitionAnswers', [])),
+            json.dumps(data.get('confidenceAnswers', []))
+        ))
+        
+        conn.commit()
+        conn.close()
+        
+        return {"status": "success", "message": "Comprehension test saved"}
+    
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error saving comprehension test: {str(e)}")
+    
 # ===== Utility Endpoints =====
 
 @app.get("/")

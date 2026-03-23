@@ -323,7 +323,7 @@ export class TosAiEnhancedComponent implements OnInit, OnDestroy {
       next: () => {
         console.log('Metrics saved successfully');
         // Navigate to condition 6
-        this.router.navigate(['/tos-ai-hover']);
+        this.router.navigate(['/distractor-spot-difference']);
       },
       error: (err: any) => {
         console.error('Error saving metrics:', err);

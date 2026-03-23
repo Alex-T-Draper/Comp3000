@@ -323,7 +323,7 @@ export class TosAiHoverComponent implements OnInit, OnDestroy {
       next: () => {
         console.log('Condition 6 (AI Hover) metrics saved');
         // Navigate to thank you page
-        this.router.navigate(['/thank-you']);
+        this.router.navigate(['/comprehension-test']);
       },
       error: (err: any) => {
         console.error('Error saving metrics:', err);

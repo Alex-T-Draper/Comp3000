@@ -123,7 +123,7 @@ export class TosScrollRequiredComponent implements OnInit, OnDestroy {
     this.tracking.saveMetrics().subscribe({
       next: () => {
         console.log('Condition 2 (Scroll Required) metrics saved');
-        this.router.navigate(['/tos-formatted']);
+        this.router.navigate(['/distractor-pattern-match']);
       },
       error: (err: any) => {
         console.error('Error saving metrics:', err);
