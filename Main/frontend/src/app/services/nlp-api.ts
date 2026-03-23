@@ -87,4 +87,11 @@ export class NlpApiService {
 
     return this.http.post<NLPAnalysisResponse>(`${this.apiUrl}/summarize`, request);
   }
+
+  /**
+   * Load a ToS document from the backend by filename (without extension)
+   */
+  loadTosFile(filename: string): Observable<string> {
+    return this.http.get(`${this.apiUrl}/api/tos/${filename}`, { responseType: 'text' });
+  }
 }

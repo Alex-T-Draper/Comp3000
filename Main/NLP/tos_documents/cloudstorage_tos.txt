@@ -1,0 +1,148 @@
+VaultDrive Cloud Storage — Terms of Service
+
+Effective Date: January 2026
+
+These Terms of Service ("Agreement") constitute a legally binding contract between you ("Customer" or "you") and VaultDrive Ltd. ("VaultDrive", "we", "us", or "our") governing your use of the VaultDrive cloud storage platform, desktop and mobile applications, browser extensions, and all associated services (the "Service").
+
+BY CLICKING "I AGREE", CREATING AN ACCOUNT, OR USING THE SERVICE, YOU ACKNOWLEDGE THAT YOU HAVE READ, UNDERSTOOD, AND AGREE TO BE BOUND BY THIS AGREEMENT. IF YOU ARE ENTERING INTO THIS AGREEMENT ON BEHALF OF AN ORGANISATION, YOU REPRESENT THAT YOU HAVE THE AUTHORITY TO BIND THAT ORGANISATION.
+
+1. Service Description
+
+VaultDrive provides cloud-based file storage, synchronisation, sharing, and collaboration tools. The Service allows you to upload, store, access, and share files and folders across multiple devices. Features vary depending on your subscription plan.
+
+2. Account Requirements
+
+You must be at least 18 years of age, or the age of majority in your jurisdiction, to create an account. Accounts for users under 18 may be created under a family plan managed by a parent or guardian.
+
+You agree to provide truthful and accurate registration information and to keep this information current. You are responsible for all activity that occurs under your account. You must immediately notify VaultDrive of any suspected unauthorised access by contacting security@vaultdrive.example.com.
+
+3. Subscription Plans and Payment
+
+VaultDrive offers both free and paid subscription tiers:
+
+Free Plan: 5 GB of storage, basic file sharing, limited to 3 device connections.
+
+Plus Plan: 200 GB of storage, advanced sharing controls, priority support, file version history for 30 days. Priced at £4.99 per month or £49.99 per year.
+
+Professional Plan: 2 TB of storage, team collaboration features, administrative controls, file version history for 180 days, advanced encryption options. Priced at £11.99 per month or £119.99 per year.
+
+Enterprise Plan: Unlimited storage, custom integrations, dedicated account manager, compliance certifications, 24/7 support. Pricing available upon request.
+
+All paid subscriptions are billed in advance on a monthly or annual basis, depending on the billing cycle you select. Payments are processed through our third-party payment processor. By subscribing, you authorise VaultDrive to charge your selected payment method automatically at the beginning of each billing cycle.
+
+Prices are subject to change. We will provide at least 30 days' notice before any price increase takes effect. Price changes will apply at the start of your next billing cycle following the notice period.
+
+All fees are exclusive of applicable taxes, which will be added where required by law.
+
+4. Free Trials and Promotions
+
+We may offer free trial periods for paid plans. At the end of a free trial, your subscription will automatically convert to a paid subscription at the then-current rate unless you cancel before the trial period ends. You may cancel a free trial at any time through your account settings.
+
+Promotional pricing is available for a limited time and may be subject to additional terms. Promotional rates apply only for the initial promotional period, after which standard pricing applies.
+
+5. Cancellation and Refunds
+
+You may cancel your paid subscription at any time through your account settings. Upon cancellation, your subscription will remain active until the end of the current billing period. After the billing period ends, your account will revert to the Free Plan.
+
+Refunds are not generally provided for partial billing periods. However, if you cancel within 14 days of your initial purchase or an annual renewal, you may request a full refund by contacting billing@vaultdrive.example.com.
+
+If your account is downgraded and your stored files exceed the Free Plan storage limit, you will have 30 days to reduce your usage. After 30 days, we may begin deleting files starting with the most recently uploaded, until your usage is within the Free Plan limit. We will notify you before any deletion occurs.
+
+6. Your Data and Privacy
+
+Ownership. You retain full ownership of all files, documents, and data you upload to VaultDrive ("Your Data"). We do not claim any intellectual property rights over Your Data.
+
+License. By uploading Your Data, you grant VaultDrive a limited, non-exclusive license to store, process, transmit, and display Your Data solely for the purpose of providing and improving the Service. This license terminates when you delete Your Data or close your account.
+
+Privacy. Our Privacy Policy describes how we collect, use, and protect your personal information. Key data practices include:
+
+We collect account information (name, email, payment details), device information, usage logs, and technical data necessary to provide the Service.
+
+We do not scan, read, or analyse the contents of your stored files for advertising purposes.
+
+We may use aggregated, anonymised usage data to improve the Service and develop new features.
+
+We use industry-standard encryption (AES-256) to protect your files at rest, and TLS 1.3 for data in transit.
+
+We do not sell your personal data to third parties.
+
+We may share your information with service providers who assist us in operating the Service, subject to confidentiality obligations.
+
+Data is stored in data centres located in the United Kingdom and the European Economic Area.
+
+You may request access to, correction of, or deletion of your personal data at any time by contacting privacy@vaultdrive.example.com.
+
+7. Data Retention and Deletion
+
+Active accounts: Your Data is retained for as long as your account is active and in good standing.
+
+Deleted files: When you delete a file, it is moved to the Trash and retained for 30 days before permanent deletion. Deleted files may persist in encrypted backups for up to 90 days.
+
+Closed accounts: Upon account closure, we will delete Your Data within 30 days. Encrypted backup copies may be retained for up to 90 additional days before permanent deletion.
+
+Legal holds: We may retain Your Data beyond these periods if required by law, regulation, or legal process.
+
+8. Acceptable Use
+
+You agree not to use the Service to:
+
+Store, distribute, or share any content that is illegal or that infringes on the rights of others.
+
+Upload malicious software, including viruses, ransomware, or other harmful code.
+
+Use the Service for cryptocurrency mining or other computational tasks unrelated to file storage.
+
+Attempt to circumvent storage limits, security measures, or access controls.
+
+Resell, redistribute, or sublicense the Service without our written permission.
+
+Interfere with the performance or availability of the Service for other users.
+
+We reserve the right to suspend or terminate accounts that violate these rules and to remove prohibited content without notice.
+
+9. Service Availability and Support
+
+VaultDrive aims to maintain 99.9% uptime for paid plans. However, we do not guarantee uninterrupted access to the Service. Planned maintenance windows will be communicated at least 48 hours in advance via email and our status page.
+
+We are not responsible for service interruptions caused by factors beyond our reasonable control, including natural disasters, power outages, internet connectivity issues, cyberattacks, or actions of third-party service providers.
+
+Support is available via email for all plans. Plus and Professional plan subscribers receive priority support with targeted response times of 24 and 4 hours respectively. Enterprise plan subscribers receive 24/7 dedicated support.
+
+10. Intellectual Property
+
+The Service, including all software, technology, designs, logos, trademarks, documentation, and other materials provided by VaultDrive, is our proprietary property and is protected by intellectual property laws. You may not copy, modify, distribute, sell, or lease any part of the Service.
+
+We may provide APIs and developer tools subject to separate API terms of use.
+
+11. Disclaimers
+
+THE SERVICE IS PROVIDED "AS IS" AND "AS AVAILABLE." VAULTDRIVE MAKES NO WARRANTIES, EXPRESS OR IMPLIED, REGARDING THE SERVICE, INCLUDING WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, OR NON-INFRINGEMENT.
+
+While we implement robust security measures, we cannot guarantee that your data will never be subject to unauthorised access, loss, or corruption. You are responsible for maintaining your own backup copies of critical data.
+
+12. Limitation of Liability
+
+TO THE FULLEST EXTENT PERMITTED BY LAW, VAULTDRIVE SHALL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, INCLUDING LOSS OF DATA, LOSS OF PROFITS, OR BUSINESS INTERRUPTION.
+
+Our total liability for any claim arising under this Agreement shall not exceed the total fees paid by you to VaultDrive during the twelve months immediately preceding the event giving rise to the claim.
+
+13. Indemnification
+
+You agree to indemnify and hold harmless VaultDrive and its officers, directors, employees, and agents from any claims, damages, or expenses arising from your use of the Service, your violation of this Agreement, or your violation of any third-party rights.
+
+14. Governing Law and Disputes
+
+This Agreement is governed by the laws of England and Wales. Any disputes shall be resolved through binding arbitration administered in London, unless you are a consumer entitled to bring proceedings in your local courts under applicable consumer protection laws.
+
+15. Changes to This Agreement
+
+VaultDrive may update this Agreement from time to time. Material changes will be communicated via email at least 30 days before they take effect. Continued use of the Service after the effective date constitutes acceptance of the updated terms.
+
+If you do not agree to the changes, you may cancel your subscription and close your account before the changes take effect.
+
+16. Contact Information
+
+For questions about this Agreement, contact us at:
+VaultDrive Ltd.
+Email: legal@vaultdrive.example.com
+Address: 42 Cloud Lane, London, EC2A 4DP, United Kingdom

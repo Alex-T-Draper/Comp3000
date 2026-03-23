@@ -1,11 +1,16 @@
 # app.py - Updated with user tracking and database
+import logging
+import os
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import Response
-from pydantic import BaseModel
+from fastapi.responses import Response, PlainTextResponse
+from pydantic import BaseModel, validator
 from typing import Optional, List, Dict, Any
 from nlp_service import analyse_text
 import database as db
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 app = FastAPI()
 
@@ -28,6 +33,20 @@ class SummRequest(BaseModel):
     num_sentences: int = 6
     abstractive: bool = False
 
+    @validator('text')
+    def validate_text(cls, v):
+        if len(v) > 500_000:
+            raise ValueError('Text exceeds maximum length of 500,000 characters')
+        if len(v.strip()) < 50:
+            raise ValueError('Text too short for meaningful analysis')
+        return v
+
+    @validator('num_sentences')
+    def validate_num_sentences(cls, v):
+        if v < 1 or v > 30:
+            raise ValueError('num_sentences must be between 1 and 30')
+        return v
+
 class UserCreate(BaseModel):
     name: str
 
@@ -46,14 +65,39 @@ class MetricsSave(BaseModel):
     didReadComplete: bool
     maxScrollDepth: float
     scrollBehavior: str
+    scrollUpCount: int = 0
+    reReadSections: int = 0
+    totalPauseTime: int = 0
     summaryGenerated: bool
     summaryGeneratedAt: Optional[str] = None
+    summaryViewDuration: Optional[int] = None
     riskScore: Optional[int] = None
     scrollEvents: List[Dict[str, Any]] = []
+    pauseEvents: List[Dict[str, Any]] = []
     clausesClicked: List[Dict[str, Any]] = []
+    hoverEvents: List[Dict[str, Any]] = []
     detectedCategories: List[str] = []
 
 # ===== NLP Endpoints =====
+
+# Whitelist of allowed ToS filenames (without extension)
+ALLOWED_TOS_FILES = {
+    'ecommerce_tos', 'cloudstorage_tos', 'socialmedia_tos',
+    'education_tos', 'fitness_tos', 'musicstreaming_tos',
+}
+
+@app.get("/api/tos/{filename}", response_class=PlainTextResponse)
+def get_tos_file(filename: str):
+    """Serve a ToS text file by name (without .txt extension)."""
+    if filename not in ALLOWED_TOS_FILES:
+        raise HTTPException(status_code=404, detail="ToS file not found")
+    
+    filepath = os.path.join(os.path.dirname(__file__), "tos_documents", f"{filename}.txt")
+    if not os.path.isfile(filepath):
+        raise HTTPException(status_code=404, detail="ToS file not found")
+    
+    with open(filepath, "r", encoding="utf-8") as f:
+        return f.read()
 
 @app.post("/summarize")
 def summarize(req: SummRequest):

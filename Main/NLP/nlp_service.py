@@ -1,4 +1,7 @@
 # nlp_service.py
+import re
+import hashlib
+import logging
 from sumy.parsers.plaintext import PlaintextParser
 from sumy.nlp.tokenizers import Tokenizer
 from sumy.summarizers.text_rank import TextRankSummarizer
@@ -6,18 +9,161 @@ import yake
 from transformers import pipeline, AutoModelForSeq2SeqLM, AutoTokenizer
 from typing import List, Dict
 
+logger = logging.getLogger(__name__)
+
 # Extractive summary (TextRank)
+def _clean_bullet(sentence: str, section_headings: List[str] = None) -> str:
+    """Clean up a raw legal sentence into a more readable bullet point"""
+    s = sentence.strip()
+    # Remove leading section numbering like "1.", "2)", "a."
+    s = re.sub(r'^\d+[\.)\-]\s*', '', s)
+    s = re.sub(r'^[a-zA-Z][\.)\-]\s+', '', s)
+    
+    # If known section headings, strip them from the start
+    if section_headings:
+        for heading in section_headings:
+            # Strip the heading text (without numbering) from the start of the sentence
+            clean_heading = re.sub(r'^\d+[\.)\-]\s*', '', heading).strip()
+            if s.startswith(clean_heading) and len(s) > len(clean_heading) + 1:
+                s = s[len(clean_heading):].strip()
+                break
+    
+    # Collapse extra whitespace
+    s = re.sub(r'\s+', ' ', s).strip()
+    return s
+
 def extractive_summary(text: str, num_sentences: int = 6) -> List[str]:
     parser = PlaintextParser.from_string(text, Tokenizer("english"))
     summarizer = TextRankSummarizer()
-    summary_sentences = summarizer(parser.document, num_sentences)
-    return [str(s).strip() for s in summary_sentences]
+    # Request extra candidates so we can filter low-value ones
+    summary_sentences = summarizer(parser.document, num_sentences + 4)
+    
+    # Detect section headings to strip them from bullets
+    sections = detect_sections(text)
+    headings = [s["heading"] for s in sections]
+    
+    # Filter out very short or boilerplate-only sentences
+    cleaned = []
+    for s in summary_sentences:
+        text_str = _clean_bullet(str(s), section_headings=headings)
+        # Skip very short sentences (< 30 chars) or pure headings
+        if len(text_str) < 30:
+            continue
+        # Skip sentences that are just dates or section headers
+        if re.match(r'^(Last updated|Effective date|Date)\b', text_str, re.IGNORECASE):
+            continue
+        cleaned.append(text_str)
+    
+    return cleaned[:num_sentences]
 
-# Keyword extraction (YAKE)
+# Keyword extraction (YAKE) with ToS-specific stopword filtering
+TOS_STOPWORDS = {
+    # Generic legal boilerplate words that appear in every ToS
+    "service", "services", "terms", "term", "agreement", "company",
+    "user", "users", "section", "sections", "party", "parties",
+    "shall", "may", "must", "including", "herein", "thereof",
+    "pursuant", "accordance", "respect", "provided", "means",
+    "the", "a", "an", "of", "to", "in", "for", "and", "or", "by",
+    "warranties", "warranty", "rights", "right", "obligations",
+    "policy", "policies", "access", "use",
+    # Time/date artifacts
+    "january", "february", "march", "april", "june", "july",
+    "august", "september", "october", "november", "december",
+    "updated", "effective", "date",
+    # Filler
+    "also", "however", "therefore", "otherwise", "hereinafter",
+    "hereunder", "foregoing", "notwithstanding",
+}
+
+# Multi-word phrases that are boilerplate in every ToS
+TOS_STOPWORD_PHRASES = {
+    "terms of service", "privacy policy", "terms and conditions",
+    "terms of use", "user agreement", "end user",
+}
+
+def _is_tos_stopword(keyword: str) -> bool:
+    """Check if a keyword is just common ToS boilerplate or a broken n-gram"""
+    kw_lower = keyword.lower().strip()
+    # Reject exact multi-word boilerplate phrases
+    if kw_lower in TOS_STOPWORD_PHRASES:
+        return True
+    words = kw_lower.split()
+    # Reject if every word in the n-gram is a stopword
+    if all(w in TOS_STOPWORDS for w in words):
+        return True
+    # Reject if majority of words are stopwords (catches broken n-grams like "Warranties The Service")
+    if len(words) >= 2:
+        stopword_ratio = sum(1 for w in words if w in TOS_STOPWORDS) / len(words)
+        if stopword_ratio >= 0.5:
+            return True
+    return False
+
+def _deduplicate_keywords(keywords: List[str]) -> List[str]:
+    """Remove keywords that are substrings of other higher-ranked keywords"""
+    result = []
+    for kw in keywords:
+        kw_lower = kw.lower()
+        # Skip if this keyword is a substring of one already accepted
+        if any(kw_lower in accepted.lower() for accepted in result):
+            continue
+        # Remove any previously accepted keyword that is a substring of this one
+        result = [r for r in result if r.lower() not in kw_lower]
+        result.append(kw)
+    return result
+
 def extract_keywords(text: str, max_keywords: int = 8) -> List[str]:
-    kw_extractor = yake.KeywordExtractor(lan="en", n=3, top=max_keywords)
+    kw_extractor = yake.KeywordExtractor(
+        lan="en",
+        n=3,
+        dedupLim=0.7,      # deduplication threshold to avoid near-duplicate n-grams
+        top=max_keywords * 5,  # extract more candidates, then filter
+        features=None
+    )
     keywords = kw_extractor.extract_keywords(text)
-    return [kw for kw, score in keywords]
+    
+    # Count word frequencies for frequency-based filtering
+    words_in_text = re.findall(r'\b[a-zA-Z]{3,}\b', text.lower())
+    total_words = len(words_in_text)
+    word_freq = {}
+    for w in words_in_text:
+        word_freq[w] = word_freq.get(w, 0) + 1
+    
+    # Filter out ToS boilerplate and low-quality keywords
+    filtered = [
+        kw for kw, score in keywords
+        if not _is_tos_stopword(kw)
+        and len(kw) > 3                    # skip very short noise
+        and not kw.strip().isdigit()        # skip bare numbers
+        and not re.search(r'[.!?]\s+[A-Z]', kw)  # skip explicit sentence breaks
+        # Skip cross-sentence n-grams (e.g., "Service You agree", "Service Last updated")
+        and not re.search(r'\s(?:You|We|The|This|That|It|Our|Your|Any|All|If|By|No)\s', kw)
+    ]
+    
+    # For multi-word keywords, reject if first or last word is a stopword
+    # (catches broken n-grams like "Service will immediately")
+    cleaned = []
+    for kw in filtered:
+        words = kw.split()
+        if len(words) > 1:
+            if words[0].lower() in TOS_STOPWORDS or words[-1].lower() in TOS_STOPWORDS:
+                continue
+        # For single words: reject if too frequent relative to document length.
+        # Short docs need a lower threshold since every word has high frequency;
+        # longer docs can afford a higher threshold. This adapts to any document
+        # rather than relying on a hardcoded blocklist.
+        if len(words) == 1:
+            freq_ratio = word_freq.get(kw.lower(), 0) / max(total_words, 1)
+            # Scale threshold: 0.5% for short docs (<500 words), up to 2% for long docs (>5000 words)
+            threshold = min(0.02, max(0.005, total_words / 250000))
+            if freq_ratio > threshold:
+                continue
+        cleaned.append(kw)
+    filtered = cleaned
+    
+    # Deduplicate overlapping keywords
+    filtered = _deduplicate_keywords(filtered)
+    
+    return filtered[:max_keywords]
 
 # Parse text into sentences
 def parse_sentences(text: str) -> List[Dict]:
@@ -79,18 +225,23 @@ CLAUSE_KEYWORDS = {
     "data_retention": ["retain", "store", "keep", "hold", "preservation", "retention period"],
     "data_security": ["security", "protect", "encrypt", "safeguard", "secure"],
     "privacy_rights": ["access your data", "delete", "right to", "opt-out", "opt out", "withdraw consent", "data subject"],
+    "data_breach": ["breach", "data breach", "security incident", "unauthorized access", "compromised", "notify you", "notification of breach"],
+    "cross_border_data": ["transfer outside", "cross-border", "international transfer", "adequate protection", "standard contractual", "data transfer", "outside the", "european economic area", "EEA", "adequacy"],
+    "automated_decisions": ["automated", "algorithm", "profiling", "automated decision", "machine learning", "AI", "artificial intelligence", "personali"],
     
     # Financial
     "payment": ["fee", "payment", "subscription", "charge", "billing", "price", "cost"],
     "cancellation_refund": ["cancel", "terminate", "refund", "unsubscribe", "withdrawal", "money back"],
     "automatic_renewal": ["auto-renew", "automatic", "recurring", "renew", "续费"],
     "free_trial": ["trial", "free period", "trial period", "promotional"],
+    "price_changes": ["price change", "change the price", "increase the fee", "adjust the price", "pricing may change", "change pricing", "revised pricing", "new pricing"],
     
     # Content & Usage
     "user_content_license": ["license", "non-exclusive", "royalty-free", "use your content", "grant us", "right to use"],
     "user_content_removal": ["remove", "delete", "take down", "moderate", "suspend"],
     "intellectual_property": ["copyright", "trademark", "intellectual property", "proprietary", "ip rights"],
     "prohibited_conduct": ["prohibited", "not permitted", "may not", "forbidden", "restricted", "not allowed"],
+    "content_moderation": ["moderate", "moderation", "community guidelines", "content review", "flag", "report content", "content standards", "acceptable use"],
     
     # Legal & Liability
     "liability": ["liab", "warrant", "indemnif", "hold harmless", "no warranty", "not responsible"],
@@ -116,8 +267,22 @@ CLAUSE_KEYWORDS = {
     "force_majeure": ["force majeure", "act of god", "beyond our control", "unavoidable"],
     "severability": ["severab", "invalid", "unenforceable", "separate"],
     "entire_agreement": ["entire agreement", "complete agreement", "supersede"],
-    "assignment": ["assign", "transfer", "delegate"]
+    "assignment": ["assign", "transfer", "delegate"],
+    "survival_clauses": ["survive", "survival", "continues after", "remains in effect", "survives termination", "persist after", "outlast"]
 }
+
+# Negation detection
+NEGATION_WORDS = {"not", "no", "never", "don't", "doesn't", "won't", "cannot", "can't", "neither", "nor", "without"}
+
+def is_negated(sentence: str, keyword: str) -> bool:
+    """Check if a keyword is negated in the sentence"""
+    lower = sentence.lower()
+    kw_pos = lower.find(keyword)
+    if kw_pos == -1:
+        return False
+    # Check the 4 words before the keyword for negation
+    preceding = lower[:kw_pos].split()[-4:]
+    return any(word.strip(",.;:") in NEGATION_WORDS for word in preceding)
 
 def detect_clauses_with_context(text: str, sentences: List[Dict]) -> Dict[str, List[Dict]]:
     """Detect clauses and include context for each detection"""
@@ -128,16 +293,24 @@ def detect_clauses_with_context(text: str, sentences: List[Dict]) -> Dict[str, L
         lower = sentence_text.lower()
         
         for category, keywords in CLAUSE_KEYWORDS.items():
-            # Check if any keyword matches
-            matched_keywords = [kw for kw in keywords if kw in lower]
+            # Use word boundary matching to avoid false positives
+            matched_keywords = [
+                kw for kw in keywords
+                if re.search(r'\b' + re.escape(kw), lower)
+            ]
             
             if matched_keywords:
+                # Filter out negated matches
+                negated = [kw for kw in matched_keywords if is_negated(lower, kw)]
+                affirmed = [kw for kw in matched_keywords if kw not in negated]
+                
                 context = get_context(text, sentence_info)
                 
                 clause_data = {
                     "sentence": sentence_text,
                     "context": context,
-                    "matched_keywords": matched_keywords
+                    "matched_keywords": affirmed if affirmed else matched_keywords,
+                    "negated": bool(negated) and not affirmed
                 }
                 
                 found.setdefault(category, []).append(clause_data)
@@ -157,6 +330,8 @@ CATEGORY_SEVERITY = {
     "liability": 4,
     "automatic_renewal": 4,
     "user_content_license": 4,
+    "cross_border_data": 4,
+    "automated_decisions": 4,
     
     # Medium severity (3)
     "cancellation_refund": 3,
@@ -165,6 +340,9 @@ CATEGORY_SEVERITY = {
     "prohibited_conduct": 3,
     "jurisdiction": 3,
     "user_content_removal": 3,
+    "data_breach": 3,
+    "price_changes": 3,
+    "content_moderation": 3,
     
     # Low-medium severity (2)
     "age_requirement": 2,
@@ -183,7 +361,8 @@ CATEGORY_SEVERITY = {
     "force_majeure": 1,
     "severability": 1,
     "entire_agreement": 1,
-    "assignment": 1
+    "assignment": 1,
+    "survival_clauses": 1
 }
 
 def compute_risk_score(detected_clauses: Dict[str, List[Dict]]) -> Dict:
@@ -194,11 +373,15 @@ def compute_risk_score(detected_clauses: Dict[str, List[Dict]]) -> Dict:
     
     for cat, clause_list in detected_clauses.items():
         weight = CATEGORY_SEVERITY.get(cat, 1)
-        # severity contribution: weight * number_of_mentions (cap to avoid runaway)
-        count = min(len(clause_list), 3)  # cap count at 3 per category
+        # Only count non-negated clauses for risk scoring
+        affirmed = [c for c in clause_list if not c.get("negated", False)]
+        negated_count = len(clause_list) - len(affirmed)
+        count = min(len(affirmed), 3)  # cap count at 3 per category
         score = weight * count
         per_cat[cat] = {
             "mentions": len(clause_list),
+            "affirmed": len(affirmed),
+            "negated": negated_count,
             "score": score,
             "weight": weight
         }
@@ -242,22 +425,22 @@ def get_summarization_model(model_name: str = "distilbart-cnn-12-6"):
                 'tokenizer': tokenizer,
                 'name': model_name
             }
-            print(f"Loaded model: {model_name}")
+            logger.info("Loaded model: %s", model_name)
         except Exception as e:
-            print(f"Failed to load model '{model_name}': {e}")
+            logger.error("Failed to load model '%s': %s", model_name, e)
             _model_cache[model_name] = None
     
     return _model_cache[model_name]
 
-# Load default model for backward compatibility
-abstractive = get_summarization_model("distilbart-cnn-12-6")
-
-def chunk_text(text: str, max_chars: int = 2500) -> List[str]:
+def chunk_text(text: str, tokenizer, max_tokens: int = 900) -> List[str]:
+    """Chunk text based on token count to avoid silent truncation"""
     paragraphs = [p.strip() for p in text.split("\n\n") if p.strip()]
     chunks, current = [], ""
     for p in paragraphs:
-        if len(current) + len(p) + 2 <= max_chars:
-            current += ("\n\n" + p) if current else p
+        candidate = (current + "\n\n" + p) if current else p
+        token_count = len(tokenizer.encode(candidate, add_special_tokens=False))
+        if token_count <= max_tokens:
+            current = candidate
         else:
             if current:
                 chunks.append(current)
@@ -275,7 +458,7 @@ def abstractive_summary(text: str, max_length: int = 120, min_length: int = 30, 
     model = model_data['model']
     tokenizer = model_data['tokenizer']
     
-    chunks = chunk_text(text)
+    chunks = chunk_text(text, tokenizer)
     summaries = []
     
     for c in chunks:
@@ -313,13 +496,13 @@ CLAUSE_GROUPS = {
     "Privacy & Data": {
         "description": "How your personal information is collected, used, shared, and protected",
         "severity": "high",
-        "categories": ["data_collection", "data_sharing", "data_retention", "data_security", "privacy_rights"],
+        "categories": ["data_collection", "data_sharing", "data_retention", "data_security", "privacy_rights", "data_breach", "cross_border_data", "automated_decisions"],
         "icon": "🔒"
     },
     "Financial": {
         "description": "Payment terms, fees, subscriptions, refunds, and billing practices",
         "severity": "medium",
-        "categories": ["payment", "cancellation_refund", "automatic_renewal", "free_trial"],
+        "categories": ["payment", "cancellation_refund", "automatic_renewal", "free_trial", "price_changes"],
         "icon": "💳"
     },
     "Legal & Liability": {
@@ -331,7 +514,7 @@ CLAUSE_GROUPS = {
     "Content & Intellectual Property": {
         "description": "Your rights and licenses regarding content you create, upload, or access",
         "severity": "medium",
-        "categories": ["user_content_license", "user_content_removal", "intellectual_property", "prohibited_conduct"],
+        "categories": ["user_content_license", "user_content_removal", "intellectual_property", "prohibited_conduct", "content_moderation"],
         "icon": "📝"
     },
     "Account & Access": {
@@ -355,7 +538,7 @@ CLAUSE_GROUPS = {
     "Legal Boilerplate": {
         "description": "Standard legal clauses that are common in most agreements",
         "severity": "low",
-        "categories": ["force_majeure", "severability", "entire_agreement", "assignment"],
+        "categories": ["force_majeure", "severability", "entire_agreement", "assignment", "survival_clauses"],
         "icon": "📋"
     }
 }
@@ -388,6 +571,21 @@ CATEGORY_METADATA = {
         "user_summary": "You have certain rights regarding your personal data.",
         "explanation": "You may have rights to access, delete, or control how your data is used."
     },
+    "data_breach": {
+        "title": "Data Breach Notification",
+        "user_summary": "The company may or may not commit to notifying you of data breaches.",
+        "explanation": "Describes whether and how quickly the company will inform you if your data is compromised."
+    },
+    "cross_border_data": {
+        "title": "Cross-Border Data Transfers",
+        "user_summary": "Your data may be transferred to and processed in other countries.",
+        "explanation": "Your personal data may be moved to servers or partners in different jurisdictions with different privacy laws."
+    },
+    "automated_decisions": {
+        "title": "Automated Decisions & Profiling",
+        "user_summary": "Algorithms or AI may be used to make decisions about your account or experience.",
+        "explanation": "The service may use automated systems to personalise content, moderate behaviour, or make decisions that affect you."
+    },
     
     # Financial
     "payment": {
@@ -410,6 +608,11 @@ CATEGORY_METADATA = {
         "user_summary": "Free trial terms and conversion to paid subscription.",
         "explanation": "Details about trial periods and when/how they convert to paid plans."
     },
+    "price_changes": {
+        "title": "Price Changes",
+        "user_summary": "The company may change pricing for their services.",
+        "explanation": "The service reserves the right to adjust fees, subscription costs, or pricing structures."
+    },
     
     # Content & IP
     "user_content_license": {
@@ -431,6 +634,11 @@ CATEGORY_METADATA = {
         "title": "Prohibited Activities",
         "user_summary": "Certain activities are not allowed on the service.",
         "explanation": "There are rules about what you cannot do while using the service."
+    },
+    "content_moderation": {
+        "title": "Content Moderation",
+        "user_summary": "Your content may be reviewed, flagged, or removed based on community guidelines.",
+        "explanation": "The service reviews user content against its policies and may remove or restrict content that violates guidelines."
     },
     
     # Legal & Liability
@@ -521,6 +729,11 @@ CATEGORY_METADATA = {
         "title": "Assignment",
         "user_summary": "The company can transfer these terms to another entity.",
         "explanation": "The service can transfer their rights and obligations to another company."
+    },
+    "survival_clauses": {
+        "title": "Survival Clauses",
+        "user_summary": "Some terms continue to apply even after you stop using the service.",
+        "explanation": "Certain obligations and rights persist beyond account deletion or service termination."
     }
 }
 
@@ -555,8 +768,45 @@ def group_clauses(detected_clauses: Dict[str, List[Dict]]) -> Dict:
     
     return grouped
 
+# Section-aware parsing
+def detect_sections(text: str) -> List[Dict]:
+    """Detect ToS section headings and split text into sections"""
+    heading_pattern = re.compile(
+        r'^(?:\d+[\.)\-]\s+|[A-Z][A-Z\s&]{2,}[:\.]?\s*$|#{1,3}\s+)(.*)$',
+        re.MULTILINE
+    )
+    sections = []
+    matches = list(heading_pattern.finditer(text))
+    
+    if not matches:
+        return [{"heading": "Full Document", "content": text, "start": 0, "end": len(text)}]
+    
+    for i, match in enumerate(matches):
+        start = match.start()
+        end = matches[i + 1].start() if i + 1 < len(matches) else len(text)
+        sections.append({
+            "heading": match.group().strip(),
+            "content": text[start:end].strip(),
+            "start": start,
+            "end": end
+        })
+    return sections
+
+# Analysis cache
+_analysis_cache = {}
+
+def _text_hash(text: str, num_sentences: int, do_abstractive: bool) -> str:
+    key = f"{text}|{num_sentences}|{do_abstractive}"
+    return hashlib.sha256(key.encode()).hexdigest()
+
 # Main analysis function
 def analyse_text(text: str, num_sentences: int = 6, do_abstractive: bool = False):
+    # Check cache first
+    cache_key = _text_hash(text, num_sentences, do_abstractive)
+    if cache_key in _analysis_cache:
+        logger.info("Returning cached analysis result")
+        return _analysis_cache[cache_key]
+
     # Extractive summary bullets
     bullets = extractive_summary(text, num_sentences=num_sentences)
     
@@ -590,15 +840,24 @@ def analyse_text(text: str, num_sentences: int = 6, do_abstractive: bool = False
             "mentions": len(clause_list)
         })
     
-    return {
+    # Detect document sections
+    sections = detect_sections(text)
+
+    result = {
         "bullets": bullets,
         "keywords": keywords,
         "detected_clauses": detected,  # Keep original format for backwards compatibility
         "grouped_clauses": grouped_clauses,  # New grouped format
         "risk": risk,
         "affects_user": affects_user,
-        "abstractive": abstr
+        "abstractive": abstr,
+        "sections": [{"heading": s["heading"], "start": s["start"], "end": s["end"]} for s in sections]
     }
+
+    # Cache the result
+    _analysis_cache[cache_key] = result
+
+    return result
 
 # quick test
 if __name__ == "__main__":

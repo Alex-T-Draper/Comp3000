@@ -1,17 +1,10 @@
 // src/app/components/tos-ai-enhanced/tos-ai-enhanced.ts
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef, HostListener } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, HostListener, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { NlpApiService, NLPAnalysisResponse, ClauseDetection } from '../../services/nlp-api';
 import { TrackingService } from '../../services/tracking';
-
-interface HighlightedSection {
-  start: number;
-  end: number;
-  category: string;
-  severity: 'high' | 'medium' | 'low';
-  detection: ClauseDetection;
-}
 
 @Component({
   selector: 'app-tos-ai-enhanced',
@@ -27,7 +20,7 @@ export class TosAiEnhancedComponent implements OnInit, OnDestroy {
   tosText: string = '';
   tosTitle: string = '';
   tosId: string = 'sample-tos-001';
-  highlightedHtml: string = '';
+  highlightedHtml: SafeHtml = '';
 
   // NLP Analysis
   analysis: NLPAnalysisResponse | null = null;
@@ -45,14 +38,15 @@ export class TosAiEnhancedComponent implements OnInit, OnDestroy {
   constructor(
     private nlpApi: NlpApiService,
     private tracking: TrackingService,
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef,
+    private sanitizer: DomSanitizer
   ) {}
 
   ngOnInit(): void {
     window.scrollTo(0, 0);
     this.userId = sessionStorage.getItem('userName') || 'anonymous';
     this.loadTosDocument();
-    this.initializeTracking();
   }
 
   ngOnDestroy(): void {
@@ -63,61 +57,21 @@ export class TosAiEnhancedComponent implements OnInit, OnDestroy {
    * Load the ToS document (in real app, this would come from backend)
    */
   loadTosDocument(): void {
-    // For now, load from sample. In production, fetch from your backend
-    // based on randomization or study condition
-    this.tosTitle = 'Sample Service Terms of Service';
-    this.tosId = 'sample-tos-001';
-    
-    // You would typically fetch this from your backend:
-    // this.http.get<{text: string, title: string}>(`/api/tos/${this.tosId}`)
-    
-    // For now, using a sample
-    this.tosText = `Terms of Service
+    this.tosTitle = 'PulseFit Terms of Service';
+    this.tosId = 'ai-enhanced-tos-005';
 
-Last updated: January 2025
-
-1. Acceptance of Terms
-By accessing or using this Service, you agree to be bound by these Terms of Service. If you do not agree to the Terms, you may not access or use the Service.
-
-2. Eligibility
-You must be at least 16 years old to use the Service. By using the Service, you represent that you meet this age requirement.
-
-3. User Accounts
-To access certain features, you may be required to create an account. You are responsible for maintaining the confidentiality of your login credentials and for all activities that occur under your account.
-
-4. Use of the Service
-You agree not to use the Service for any unlawful purpose or to engage in any activity that may harm, disable, or impair the Service. You may not attempt to gain unauthorized access to any part of the Service.
-
-5. Content Ownership
-All content provided through the Service, including text, graphics, logos, and software, is the property of the Company or its licensors. You may not reproduce, distribute, or create derivative works from the content without explicit permission.
-
-6. User-Generated Content
-You may submit content such as comments or uploads. By submitting content, you grant the Company a non-exclusive, worldwide, royalty-free license to use, modify, reproduce, and distribute your content. You are responsible for ensuring your content does not violate the rights of others.
-
-7. Privacy
-Your use of the Service is also governed by our Privacy Policy, which describes how we collect, use, and share your information. By using the Service, you consent to the processing of your information in accordance with the Privacy Policy.
-
-8. Payment and Subscriptions
-Certain features may require payment. By subscribing, you authorize the Company to charge your payment method automatically on a recurring basis until you cancel. Prices may change, but we will notify you in advance of any changes.
-
-9. Termination
-We reserve the right to suspend or terminate your access to the Service at any time, with or without notice, if you violate these Terms or engage in harmful behaviour. Upon termination, your right to use the Service will immediately cease.
-
-10. Disclaimer of Warranties
-The Service is provided "as is" and "as available." We do not guarantee that the Service will be uninterrupted, error-free, or secure. Your use of the Service is at your own risk.
-
-11. Limitation of Liability
-The Company is not liable for any indirect, incidental, or consequential damages arising from your use of the Service. Our total liability to you will not exceed the amount you paid (if any) for using the Service in the past 12 months.
-
-12. Modifications to the Terms
-We may update these Terms from time to time. We will notify you of any material changes by posting the updated Terms on the Service. Continued use of the Service indicates acceptance of the revised Terms.
-
-13. Governing Law
-These Terms are governed by the laws of the United Kingdom. Any disputes will be resolved in the courts of England and Wales.
-
-If you have any questions about these Terms, please contact us at support@example.com.`;
-
-    this.highlightedHtml = this.escapeHtml(this.tosText);
+    this.nlpApi.loadTosFile('fitness_tos').subscribe({
+      next: (text: string) => {
+        this.tosText = text;
+        this.highlightedHtml = this.escapeHtml(this.tosText);
+        this.initializeTracking();
+        this.cdr.detectChanges();
+      },
+      error: (err: any) => {
+        console.error('Error loading ToS document:', err);
+        this.tosText = 'Failed to load Terms of Service. Please try again later.';
+      }
+    });
   }
 
   /**
@@ -170,6 +124,9 @@ If you have any questions about these Terms, please contact us at support@exampl
         // Apply highlighting to the ToS text
         this.applyHighlighting();
 
+        // Scroll to top so user sees the summary panel
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+
         // Track summary generation
         const categories = Object.keys(response.grouped_clauses);
         this.tracking.trackSummaryGeneration(
@@ -191,44 +148,82 @@ If you have any questions about these Terms, please contact us at support@exampl
   applyHighlighting(): void {
     if (!this.analysis) return;
 
-    const highlights: HighlightedSection[] = [];
+    interface Segment {
+      start: number;
+      end: number;
+      category: string;
+      severity: 'high' | 'medium' | 'low';
+    }
+
+    const segments: Segment[] = [];
 
     // Collect all detections with their positions
-    Object.entries(this.analysis.grouped_clauses).forEach(([groupName, group]: [string, any]) => {
+    Object.entries(this.analysis.grouped_clauses).forEach(([, group]: [string, any]) => {
       Object.entries(group.categories).forEach(([categoryName, category]: [string, any]) => {
         category.detections.forEach((detection: any) => {
-          highlights.push({
-            start: detection.context.position.start,
-            end: detection.context.position.end,
+          const start: number = detection.context?.position?.start ?? -1;
+          const end: number = detection.context?.position?.end ?? -1;
+          if (start < 0 || end <= start || end > this.tosText.length) return;
+
+          segments.push({
+            start,
+            end,
             category: categoryName,
-            severity: group.severity,
-            detection
+            severity: group.severity as 'high' | 'medium' | 'low'
           });
         });
       });
     });
 
-    // Sort by position (start) in reverse to avoid position shifts when inserting HTML
-    highlights.sort((a, b) => b.start - a.start);
+    // Sort rightmost-first, then remove overlapping segments
+    segments.sort((a, b) => b.start - a.start);
+    const noOverlap: Segment[] = [];
+    let boundary = Infinity;
+    for (const seg of segments) {
+      if (seg.end <= boundary) {
+        noOverlap.push(seg);
+        boundary = seg.start;
+      }
+    }
 
-    // Apply highlighting
-    let highlightedText = this.tosText;
-    
-    highlights.forEach((highlight) => {
-      const before = highlightedText.substring(0, highlight.start);
-      const text = highlightedText.substring(highlight.start, highlight.end);
-      const after = highlightedText.substring(highlight.end);
+    // Sort left-to-right for single-pass HTML build
+    noOverlap.sort((a, b) => a.start - b.start);
 
-      const cssClass = `highlight-${highlight.severity}`;
-      const dataAttr = `data-category="${highlight.category}"`;
-      
-      highlightedText = 
-        before +
-        `<span class="${cssClass}" ${dataAttr} (click)="onClauseClick('${highlight.category}', ${highlight.start}, ${highlight.end})">${text}</span>` +
-        after;
-    });
+    // Build HTML in one pass
+    let html = '';
+    let pos = 0;
 
-    this.highlightedHtml = highlightedText.replace(/\n/g, '<br>');
+    for (const seg of noOverlap) {
+      html += this.escapeHtml(this.tosText.substring(pos, seg.start));
+      const cssClass = `highlight-${seg.severity}`;
+      const content = this.escapeHtml(this.tosText.substring(seg.start, seg.end));
+      html += `<span class="${cssClass}" data-category="${this.escapeAttribute(seg.category)}" data-start="${seg.start}" data-end="${seg.end}" style="cursor:pointer">${content}</span>`;
+      pos = seg.end;
+    }
+    html += this.escapeHtml(this.tosText.substring(pos));
+
+    this.highlightedHtml = this.sanitizer.bypassSecurityTrustHtml(html);
+  }
+
+  /**
+   * Handle clicks on highlighted clauses via event delegation
+   */
+  @HostListener('click', ['$event'])
+  onHostClick(event: MouseEvent): void {
+    const target = (event.target as HTMLElement).closest('[data-category]') as HTMLElement | null;
+    if (!target) return;
+
+    const category = target.getAttribute('data-category') || '';
+    const start = parseInt(target.getAttribute('data-start') || '0', 10);
+    const end = parseInt(target.getAttribute('data-end') || '0', 10);
+    this.onClauseClick(category, start, end);
+  }
+
+  /**
+   * Escape an attribute value
+   */
+  private escapeAttribute(value: string): string {
+    return value.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   }
 
   /**
@@ -270,7 +265,7 @@ If you have any questions about these Terms, please contact us at support@exampl
   private escapeHtml(text: string): string {
     const div = document.createElement('div');
     div.textContent = text;
-    return div.innerHTML.replace(/\n/g, '<br>');
+    return div.innerHTML.replace(/\n/g, '<br>\n');
   }
 
   /**

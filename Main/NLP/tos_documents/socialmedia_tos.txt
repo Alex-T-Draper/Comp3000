@@ -1,0 +1,131 @@
+Terms of Service — ConnectSphere Social Platform
+
+Last Updated: March 2026
+
+Welcome to ConnectSphere. These Terms of Service ("Terms") govern your access to and use of the ConnectSphere platform, including our website, mobile applications, APIs, and all related services (collectively, the "Platform"). By creating an account or using the Platform, you agree to be bound by these Terms. If you do not agree, do not use ConnectSphere.
+
+1. Eligibility and Account Registration
+
+You must be at least 13 years of age to create an account on ConnectSphere. If you are between 13 and 18 years old, you must have the consent of a parent or legal guardian to use the Platform. By registering, you represent and warrant that you meet these age requirements.
+
+When you create an account, you must provide accurate and complete information. You are solely responsible for maintaining the confidentiality of your login credentials, including your password and any two-factor authentication methods. You agree to notify us immediately if you become aware of any unauthorised use of your account. ConnectSphere will not be liable for any losses arising from unauthorised access to your account where you have failed to safeguard your credentials.
+
+You may not create accounts using automated methods, create multiple accounts for deceptive purposes, or impersonate another person or entity. We reserve the right to suspend or terminate accounts that violate these provisions.
+
+2. User-Generated Content
+
+ConnectSphere allows you to post, upload, share, and otherwise make available text, images, videos, audio, links, and other materials ("User Content"). You retain ownership of your User Content. However, by posting User Content on the Platform, you grant ConnectSphere a worldwide, non-exclusive, royalty-free, sublicensable, and transferable license to use, reproduce, modify, adapt, publish, translate, create derivative works from, distribute, perform, and display your User Content in connection with operating and providing the Platform.
+
+This license continues even after you delete your account or remove specific content, to the extent that your content has been shared with others, cached, or otherwise distributed through the Platform prior to removal. We will make reasonable efforts to remove your content from our active systems upon account deletion, but copies may persist in backup systems for a limited period.
+
+You are solely responsible for any User Content you submit. You represent that you own or have the necessary rights to post your content, and that your content does not violate the rights of any third party, including intellectual property rights, privacy rights, or publicity rights.
+
+3. Prohibited Conduct
+
+You agree not to engage in any of the following activities on ConnectSphere:
+
+Posting content that is illegal, defamatory, threatening, harassing, abusive, hateful, or discriminatory.
+
+Uploading or distributing malware, viruses, or other harmful software.
+
+Engaging in spam, phishing, or other deceptive practices.
+
+Attempting to reverse-engineer, decompile, or disassemble any part of the Platform.
+
+Scraping or collecting data from the Platform using automated tools without our prior written consent.
+
+Circumventing or interfering with any security features of the Platform.
+
+Using the Platform to stalk, bully, or intimidate other users.
+
+Creating fake accounts, fake engagement, or artificially inflating metrics.
+
+Selling or transferring your account to another party.
+
+Violating any applicable local, national, or international law or regulation.
+
+We reserve the right to remove any content and suspend or permanently ban any user who violates these rules, at our sole discretion and without prior notice.
+
+4. Privacy and Data Collection
+
+Your privacy is important to us. Our Privacy Policy, which is incorporated into these Terms by reference, describes how we collect, use, store, and share your personal information.
+
+By using ConnectSphere, you acknowledge and consent to the following data practices:
+
+We collect information you provide directly, such as your name, email address, profile picture, date of birth, and any content you post.
+
+We automatically collect usage data, including your IP address, device identifiers, browser type, operating system, pages visited, time spent on the Platform, click patterns, and interaction data.
+
+We use cookies, web beacons, pixels, and similar tracking technologies to personalise your experience, deliver targeted advertising, and analyse Platform usage.
+
+We may share your data with third-party advertising partners, analytics providers, and business partners who assist us in operating the Platform. These third parties may use your information to deliver personalised advertisements across the internet.
+
+We may disclose your information to law enforcement or government authorities if required by law, legal process, or to protect the rights, property, or safety of ConnectSphere, its users, or the public.
+
+We retain your personal data for as long as your account is active and for a period of up to 3 years after account deletion for legal compliance, fraud prevention, and legitimate business purposes.
+
+You have the right to access, correct, delete, or export your personal data. You may also opt out of targeted advertising through your account settings. To exercise these rights, contact us at privacy@connectsphere.example.com.
+
+5. Intellectual Property
+
+All content, features, and functionality of the Platform, including but not limited to text, graphics, logos, icons, images, audio clips, video clips, software, and the compilation thereof, are the exclusive property of ConnectSphere or its licensors and are protected by copyright, trademark, patent, and other intellectual property laws.
+
+The ConnectSphere name, logo, and all related product and service names, designs, and slogans are trademarks of ConnectSphere. You may not use these marks without our prior written permission.
+
+6. Advertising and Sponsored Content
+
+ConnectSphere is an advertising-supported platform. By using the Platform, you agree that we may display advertisements, sponsored content, and promotional materials on or in connection with the Platform, including within your content feed and alongside your User Content.
+
+We may use your profile information, interests, activity, and demographics to deliver targeted advertising. You may adjust your advertising preferences in your account settings, but you cannot opt out of all advertising entirely while using the free version of the Platform.
+
+Sponsored content and advertisements will be labelled as such. However, ConnectSphere is not responsible for the accuracy, legality, or content of third-party advertisements or the products and services they promote.
+
+7. Termination and Suspension
+
+We may suspend or terminate your account at any time, with or without cause, and with or without notice. Reasons for termination may include, but are not limited to, violation of these Terms, prolonged inactivity, or conduct that we believe is harmful to other users or the Platform.
+
+Upon termination, your right to access and use the Platform will immediately cease. We may, but are not obligated to, delete your User Content upon termination. Sections of these Terms that by their nature should survive termination will continue to apply, including but not limited to intellectual property provisions, disclaimers, limitations of liability, and dispute resolution.
+
+You may delete your account at any time through your account settings. Account deletion is permanent and cannot be undone.
+
+8. Disclaimers
+
+THE PLATFORM IS PROVIDED ON AN "AS IS" AND "AS AVAILABLE" BASIS WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED. CONNECTSPHERE DISCLAIMS ALL WARRANTIES, INCLUDING BUT NOT LIMITED TO IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, TITLE, AND NON-INFRINGEMENT.
+
+ConnectSphere does not warrant that the Platform will be uninterrupted, error-free, secure, or free from viruses or other harmful components. We do not guarantee the accuracy, completeness, or reliability of any content on the Platform, including User Content.
+
+9. Limitation of Liability
+
+TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, CONNECTSPHERE AND ITS OFFICERS, DIRECTORS, EMPLOYEES, AGENTS, AND AFFILIATES SHALL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, OR ANY LOSS OF PROFITS, DATA, USE, GOODWILL, OR OTHER INTANGIBLE LOSSES, ARISING OUT OF OR RELATED TO YOUR USE OF OR INABILITY TO USE THE PLATFORM.
+
+Our total aggregate liability for all claims arising from or related to these Terms or the Platform shall not exceed the greater of fifty pounds (£50) or the amounts paid by you to ConnectSphere, if any, during the twelve months preceding the claim.
+
+10. Indemnification
+
+You agree to indemnify, defend, and hold harmless ConnectSphere and its officers, directors, employees, agents, and affiliates from and against any claims, damages, losses, liabilities, costs, and expenses (including reasonable legal fees) arising out of or related to your use of the Platform, your User Content, your violation of these Terms, or your violation of any rights of another person or entity.
+
+11. Dispute Resolution and Arbitration
+
+Any dispute, controversy, or claim arising out of or relating to these Terms or the Platform shall first be attempted to be resolved through informal negotiation. If the dispute cannot be resolved informally within 30 days, either party may initiate binding arbitration.
+
+You agree that any arbitration shall be conducted on an individual basis and not as a class, consolidated, or representative action. YOU WAIVE YOUR RIGHT TO PARTICIPATE IN A CLASS ACTION LAWSUIT OR CLASS-WIDE ARBITRATION.
+
+These Terms shall be governed by and construed in accordance with the laws of England and Wales, without regard to conflict of law principles. Any arbitration or legal proceedings shall take place in London, United Kingdom.
+
+12. Changes to These Terms
+
+We reserve the right to modify these Terms at any time. If we make material changes, we will notify you by posting the updated Terms on the Platform and updating the "Last Updated" date at the top. Your continued use of the Platform after such changes constitutes your acceptance of the revised Terms.
+
+It is your responsibility to review these Terms periodically. If you do not agree to the modified Terms, you must stop using the Platform and delete your account.
+
+13. Miscellaneous
+
+Entire Agreement. These Terms, together with the Privacy Policy and any other agreements expressly incorporated by reference, constitute the entire agreement between you and ConnectSphere.
+
+Severability. If any provision of these Terms is found to be unenforceable, the remaining provisions will continue in full force and effect.
+
+Waiver. The failure of ConnectSphere to enforce any right or provision of these Terms shall not constitute a waiver of such right or provision.
+
+Assignment. ConnectSphere may assign or transfer these Terms and its rights and obligations hereunder, in whole or in part, without your prior consent. You may not assign or transfer these Terms without our prior written consent.
+
+Contact Us. If you have questions about these Terms, please contact us at legal@connectsphere.example.com.

@@ -1,5 +1,5 @@
 // src/app/components/tos-ai-hover/tos-ai-hover.ts
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef, HostListener } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, HostListener, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
@@ -49,14 +49,14 @@ export class TosAiHoverComponent implements OnInit, OnDestroy {
     private tracking: TrackingService,
     private nlpApi: NlpApiService,
     private router: Router,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
     window.scrollTo(0, 0);
     this.userId = sessionStorage.getItem('userName') || 'anonymous';
     this.loadTosDocument();
-    this.initializeTracking();
   }
 
   ngOnDestroy(): void {
@@ -67,57 +67,23 @@ export class TosAiHoverComponent implements OnInit, OnDestroy {
    * Load the ToS document
    */
   loadTosDocument(): void {
-    this.tosTitle = 'Service Terms of Service';
+    this.tosTitle = 'SonicWave Terms of Service';
     this.tosId = 'ai-hover-tos-006';
-    
-    this.tosText = `Terms of Service
 
-Last updated: January 2025
-
-1. Acceptance of Terms
-By accessing or using this Service, you agree to be bound by these Terms of Service. If you do not agree to the Terms, you may not access or use the Service.
-
-2. Eligibility
-You must be at least 16 years old to use the Service. By using the Service, you represent that you meet this age requirement.
-
-3. User Accounts
-To access certain features, you may be required to create an account. You are responsible for maintaining the confidentiality of your login credentials and for all activities that occur under your account.
-
-4. Use of the Service
-You agree not to use the Service for any unlawful purpose or to engage in any activity that may harm, disable, or impair the Service. You may not attempt to gain unauthorized access to any part of the Service.
-
-5. Content Ownership
-All content provided through the Service, including text, graphics, logos, and software, is the property of the Company or its licensors. You may not reproduce, distribute, or create derivative works from the content without explicit permission.
-
-6. User-Generated Content
-You may submit content such as comments or uploads. By submitting content, you grant the Company a non-exclusive, worldwide, royalty-free license to use, modify, reproduce, and distribute your content. You are responsible for ensuring your content does not violate the rights of others.
-
-7. Privacy
-Your use of the Service is also governed by our Privacy Policy, which describes how we collect, use, and share your information. By using the Service, you consent to the processing of your information in accordance with the Privacy Policy.
-
-8. Payment and Subscriptions
-Certain features may require payment. By subscribing, you authorize the Company to charge your payment method automatically on a recurring basis until you cancel. Prices may change, but we will notify you in advance of any changes.
-
-9. Termination
-We reserve the right to suspend or terminate your access to the Service at any time, with or without notice, if you violate these Terms or engage in harmful behaviour. Upon termination, your right to use the Service will immediately cease.
-
-10. Disclaimer of Warranties
-The Service is provided "as is" and "as available." We do not guarantee that the Service will be uninterrupted, error-free, or secure. Your use of the Service is at your own risk.
-
-11. Limitation of Liability
-The Company is not liable for any indirect, incidental, or consequential damages arising from your use of the Service. Our total liability to you will not exceed the amount you paid (if any) for using the Service in the past 12 months.
-
-12. Modifications to the Terms
-We may update these Terms from time to time. We will notify you of any material changes by posting the updated Terms on the Service. Continued use of the Service indicates acceptance of the revised Terms.
-
-13. Governing Law
-These Terms are governed by the laws of the United Kingdom. Any disputes will be resolved in the courts of England and Wales.
-
-If you have any questions about these Terms, please contact us at support@example.com.`;
-
-    this.highlightedHtml = this.sanitizer.bypassSecurityTrustHtml(
-      this.escapeHtml(this.tosText)
-    );
+    this.nlpApi.loadTosFile('musicstreaming_tos').subscribe({
+      next: (text: string) => {
+        this.tosText = text;
+        this.highlightedHtml = this.sanitizer.bypassSecurityTrustHtml(
+          this.escapeHtml(this.tosText)
+        );
+        this.initializeTracking();
+        this.cdr.detectChanges();
+      },
+      error: (err: any) => {
+        console.error('Error loading ToS document:', err);
+        this.tosText = 'Failed to load Terms of Service. Please try again later.';
+      }
+    });
   }
 
   /**
@@ -168,6 +134,9 @@ If you have any questions about these Terms, please contact us at support@exampl
 
         // Apply subtle highlighting with hover
         this.applyHoverHighlighting();
+
+        // Scroll to top so user sees the highlighted document
+        window.scrollTo({ top: 0, behavior: 'smooth' });
 
         // Track summary generation
         const categories = Object.keys(response.grouped_clauses);
@@ -268,12 +237,22 @@ If you have any questions about these Terms, please contact us at support@exampl
     const newId = target ? target.getAttribute('data-clause-id') : null;
 
     if (newId === this.currentClauseId) return;
+
+    // Track hover leave on previous clause
+    if (this.currentClauseId) {
+      this.tracking.trackHoverLeave();
+    }
+
     this.currentClauseId = newId;
 
     if (!target) {
       this.tooltip = null;
       return;
     }
+
+    // Track hover enter on new clause
+    const category = target.getAttribute('data-category') || '';
+    this.tracking.trackHoverEnter(category, newId || '');
 
     const rect = target.getBoundingClientRect();
     this.tooltip = {

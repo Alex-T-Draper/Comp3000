@@ -1,0 +1,138 @@
+LearnVault Online Education Platform — Terms of Service
+
+Effective Date: November 2025
+
+These Terms of Service ("Terms") constitute a legally binding agreement between you ("Student", "Instructor", or "User") and LearnVault Inc. ("LearnVault", "we", "us") governing your use of the LearnVault online education platform, including our website, mobile applications, virtual classroom tools, and any associated services (collectively, the "Platform").
+
+By creating an account or accessing the Platform, you agree to be bound by these Terms. If you are accepting these Terms on behalf of an organisation, you represent that you have the authority to bind that organisation.
+
+1. Overview of the Platform
+
+LearnVault is an online education platform that connects students with instructors offering courses, workshops, tutorials, and certification programmes across a wide range of subjects. We act as a marketplace and host for educational content—we do not create course content ourselves, and we do not employ instructors.
+
+The Platform supports video lectures, live sessions, discussion forums, quizzes, assignments, downloadable resources, and certificate issuance.
+
+2. Account Registration
+
+You must be at least 16 years old to create a LearnVault account. Users aged 13 to 15 may use the Platform with verified parental or guardian consent. Accounts are personal and non-transferable.
+
+You are responsible for maintaining the confidentiality of your login credentials. You must notify us immediately if you suspect unauthorised access to your account. We are not liable for any loss arising from unauthorised use of your account.
+
+3. Student Terms
+
+Course Enrolment. When you enrol in a course, you receive a limited, non-exclusive, non-transferable licence to access the course content for personal educational purposes. This licence does not expire unless your account is terminated or the course is removed due to a policy violation.
+
+You do not acquire ownership of any course materials. You may not record, download (except where an instructor has enabled downloads), redistribute, share, or commercially exploit any course content.
+
+Certificates and Credentials. Some courses offer certificates of completion. These certificates are issued by LearnVault on behalf of the instructor and are not equivalent to academic credits, professional certifications, or degrees unless explicitly stated by a partnered institution. We do not guarantee that employers, educational institutions, or licensing bodies will recognise LearnVault certificates.
+
+Refund Policy. You may request a full refund within 14 days of enrolment, provided you have completed less than 25% of the course content. Refunds are processed to the original payment method within 10 business days. Courses purchased during promotional sales are eligible for refund under the same conditions. Subscription plans are non-refundable after the first 7 days.
+
+4. Instructor Terms
+
+Any registered user who meets our eligibility criteria may apply to become an instructor. Instructors must be at least 18 years old and must verify their identity.
+
+Course Submission. Instructors retain full intellectual property rights to their course content. By publishing a course on LearnVault, instructors grant us a non-exclusive, worldwide, royalty-free licence to host, display, distribute, and promote the course content on and through the Platform, including in marketing materials, social media, and partner channels.
+
+Instructors are solely responsible for the accuracy, legality, and quality of their course content. Courses must not contain plagiarised material, misleading claims, discriminatory content, or content that infringes third-party intellectual property rights.
+
+Revenue Sharing. Instructors receive 60% of net revenue from course sales made through organic discovery on the Platform. For sales generated through instructor-driven marketing (using the instructor's own referral links or promotional codes), instructors receive 97% of net revenue minus payment processing fees. Revenue is calculated after any applicable taxes, platform fees, and refunds. Payments are made monthly, with a minimum payout threshold of £50.
+
+Course Pricing. Instructors set their own course prices within the range of £9.99 to £199.99. LearnVault may include courses in promotional campaigns or subscription bundles with the instructor's consent. If an instructor opts into promotional programmes, the discounted price applies, and revenue share is calculated on the discounted amount.
+
+5. Subscription Plans
+
+LearnVault Free. Access to a limited selection of free courses, community forums, and preview content.
+
+LearnVault Plus: £19.99/month or £149.99/year. Unlimited access to the Plus catalogue (over 5,000 courses), offline viewing on mobile, practice exercises, and basic certificates.
+
+LearnVault Pro: £34.99/month or £279.99/year. Everything in Plus, plus access to the full catalogue (over 15,000 courses), live workshop sessions, career path guidance, verified certificates, and priority support.
+
+Enterprise Plan: Custom pricing for organisations. Includes centralised billing, team management dashboard, custom learning paths, analytics and reporting, SSO integration, and dedicated account manager.
+
+6. Live Sessions and Virtual Classrooms
+
+Some courses include live sessions conducted through our integrated virtual classroom. Live sessions may be recorded and made available to enrolled students. By participating in a live session, you consent to being recorded.
+
+You must conduct yourself professionally and respectfully during live sessions. Disruptive behaviour, harassment, or sharing inappropriate content during live sessions will result in removal and potential account termination.
+
+7. Academic Integrity
+
+Students must complete assessments, quizzes, and assignments independently unless explicitly permitted to collaborate. The use of AI tools (such as language models or code generators) to complete graded assessments is prohibited unless the instructor explicitly permits it.
+
+Instructors may use plagiarism detection tools to review submitted work. Violations of academic integrity policies may result in certificate revocation, course access removal, or account termination.
+
+8. User Content and Community Guidelines
+
+Users may post questions, answers, reviews, and comments in course discussion forums. All user content must comply with our Community Guidelines.
+
+By posting content on the Platform, you grant LearnVault a non-exclusive, royalty-free, worldwide licence to use, display, and distribute that content in connection with the Platform.
+
+We do not pre-screen user content but reserve the right to remove content that violates our guidelines. Users may report content through the flagging system.
+
+Reviews. Students may leave ratings and written reviews for courses they have enrolled in. Reviews must be honest, based on personal experience, and free from personal attacks. Instructors may not solicit fake reviews, offer incentives for positive reviews, or manipulate ratings.
+
+9. Intellectual Property
+
+LearnVault Platform. The LearnVault name, logo, website design, software, and proprietary technology are owned by LearnVault Inc. and protected by intellectual property laws. You may not copy, modify, or create derivative works based on our platform technology.
+
+Course Content. As stated in Section 4, instructors retain ownership of their course content. Students may not reproduce, distribute, or create derivative works from course materials without the instructor's written permission.
+
+10. Privacy and Data Protection
+
+We collect personal information including your name, email, payment details, learning activity, assessment results, forum posts, device information, and usage analytics. We process this data to:
+
+Provide and personalise the learning experience.
+Track course progress and issue certificates.
+Process payments and manage subscriptions.
+Send course recommendations and promotional communications.
+Generate analytics for instructors about student engagement.
+Comply with legal obligations.
+
+Student Learning Data. We share aggregated and anonymised learning analytics with instructors to help them improve their courses. We do not share individual student assessment results without consent, except as required by accreditation partners in verified certificate programmes.
+
+We comply with applicable data protection laws, including the UK GDPR and the California Consumer Privacy Act (CCPA). For full details, see our Privacy Policy.
+
+Data Retention. We retain your account data for as long as your account is active. If you delete your account, we will remove your personal data within 60 days, except where retention is required for legal, regulatory, or legitimate business purposes (e.g., financial records retained for 7 years).
+
+11. Payment and Taxes
+
+All prices are displayed in your local currency where available. Payments are processed through Stripe or PayPal. You are responsible for any applicable taxes in your jurisdiction.
+
+12. Disclaimers
+
+THE PLATFORM AND ALL COURSE CONTENT ARE PROVIDED "AS IS" AND "AS AVAILABLE." WE MAKE NO WARRANTIES REGARDING THE ACCURACY, COMPLETENESS, OR SUITABILITY OF ANY COURSE CONTENT FOR ANY PARTICULAR PURPOSE.
+
+LearnVault does not verify the qualifications or credentials of instructors beyond basic identity verification. We are not responsible for the quality, accuracy, or outcomes of any course.
+
+Courses that discuss health, legal, financial, or professional topics are for informational purposes only and should not be treated as professional advice. Always consult a qualified professional for specific guidance.
+
+13. Limitation of Liability
+
+TO THE MAXIMUM EXTENT PERMITTED BY LAW, LEARNVAULT SHALL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, INCLUDING BUT NOT LIMITED TO LOSS OF PROFITS, DATA, OR CAREER OPPORTUNITIES, ARISING FROM YOUR USE OF OR INABILITY TO USE THE PLATFORM.
+
+Our total aggregate liability for any claims arising from these Terms shall not exceed the greater of (a) the amounts you paid to LearnVault in the 12 months preceding the claim, or (b) £100.
+
+14. Termination
+
+We may suspend or terminate your account if you violate these Terms, engage in fraudulent activity, or if required by law. You may delete your account at any time through your account settings.
+
+Instructors who are terminated for policy violations will receive any outstanding revenue earned prior to termination, minus any refunds issued to students. Course content will be removed from the Platform within 30 days.
+
+If we discontinue the Platform entirely, we will provide at least 90 days' notice and ensure enrolled students can download any available course materials.
+
+15. Dispute Resolution
+
+Any disputes arising from these Terms shall first be addressed through our internal complaint process. If unresolved, disputes shall be submitted to binding arbitration administered by the London Court of International Arbitration, except where prohibited by consumer protection laws in your jurisdiction.
+
+Class Action Waiver. To the extent permitted by law, you agree to resolve disputes on an individual basis and waive any right to participate in a class action, collective action, or representative proceeding.
+
+16. Changes to These Terms
+
+We may update these Terms from time to time. Material changes will be communicated via email or a prominent notice on the Platform at least 30 days before taking effect. Your continued use of the Platform after changes take effect constitutes acceptance.
+
+17. Contact Information
+
+LearnVault Inc.
+Email: legal@learnvault.example.com
+Address: 45 Scholar Lane, Cambridge, CB2 1TN, United Kingdom

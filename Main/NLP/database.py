@@ -39,8 +39,12 @@ def init_database():
             did_read_complete BOOLEAN,
             max_scroll_depth REAL,
             scroll_behavior TEXT,
+            scroll_up_count INTEGER DEFAULT 0,
+            re_read_sections INTEGER DEFAULT 0,
+            total_pause_time INTEGER DEFAULT 0,
             summary_generated BOOLEAN,
             summary_generated_at TIMESTAMP,
+            summary_view_duration INTEGER,
             risk_score INTEGER,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             FOREIGN KEY (user_id) REFERENCES users(id)
@@ -55,6 +59,19 @@ def init_database():
             timestamp TIMESTAMP NOT NULL,
             scroll_depth REAL NOT NULL,
             scroll_position INTEGER NOT NULL,
+            direction TEXT NOT NULL DEFAULT 'down',
+            FOREIGN KEY (session_id) REFERENCES sessions(session_id)
+        )
+    ''')
+    
+    # Pause/dwell events table
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS pause_events (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            session_id TEXT NOT NULL,
+            timestamp TIMESTAMP NOT NULL,
+            scroll_depth REAL NOT NULL,
+            duration INTEGER NOT NULL,
             FOREIGN KEY (session_id) REFERENCES sessions(session_id)
         )
     ''')
@@ -78,6 +95,19 @@ def init_database():
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             session_id TEXT NOT NULL,
             category TEXT NOT NULL,
+            FOREIGN KEY (session_id) REFERENCES sessions(session_id)
+        )
+    ''')
+    
+    # Hover events table (for ai-hover condition)
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS hover_events (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            session_id TEXT NOT NULL,
+            category TEXT NOT NULL,
+            clause_id TEXT NOT NULL,
+            timestamp TIMESTAMP NOT NULL,
+            duration INTEGER NOT NULL,
             FOREIGN KEY (session_id) REFERENCES sessions(session_id)
         )
     ''')
@@ -128,8 +158,9 @@ def save_session_data(user_id: int, metrics: dict):
             user_id, session_id, tos_id, tos_title, condition_group, tos_length,
             time_started, time_ended, total_reading_time, time_to_bottom, 
             time_before_summary, did_read_complete, max_scroll_depth, 
-            scroll_behavior, summary_generated, summary_generated_at, risk_score
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            scroll_behavior, scroll_up_count, re_read_sections, total_pause_time,
+            summary_generated, summary_generated_at, summary_view_duration, risk_score
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     ''', (
         user_id,
         metrics.get('sessionId'),
@@ -145,8 +176,12 @@ def save_session_data(user_id: int, metrics: dict):
         metrics.get('didReadComplete'),
         metrics.get('maxScrollDepth'),
         metrics.get('scrollBehavior'),
+        metrics.get('scrollUpCount', 0),
+        metrics.get('reReadSections', 0),
+        metrics.get('totalPauseTime', 0),
         metrics.get('summaryGenerated'),
         metrics.get('summaryGeneratedAt'),
+        metrics.get('summaryViewDuration'),
         metrics.get('riskScore')
     ))
     
@@ -155,9 +190,16 @@ def save_session_data(user_id: int, metrics: dict):
     # Insert scroll events
     for event in metrics.get('scrollEvents', []):
         cursor.execute('''
-            INSERT INTO scroll_events (session_id, timestamp, scroll_depth, scroll_position)
+            INSERT INTO scroll_events (session_id, timestamp, scroll_depth, scroll_position, direction)
+            VALUES (?, ?, ?, ?, ?)
+        ''', (session_id, event['timestamp'], event['scrollDepth'], event['scrollPosition'], event.get('direction', 'down')))
+    
+    # Insert pause events
+    for pause in metrics.get('pauseEvents', []):
+        cursor.execute('''
+            INSERT INTO pause_events (session_id, timestamp, scroll_depth, duration)
             VALUES (?, ?, ?, ?)
-        ''', (session_id, event['timestamp'], event['scrollDepth'], event['scrollPosition']))
+        ''', (session_id, pause['timestamp'], pause['scrollDepth'], pause['duration']))
     
     # Insert clause clicks
     for click in metrics.get('clausesClicked', []):
@@ -178,6 +220,13 @@ def save_session_data(user_id: int, metrics: dict):
             INSERT INTO detected_categories (session_id, category)
             VALUES (?, ?)
         ''', (session_id, category))
+    
+    # Insert hover events
+    for hover in metrics.get('hoverEvents', []):
+        cursor.execute('''
+            INSERT INTO hover_events (session_id, category, clause_id, timestamp, duration)
+            VALUES (?, ?, ?, ?, ?)
+        ''', (session_id, hover['category'], hover['clauseId'], hover['timestamp'], hover['duration']))
     
     conn.commit()
     conn.close()

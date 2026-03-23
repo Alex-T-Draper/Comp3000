@@ -7,6 +7,20 @@ export interface ScrollEvent {
   timestamp: Date;
   scrollDepth: number; // 0-100 percentage
   scrollPosition: number; // pixels from top
+  direction: 'up' | 'down'; // scroll direction
+}
+
+export interface PauseEvent {
+  timestamp: Date;
+  scrollDepth: number; // where they paused
+  duration: number; // seconds paused
+}
+
+export interface HoverEvent {
+  category: string;
+  clauseId: string;
+  timestamp: Date;
+  duration: number; // milliseconds spent hovering
 }
 
 export interface UserMetrics {
@@ -33,14 +47,28 @@ export interface UserMetrics {
   maxScrollDepth: number; // highest % they reached
   scrollBehavior: 'quick-scroll' | 'thorough-read' | 'partial-read';
   
-  // Engagement with summary
+  // Re-read & direction tracking
+  scrollUpCount: number; // number of times user scrolled back up
+  reReadSections: number; // times user scrolled back >10% to re-read
+  
+  // Pause/dwell tracking
+  pauseEvents: PauseEvent[]; // periods where user paused scrolling (reading)
+  totalPauseTime: number; // total seconds paused (reading) vs scrolling
+  
+  // Summary engagement
   summaryGenerated: boolean;
   summaryGeneratedAt?: Date;
+  summaryViewDuration?: number; // seconds spent viewing summary after generation
+  
+  // Clause interactions
   clausesClicked: Array<{
     category: string;
     timestamp: Date;
     position: { start: number; end: number };
   }>;
+  
+  // Hover tracking (for ai-hover condition)
+  hoverEvents: HoverEvent[];
   
   // NLP Results (for later analysis correlation)
   riskScore?: number;
@@ -54,6 +82,22 @@ export class TrackingService {
   private metrics: UserMetrics;
   private scrollTrackingInterval: any;
   private apiUrl = 'http://127.0.0.1:8000/api'; // Your FastAPI backend
+
+  // Pause detection state
+  private lastScrollTime: number = 0;
+  private lastScrollDepth: number = 0;
+  private pauseTimer: any = null;
+  private pauseStartTime: number = 0;
+  private readonly PAUSE_THRESHOLD_MS = 3000; // 3 seconds = a reading pause
+
+  // Scroll-up gesture tracking
+  private lastDirection: 'up' | 'down' = 'down'; // track direction changes, not every event
+  private peakScrollDepth: number = 0; // highest depth reached (for re-read detection)
+
+  // Hover tracking state
+  private currentHoverStart: number = 0;
+  private currentHoverCategory: string = '';
+  private currentHoverClauseId: string = '';
 
   constructor(private http: HttpClient) {
     this.metrics = this.initializeMetrics();
@@ -75,24 +119,52 @@ export class TrackingService {
       scrollEvents: [],
       maxScrollDepth: 0,
       scrollBehavior: 'partial-read',
+      scrollUpCount: 0,
+      reReadSections: 0,
+      pauseEvents: [],
+      totalPauseTime: 0,
       summaryGenerated: false,
-      clausesClicked: []
+      clausesClicked: [],
+      hoverEvents: []
     };
+
+    this.lastScrollTime = Date.now();
+    this.lastScrollDepth = 0;
+    this.lastDirection = 'down';
+    this.peakScrollDepth = 0;
   }
 
   /**
-   * Track scroll position
+   * Track scroll position with direction and pause detection
    */
   trackScroll(scrollDepth: number, scrollPosition: number): void {
+    const now = Date.now();
+    const direction: 'up' | 'down' = scrollDepth >= this.lastScrollDepth ? 'down' : 'up';
+
     const event: ScrollEvent = {
       timestamp: new Date(),
       scrollDepth,
-      scrollPosition
+      scrollPosition,
+      direction
     };
 
     this.metrics.scrollEvents.push(event);
     
-    // Update max scroll depth
+    // Track scroll-up gestures (only count direction *changes*, not every event)
+    if (direction === 'up' && this.lastDirection === 'down') {
+      this.metrics.scrollUpCount++;
+
+      // Significant re-read: user is now >10% above their peak scroll depth
+      if (this.peakScrollDepth - scrollDepth > 10) {
+        this.metrics.reReadSections++;
+      }
+    }
+    this.lastDirection = direction;
+
+    // Update peak and max scroll depth
+    if (scrollDepth > this.peakScrollDepth) {
+      this.peakScrollDepth = scrollDepth;
+    }
     if (scrollDepth > this.metrics.maxScrollDepth) {
       this.metrics.maxScrollDepth = scrollDepth;
     }
@@ -102,6 +174,43 @@ export class TrackingService {
       this.metrics.didReadComplete = true;
       this.metrics.timeToBottom = this.getElapsedSeconds();
     }
+
+    // Pause/dwell detection: if user stops scrolling for 3+ seconds, record it
+    this.detectPause(scrollDepth, now);
+
+    this.lastScrollDepth = scrollDepth;
+    this.lastScrollTime = now;
+  }
+
+  /**
+   * Detect reading pauses (user stops scrolling for PAUSE_THRESHOLD_MS)
+   */
+  private detectPause(currentDepth: number, now: number): void {
+    // Clear previous timer
+    if (this.pauseTimer) {
+      clearTimeout(this.pauseTimer);
+    }
+
+    // If there was an active pause, finalize it
+    if (this.pauseStartTime > 0) {
+      const duration = (now - this.pauseStartTime) / 1000;
+      if (duration >= this.PAUSE_THRESHOLD_MS / 1000) {
+        this.metrics.pauseEvents.push({
+          timestamp: new Date(this.pauseStartTime),
+          scrollDepth: this.lastScrollDepth,
+          duration: Math.round(duration)
+        });
+        this.metrics.totalPauseTime += Math.round(duration);
+      }
+      this.pauseStartTime = 0;
+    }
+
+    // Set new timer: if no scroll event fires for 3s, mark pause as started
+    // Use lastScrollTime so the pause duration includes the initial wait period
+    const scrollTimeSnapshot = now;
+    this.pauseTimer = setTimeout(() => {
+      this.pauseStartTime = scrollTimeSnapshot; // pause started when scrolling stopped
+    }, this.PAUSE_THRESHOLD_MS);
   }
 
   /**
@@ -127,12 +236,69 @@ export class TrackingService {
   }
 
   /**
+   * Track hover enter on a clause (for ai-hover condition)
+   */
+  trackHoverEnter(category: string, clauseId: string): void {
+    this.currentHoverStart = Date.now();
+    this.currentHoverCategory = category;
+    this.currentHoverClauseId = clauseId;
+  }
+
+  /**
+   * Track hover leave on a clause (for ai-hover condition)
+   */
+  trackHoverLeave(): void {
+    if (this.currentHoverStart > 0) {
+      const duration = Date.now() - this.currentHoverStart;
+      // Only record hovers longer than 200ms (ignore pass-throughs)
+      if (duration > 200) {
+        this.metrics.hoverEvents.push({
+          category: this.currentHoverCategory,
+          clauseId: this.currentHoverClauseId,
+          timestamp: new Date(this.currentHoverStart),
+          duration
+        });
+      }
+      this.currentHoverStart = 0;
+      this.currentHoverCategory = '';
+      this.currentHoverClauseId = '';
+    }
+  }
+
+  /**
    * End the session and calculate final metrics
    */
   endSession(): void {
     this.metrics.timeEnded = new Date();
     this.metrics.totalReadingTime = this.getElapsedSeconds();
     this.metrics.scrollBehavior = this.determineScrollBehavior();
+
+    // Finalize any active pause
+    if (this.pauseStartTime > 0) {
+      const duration = (Date.now() - this.pauseStartTime) / 1000;
+      if (duration >= this.PAUSE_THRESHOLD_MS / 1000) {
+        this.metrics.pauseEvents.push({
+          timestamp: new Date(this.pauseStartTime),
+          scrollDepth: this.lastScrollDepth,
+          duration: Math.round(duration)
+        });
+        this.metrics.totalPauseTime += Math.round(duration);
+      }
+      this.pauseStartTime = 0;
+    }
+    if (this.pauseTimer) {
+      clearTimeout(this.pauseTimer);
+    }
+
+    // Finalize any active hover
+    this.trackHoverLeave();
+
+    // Calculate summary view duration
+    if (this.metrics.summaryGenerated && this.metrics.summaryGeneratedAt) {
+      this.metrics.summaryViewDuration = Math.floor(
+        (this.metrics.timeEnded.getTime() - this.metrics.summaryGeneratedAt.getTime()) / 1000
+      );
+    }
     
     this.stopScrollTracking();
   }
@@ -153,9 +319,17 @@ export class TrackingService {
         ...e,
         timestamp: e.timestamp.toISOString()
       })),
+      pauseEvents: this.metrics.pauseEvents.map(p => ({
+        ...p,
+        timestamp: p.timestamp.toISOString()
+      })),
       clausesClicked: this.metrics.clausesClicked.map(c => ({
         ...c,
         timestamp: c.timestamp.toISOString()
+      })),
+      hoverEvents: this.metrics.hoverEvents.map(h => ({
+        ...h,
+        timestamp: h.timestamp.toISOString()
       }))
     };
     
@@ -184,8 +358,13 @@ export class TrackingService {
       scrollEvents: [],
       maxScrollDepth: 0,
       scrollBehavior: 'partial-read',
+      scrollUpCount: 0,
+      reReadSections: 0,
+      pauseEvents: [],
+      totalPauseTime: 0,
       summaryGenerated: false,
-      clausesClicked: []
+      clausesClicked: [],
+      hoverEvents: []
     };
   }
 

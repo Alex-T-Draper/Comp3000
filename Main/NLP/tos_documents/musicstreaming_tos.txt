@@ -1,0 +1,115 @@
+SonicWave Music Streaming — Terms of Service
+
+Last Updated: December 2025
+
+Welcome to SonicWave. These Terms of Service ("Terms") govern your use of the SonicWave music streaming service, including our website, mobile applications, desktop applications, smart speaker integrations, and any other platforms through which we make the service available (collectively, the "Service"). SonicWave is operated by SonicWave Entertainment Ltd. ("SonicWave", "we", "us").
+
+By using the Service, you agree to these Terms. If you do not agree, please do not use SonicWave.
+
+1. The Service
+
+SonicWave provides on-demand access to a catalogue of licensed music, podcasts, and audio content. The availability of specific tracks, albums, and podcasts may vary by region due to licensing restrictions and may change over time without notice.
+
+SonicWave does not own the music in our catalogue. We license content from record labels, distributors, publishers, and independent artists. Our ability to offer specific content depends on our licensing agreements, which may expire, be modified, or terminated.
+
+2. Accounts and Eligibility
+
+You must be at least 13 years old to create a SonicWave account. Users under 18 should review these Terms with a parent or guardian. Family plan managers must be at least 18 years old.
+
+You may not share your account credentials with others or allow multiple people to use a single account simultaneously, except through an authorised Family or Duo plan.
+
+3. Subscription Plans
+
+SonicWave Free: Ad-supported streaming with shuffle-only playback on mobile devices. Limited skips. No offline downloads. Audio quality up to 128 kbps.
+
+SonicWave Premium: £9.99/month. Ad-free streaming, on-demand playback, unlimited skips, offline downloads (up to 10,000 tracks across 5 devices), high-quality audio up to 320 kbps, lyrics display, and priority access to new features.
+
+SonicWave HiFi: £14.99/month. Everything in Premium plus lossless audio quality (up to 24-bit/192kHz FLAC), spatial audio support, and exclusive HiFi-only content.
+
+SonicWave Duo: £13.99/month. Two Premium accounts for couples residing at the same address.
+
+SonicWave Family: £16.99/month. Up to 6 Premium accounts for family members residing at the same address. Includes parental controls and a kids-safe listening mode.
+
+Student Plan: £5.99/month. Premium features at a discounted rate. Requires annual verification of student status through our verification partner. Available to students enrolled in accredited higher education institutions.
+
+Payment and Billing. All subscriptions are billed in advance. Payments are processed through our payment partner or through the Apple App Store or Google Play Store, depending on where you subscribed. You authorise automatic recurring charges to your payment method.
+
+4. Free Trials
+
+New users may be eligible for a free trial of Premium or HiFi. Free trials automatically convert to paid subscriptions at the end of the trial period unless cancelled beforehand. Only one free trial is available per person. We may verify eligibility using your payment method, device identifiers, or email address, and we reserve the right to withdraw or modify trial offers at any time.
+
+5. Content Licensing and Restrictions
+
+Access, Not Ownership. Your subscription grants you a limited, non-exclusive, revocable, non-transferable license to stream content through the Service for personal, non-commercial use. You do not own any content you access through SonicWave.
+
+Restrictions. You may not:
+
+Record, download (except through the offline feature), copy, or redistribute any content from the Service.
+
+Use the Service in any commercial establishment, public venue, or broadcast without a separate commercial licence.
+
+Remove or alter any copyright notices, watermarks, or digital rights management protections.
+
+Use any automated tools, bots, or scripts to access the Service or circumvent technical restrictions.
+
+Reverse-engineer, decompile, or disassemble any part of the SonicWave application.
+
+Offline Content. Premium and HiFi subscribers may download content for offline listening. Downloaded content is encrypted and can only be played through the SonicWave app. Offline content requires periodic internet connection (at least once every 30 days) to verify your subscription status. Downloaded content will become unavailable if your subscription lapses.
+
+6. User-Generated Content and Playlists
+
+You may create playlists, follow other users, and share content links. Playlists you create are your own, but the underlying music remains the property of the respective rights holders. We may feature user-created playlists on the Service, and by making a playlist public, you grant us permission to display and promote it.
+
+SonicWave may offer features that allow user commentary, ratings, or reviews. You are solely responsible for any content you submit. We reserve the right to remove content that violates community guidelines.
+
+7. Artist and Creator Programme
+
+SonicWave supports independent artists through our Creator Programme. Artists may upload original music directly to SonicWave. By uploading, artists grant SonicWave a non-exclusive, worldwide licence to distribute, stream, and promote their music on the Service. Artists retain ownership of their music and may remove it at any time, subject to a 30-day processing period.
+
+Royalty payments are calculated based on stream counts and distributed monthly. Detailed payment terms are set out in the Creator Programme Agreement, which is separate from these Terms.
+
+8. Privacy and Data
+
+We collect the following data: account information, listening history, search queries, playlist data, device information, IP address, location data, and interaction data.
+
+We use your data to provide and personalise the Service, generate music recommendations, create personalised playlists (such as Discover Weekly and Daily Mix), deliver targeted advertising to free-tier users, generate anonymised listening statistics, and comply with royalty reporting obligations to rights holders.
+
+We share listening data with rights holders and music publishers as required by our licensing agreements. This data is typically aggregated but may include user-level streaming data for royalty calculation purposes.
+
+We use cookies and similar technologies for analytics, personalisation, and advertising. You may manage cookie preferences through your browser settings.
+
+For full details, see our Privacy Policy.
+
+9. Third-Party Integrations
+
+SonicWave integrates with third-party services and devices, including smart speakers (Amazon Alexa, Google Home), automotive infotainment systems, gaming consoles, and social media platforms. We are not responsible for the functionality, privacy practices, or terms of these third-party services.
+
+Social sharing features allow you to share what you are listening to on connected social media accounts. You can control social sharing through your privacy settings.
+
+10. Disclaimers
+
+THE SERVICE IS PROVIDED "AS IS" WITHOUT WARRANTIES OF ANY KIND. WE DO NOT GUARANTEE THE AVAILABILITY OF ANY SPECIFIC CONTENT, UNINTERRUPTED SERVICE, OR AUDIO QUALITY, WHICH MAY VARY BASED ON YOUR INTERNET CONNECTION, DEVICE CAPABILITIES, AND LICENSING RESTRICTIONS.
+
+SonicWave is not responsible for content uploaded by independent artists through the Creator Programme, including any claims of copyright infringement, defamation, or other violations.
+
+11. Limitation of Liability
+
+TO THE FULLEST EXTENT PERMITTED BY LAW, SONICWAVE SHALL NOT BE LIABLE FOR ANY INDIRECT, CONSEQUENTIAL, INCIDENTAL, OR SPECIAL DAMAGES ARISING FROM YOUR USE OF THE SERVICE.
+
+Our total liability shall not exceed the subscription fees you paid in the 3 months prior to the claim.
+
+12. Suspension and Termination
+
+We may suspend or terminate your account for violation of these Terms, suspected fraudulent activity, or inactivity exceeding 12 months. You may cancel your subscription at any time. Cancellation takes effect at the end of your current billing period.
+
+Upon termination, your access to the Service will cease, offline downloads will be deleted, and your playlists and listening history may be permanently removed after 90 days.
+
+13. Governing Law
+
+These Terms are governed by the laws of England and Wales. Any disputes shall be resolved in the courts of London, United Kingdom, subject to any mandatory consumer protection laws in your jurisdiction.
+
+14. Contact
+
+SonicWave Entertainment Ltd.
+Email: support@sonicwave.example.com
+Address: 200 Music Row, London, W1D 3AF, United Kingdom

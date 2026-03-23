@@ -1,0 +1,109 @@
+PulseFit Health and Fitness App — Terms of Use
+
+Effective: November 2025
+
+These Terms of Use ("Terms") govern your access to and use of the PulseFit mobile application and associated wearable device integrations (together, the "App"). The App is operated by PulseFit Health Ltd. ("PulseFit", "we", "us"). By downloading, installing, or using the App, you agree to these Terms.
+
+IMPORTANT HEALTH DISCLAIMER: PulseFit is a fitness and wellness tool designed for general informational purposes only. The App is NOT a medical device, does NOT provide medical advice, and should NOT be used as a substitute for professional medical consultation, diagnosis, or treatment. Always consult a qualified healthcare professional before starting any exercise programme or making changes to your diet. If you experience any pain, discomfort, or medical emergency while using the App, discontinue use immediately and seek medical attention.
+
+1. Eligibility
+
+You must be at least 16 years old to use the App. Users between 16 and 18 require parental or guardian consent. The App is not intended for use by children under 16.
+
+By using the App, you confirm that you are in satisfactory physical health and that a medical professional has not advised you against physical exercise.
+
+2. Account and Subscription
+
+Account Creation. You may create an account using your email address or by linking a supported social login provider. You are responsible for maintaining the security of your account credentials.
+
+Free Tier. The free version of PulseFit includes basic workout tracking, step counting, and limited exercise library access.
+
+Premium Subscription. PulseFit Premium unlocks personalised workout plans, nutrition tracking, sleep analysis, advanced health metrics, integration with third-party wearables (Fitbit, Apple Watch, Garmin), and access to live and on-demand fitness classes. Premium is priced at £7.99 per month or £59.99 per year.
+
+Family Plan. PulseFit Family allows up to 5 members under a single subscription at £12.99 per month or £99.99 per year.
+
+Payment. Subscriptions are billed through the Apple App Store or Google Play Store. Payment terms are subject to the respective store's policies. You may also subscribe directly through our website, where payments are processed by Stripe.
+
+Auto-Renewal. All paid subscriptions automatically renew at the end of each billing period unless cancelled at least 24 hours before the renewal date. You can manage and cancel subscriptions through your device's app store settings or through your PulseFit account settings on our website.
+
+3. Health and Fitness Data
+
+Types of Data Collected. PulseFit collects and processes the following categories of health and fitness data:
+
+Exercise data: workouts completed, duration, intensity, calories burned, repetitions, and sets.
+Biometric data: heart rate, resting heart rate, heart rate variability (when connected to a compatible device).
+Body measurements: height, weight, body fat percentage, BMI (when manually entered or synced from a connected device).
+Activity data: steps, distance, floors climbed, active minutes.
+Sleep data: sleep duration, sleep stages, sleep quality score (when synced from a compatible device).
+Nutrition data: food logs, caloric intake, macronutrient breakdown (when manually entered).
+Location data: GPS route tracking during outdoor activities (only when GPS tracking is enabled by you).
+
+How We Use Your Health Data. Your health and fitness data is used to:
+
+Provide personalised workout recommendations and training plans.
+Track your progress and generate performance reports.
+Provide insights about your sleep patterns and recovery.
+Calculate health metrics such as estimated VO2 max and fitness age.
+Improve our algorithms and recommendation engine using aggregated, de-identified data.
+
+We do NOT sell your health data to third parties. We do NOT share individually identifiable health data with advertisers. We do NOT use your health data to make insurance or employment-related decisions.
+
+Third-Party Integrations. If you choose to connect PulseFit with third-party services (such as Apple Health, Google Fit, Fitbit, Strava, or MyFitnessPal), data will be shared between PulseFit and the connected service in accordance with your settings and the third party's privacy policy. You can disconnect integrations at any time through the App settings.
+
+Data Storage and Security. Your health data is encrypted at rest using AES-256 encryption and in transit using TLS 1.3. Data is stored on secure servers within the European Economic Area. We implement access controls, regular security audits, and data minimisation practices to protect your information.
+
+Data Retention. Your health data is retained for as long as your account is active. Upon account deletion, your data will be permanently deleted within 60 days, except where retention is required by law. You may export your data at any time in standard formats (CSV, JSON) through the App settings.
+
+4. User Content and Community Features
+
+PulseFit includes community features such as workout sharing, progress posts, challenges, and forums. Content you share through these features ("Community Content") is visible to other users unless you adjust your privacy settings.
+
+By posting Community Content, you grant PulseFit a non-exclusive, worldwide, royalty-free license to display, distribute, and promote your Community Content within the App. You may delete your Community Content at any time, and the license will terminate upon deletion, except where the content has been shared or reposted by other users.
+
+You must not post content that is offensive, promotes dangerous fitness practices, contains medical claims, or violates any applicable law.
+
+5. Wearable Device Integration
+
+PulseFit is compatible with various wearable fitness devices and smartwatches. We do not manufacture these devices and are not responsible for their accuracy, reliability, or functionality. Data received from wearable devices is used on an "as provided" basis and may not always be accurate.
+
+Calibration and accuracy of health metrics depend on correct device setup, including accurate input of personal information such as age, height, and weight.
+
+6. Intellectual Property
+
+All content in the App, including workout videos, exercise descriptions, illustrations, software, and trademarks, is the property of PulseFit or its content partners and is protected by intellectual property laws. You may not reproduce, distribute, or create derivative works from any App content without our written permission.
+
+Workout programmes created by PulseFit's certified trainers are proprietary content. You may use them for personal, non-commercial purposes only.
+
+7. Disclaimers and Assumption of Risk
+
+THE APP AND ALL CONTENT ARE PROVIDED "AS IS" WITHOUT WARRANTIES OF ANY KIND. PULSEFIT DOES NOT WARRANT THAT THE APP WILL BE ACCURATE, RELIABLE, ERROR-FREE, OR UNINTERRUPTED.
+
+EXERCISE INVOLVES INHERENT RISKS OF INJURY. BY USING THE APP, YOU ACKNOWLEDGE AND VOLUNTARILY ASSUME ALL RISKS ASSOCIATED WITH PHYSICAL EXERCISE, INCLUDING BUT NOT LIMITED TO MUSCLE STRAINS, SPRAINS, FRACTURES, CARDIOVASCULAR EVENTS, AND DEATH. YOU AGREE THAT PULSEFIT IS NOT RESPONSIBLE FOR ANY INJURY OR HEALTH CONDITION RESULTING FROM YOUR USE OF THE APP.
+
+The calorie counts, nutritional information, and health metrics provided by the App are estimates only and should not be relied upon for medical purposes.
+
+8. Limitation of Liability
+
+TO THE MAXIMUM EXTENT PERMITTED BY LAW, PULSEFIT SHALL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, OR CONSEQUENTIAL DAMAGES ARISING FROM YOUR USE OF THE APP, INCLUDING BUT NOT LIMITED TO PERSONAL INJURY, PROPERTY DAMAGE, OR LOSS OF DATA.
+
+Our total liability shall not exceed the subscription fees paid by you in the 12 months preceding the event giving rise to the claim, or £50, whichever is greater.
+
+9. Termination
+
+You may delete your account and uninstall the App at any time. We may suspend or terminate your account if you violate these Terms, engage in harmful behaviour, or misuse the App.
+
+Upon termination, your access to Premium features will end immediately. You will not receive a refund for any remaining subscription period unless required by applicable consumer protection law.
+
+10. Governing Law
+
+These Terms are governed by the laws of England and Wales. Disputes shall be subject to the exclusive jurisdiction of the courts of England and Wales, without prejudice to any consumer rights that entitle you to bring proceedings in your local courts.
+
+11. Changes to These Terms
+
+We may update these Terms from time to time. We will notify you of material changes via the App or email. Continued use after the effective date constitutes acceptance.
+
+12. Contact
+
+PulseFit Health Ltd.
+Email: support@pulsefit.example.com
+Address: 15 Wellness Way, Bristol, BS1 5AH, United Kingdom
