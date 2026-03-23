@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { TrackingService } from '../../services/tracking';
 import { NlpApiService, NLPAnalysisResponse } from '../../services/nlp-api';
+import { EyeTrackingService } from '../../services/eye-tracking';
 
 @Component({
   selector: 'app-tos-ai-summary',
@@ -34,7 +35,8 @@ export class TosAiSummaryComponent implements OnInit, OnDestroy {
     private tracking: TrackingService,
     private nlpApi: NlpApiService,
     private router: Router,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private eyeTracking: EyeTrackingService
   ) {}
 
   ngOnInit(): void {
@@ -45,6 +47,7 @@ export class TosAiSummaryComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.eyeTracking.stopTracking(this.tracking.getSessionId());
     this.tracking.endSession();
   }
 
@@ -79,6 +82,7 @@ export class TosAiSummaryComponent implements OnInit, OnDestroy {
       this.tosTitle,
       'ai-summary' // Condition type
     );
+    this.eyeTracking.startTracking(this.tracking.getSessionId());
   }
 
   /**

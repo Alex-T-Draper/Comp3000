@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { TrackingService } from '../../services/tracking';
 import { NlpApiService, NLPAnalysisResponse } from '../../services/nlp-api';
+import { EyeTrackingService } from '../../services/eye-tracking';
 
 interface TooltipData {
   category: string;
@@ -50,7 +51,8 @@ export class TosAiHoverComponent implements OnInit, OnDestroy {
     private nlpApi: NlpApiService,
     private router: Router,
     private sanitizer: DomSanitizer,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private eyeTracking: EyeTrackingService
   ) {}
 
   ngOnInit(): void {
@@ -60,6 +62,7 @@ export class TosAiHoverComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.eyeTracking.stopTracking(this.tracking.getSessionId());
     this.tracking.endSession();
   }
 
@@ -97,6 +100,7 @@ export class TosAiHoverComponent implements OnInit, OnDestroy {
       this.tosTitle,
       'ai-hover' // Condition type
     );
+    this.eyeTracking.startTracking(this.tracking.getSessionId());
   }
 
   /**

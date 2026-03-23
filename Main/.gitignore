@@ -1,0 +1,33 @@
+# Ignore Python virtual environments
+venv/
+.venv/
+# Ignore node_modules for frontend
+frontend/node_modules/
+# Ignore Python bytecode
+__pycache__/
+# Ignore environment and IDE files
+.env
+*.env
+*.log
+*.pyc
+*.pyo
+*.pyd
+# Ignore OS files
+.DS_Store
+Thumbs.db
+# Ignore large model/data files
+*.h5
+*.pth
+*.pt
+*.ckpt
+*.onnx
+*.pb
+*.npz
+*.npy
+# Ignore Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+# Ignore results and output folders
+NLP/output/
+NLP/results/
+# Ignore NLP model cache
+NLP/.cache/

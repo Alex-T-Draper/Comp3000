@@ -5,6 +5,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { TrackingService } from '../../services/tracking';
 import { NlpApiService } from '../../services/nlp-api';
+import { EyeTrackingService } from '../../services/eye-tracking';
 
 @Component({
   selector: 'app-tos-formatted',
@@ -31,7 +32,8 @@ export class TosFormattedComponent implements OnInit, OnDestroy {
     private router: Router,
     private sanitizer: DomSanitizer,
     private nlpApi: NlpApiService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private eyeTracking: EyeTrackingService
   ) {}
 
   ngOnInit(): void {
@@ -42,6 +44,7 @@ export class TosFormattedComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.eyeTracking.stopTracking(this.tracking.getSessionId());
     this.tracking.endSession();
   }
 
@@ -257,6 +260,7 @@ export class TosFormattedComponent implements OnInit, OnDestroy {
       this.tosTitle,
       'formatted' // Condition type
     );
+    this.eyeTracking.startTracking(this.tracking.getSessionId());
   }
 
   /**

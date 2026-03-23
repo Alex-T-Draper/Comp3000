@@ -3,18 +3,27 @@ import json
 import logging
 import os
 import sqlite3
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import Response, PlainTextResponse
 from pydantic import BaseModel, validator
 from typing import Optional, List, Dict, Any
 from nlp_service import analyse_text
 import database as db
+from eye_tracking import EyeTrackingService
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 app = FastAPI()
+
+# Initialize eye tracking service (connects lazily on first use)
+try:
+    eye_service = EyeTrackingService()
+    logger.info("Eye tracking service initialized (tracker connects on first use)")
+except Exception as e:
+    eye_service = None
+    logger.warning(f"Eye tracking service unavailable: {e}")
 
 # Enable CORS for Angular frontend
 app.add_middleware(
@@ -300,3 +309,63 @@ def get_stats():
         "total_scroll_events": scroll_count,
         "total_clause_clicks": click_count
     }
+
+# ===== Eye Tracking WebSocket =====
+
+@app.websocket("/ws/eyetracking")
+async def eyetracking_ws(websocket: WebSocket):
+    """WebSocket endpoint for controlling Tobii eye tracking.
+    
+    Messages from client:
+      {"action": "start", "sessionId": "..."}
+      {"action": "stop", "sessionId": "..."}
+      {"action": "status"}
+    """
+    await websocket.accept()
+    logger.info("[EyeTracking WS] Client connected")
+    try:
+        while True:
+            msg = await websocket.receive_json()
+            action = msg.get("action")
+
+            if action == "start":
+                session_id = msg.get("sessionId", "")
+                if not eye_service:
+                    await websocket.send_json({"status": "error", "message": "Eye tracker not available"})
+                    continue
+                try:
+                    eye_service.start(session_id)
+                    await websocket.send_json({"status": "tracking_started", "sessionId": session_id})
+                except Exception as e:
+                    logger.error(f"[EyeTracking WS] Start error: {e}")
+                    await websocket.send_json({"status": "error", "message": str(e)})
+
+            elif action == "stop":
+                session_id = msg.get("sessionId", "")
+                if not eye_service:
+                    await websocket.send_json({"status": "error", "message": "Eye tracker not available"})
+                    continue
+                try:
+                    gaze_data = eye_service.stop()
+                    if gaze_data:
+                        db.save_gaze_data(session_id, gaze_data)
+                    await websocket.send_json({
+                        "status": "tracking_stopped",
+                        "sessionId": session_id,
+                        "samplesCollected": len(gaze_data)
+                    })
+                except Exception as e:
+                    logger.error(f"[EyeTracking WS] Stop error: {e}")
+                    await websocket.send_json({"status": "error", "message": str(e)})
+
+            elif action == "status":
+                await websocket.send_json({
+                    "status": "ok",
+                    "trackerConnected": eye_service.is_connected if eye_service else False,
+                    "isTracking": eye_service.is_tracking if eye_service else False
+                })
+
+    except WebSocketDisconnect:
+        logger.info("[EyeTracking WS] Client disconnected")
+        if eye_service and eye_service.is_tracking:
+            eye_service.stop()

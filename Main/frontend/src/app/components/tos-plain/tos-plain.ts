@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { TrackingService } from '../../services/tracking';
 import { NlpApiService } from '../../services/nlp-api';
+import { EyeTrackingService } from '../../services/eye-tracking';
 
 @Component({
   selector: 'app-tos-plain',
@@ -28,7 +29,8 @@ export class TosPlainComponent implements OnInit, OnDestroy {
     private tracking: TrackingService,
     private router: Router,
     private nlpApi: NlpApiService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private eyeTracking: EyeTrackingService
   ) {}
 
   ngOnInit(): void {
@@ -38,6 +40,7 @@ export class TosPlainComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.eyeTracking.stopTracking(this.tracking.getSessionId());
     this.tracking.endSession();
   }
 
@@ -72,6 +75,7 @@ export class TosPlainComponent implements OnInit, OnDestroy {
       this.tosTitle,
       'control' // Condition type
     );
+    this.eyeTracking.startTracking(this.tracking.getSessionId());
   }
 
   /**

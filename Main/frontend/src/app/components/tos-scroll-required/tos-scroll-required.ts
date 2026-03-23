@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { TrackingService } from '../../services/tracking';
 import { NlpApiService } from '../../services/nlp-api';
+import { EyeTrackingService } from '../../services/eye-tracking';
 
 @Component({
   selector: 'app-tos-scroll-required',
@@ -29,7 +30,8 @@ export class TosScrollRequiredComponent implements OnInit, OnDestroy {
     private tracking: TrackingService,
     private router: Router,
     private nlpApi: NlpApiService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private eyeTracking: EyeTrackingService
   ) {
     // Get user name from session storage
     this.userId = sessionStorage.getItem('userName') || 'anonymous';
@@ -42,6 +44,7 @@ export class TosScrollRequiredComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.eyeTracking.stopTracking(this.tracking.getSessionId());
     this.tracking.endSession();
   }
 
@@ -76,6 +79,7 @@ export class TosScrollRequiredComponent implements OnInit, OnDestroy {
       this.tosTitle,
       'scroll-gate' // Condition type
     );
+    this.eyeTracking.startTracking(this.tracking.getSessionId());
   }
 
   /**

@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>Tobii.StreamEngine</id>
+    <version>2.2.2.363</version>
+    <authors>Tobii AB</authors>
+    <owners>TobiiEyeTracking</owners>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <licenseUrl>https://developer.tobii.com/license-agreement/</licenseUrl>
+    <projectUrl>http://developer-files.tobii.com/wp-content/uploads/2017/03/Tobii-Stream-Engine-API-Reference.pdf</projectUrl>
+    <iconUrl>https://files.update.tech.tobii.com/assets/Favicon_for_web_20170308-128x128-01.png</iconUrl>
+    <description>.NET API that enables low level access to gaze data and streams from Tobii Eye Trackers</description>
+    <summary>Tobii EyeTracking low level .NET API</summary>
+    <copyright>Copyright (c) Tobii AB</copyright>
+    <tags>Tobii EyeTracking .NET StreamEngine</tags>
+  </metadata>
+</package>

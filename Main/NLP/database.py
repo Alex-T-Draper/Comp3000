@@ -111,6 +111,20 @@ def init_database():
             FOREIGN KEY (session_id) REFERENCES sessions(session_id)
         )
     ''')
+
+    # Gaze samples table (Tobii eye tracking - consumer device)
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS gaze_samples (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            session_id TEXT NOT NULL,
+            timestamp TEXT NOT NULL,
+            device_ts INTEGER,
+            gaze_x REAL,
+            gaze_y REAL,
+            gaze_valid INTEGER,
+            FOREIGN KEY (session_id) REFERENCES sessions(session_id)
+        )
+    ''')
     
     conn.commit()
     conn.close()
@@ -230,6 +244,26 @@ def save_session_data(user_id: int, metrics: dict):
     
     conn.commit()
     conn.close()
+
+def save_gaze_data(session_id: str, gaze_samples: list):
+    """Batch-insert gaze samples collected from the Tobii eye tracker."""
+    if not gaze_samples:
+        return
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.executemany('''
+        INSERT INTO gaze_samples
+        (session_id, timestamp, device_ts, gaze_x, gaze_y, gaze_valid)
+        VALUES (?, ?, ?, ?, ?, ?)
+    ''', [(
+        session_id, s['timestamp'], s.get('device_ts'),
+        s.get('gaze_x'), s.get('gaze_y'),
+        1 if s.get('gaze_valid') else 0,
+    ) for s in gaze_samples])
+    conn.commit()
+    conn.close()
+    print(f"[DB] Saved {len(gaze_samples)} gaze samples for session {session_id}")
+
 
 def get_user_sessions(user_id: int):
     """Get all sessions for a user"""

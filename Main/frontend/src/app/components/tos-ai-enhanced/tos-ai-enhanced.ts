@@ -5,6 +5,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { NlpApiService, NLPAnalysisResponse, ClauseDetection } from '../../services/nlp-api';
 import { TrackingService } from '../../services/tracking';
+import { EyeTrackingService } from '../../services/eye-tracking';
 
 @Component({
   selector: 'app-tos-ai-enhanced',
@@ -40,7 +41,8 @@ export class TosAiEnhancedComponent implements OnInit, OnDestroy {
     private tracking: TrackingService,
     private router: Router,
     private cdr: ChangeDetectorRef,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private eyeTracking: EyeTrackingService
   ) {}
 
   ngOnInit(): void {
@@ -50,6 +52,7 @@ export class TosAiEnhancedComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.eyeTracking.stopTracking(this.tracking.getSessionId());
     this.tracking.endSession();
   }
 
@@ -85,6 +88,7 @@ export class TosAiEnhancedComponent implements OnInit, OnDestroy {
       this.tosTitle,
       'ai-enhanced'
     );
+    this.eyeTracking.startTracking(this.tracking.getSessionId());
   }
 
   /**

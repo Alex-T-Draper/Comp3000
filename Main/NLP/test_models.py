@@ -15,7 +15,7 @@ from nlp_service import (
     _model_cache
 )
 
-RESULTS_DIR = os.path.join(os.path.dirname(__file__), "results")
+RESULTS_DIR = os.path.join(os.path.dirname(__file__), "output", "test_models")
 os.makedirs(RESULTS_DIR, exist_ok=True)
 
 def detect_device():

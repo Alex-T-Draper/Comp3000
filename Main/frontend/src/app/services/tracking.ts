@@ -343,6 +343,10 @@ export class TrackingService {
     return { ...this.metrics };
   }
 
+  getSessionId(): string {
+    return this.metrics.sessionId;
+  }
+
   // Private helper methods
 
   private initializeMetrics(): UserMetrics {
