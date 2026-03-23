@@ -7,11 +7,25 @@ Compare different summarization models across multiple ToS documents
 import json
 import os
 import time
+import torch
 from nlp_service import (
     compare_summarization_models,
     abstractive_summary,
-    SUMMARIZATION_MODELS
+    SUMMARIZATION_MODELS,
+    _model_cache
 )
+
+def detect_device():
+    """Detect available compute device and print GPU info if available"""
+    if torch.cuda.is_available():
+        gpu_name = torch.cuda.get_device_name(0)
+        gpu_mem = round(torch.cuda.get_device_properties(0).total_memory / (1024**3), 1)
+        print(f"GPU detected: {gpu_name} ({gpu_mem} GB)")
+        print(f"CUDA version: {torch.version.cuda}")
+        return "cuda"
+    else:
+        print("No CUDA GPU detected — running on CPU only.")
+        return None
 
 # ToS documents to test against (filename without extension -> display label)
 TOS_DOCUMENTS = {
@@ -191,9 +205,98 @@ def compare_two_models(model1: str, model2: str):
         print(f"\n  {model2} ({len(s2.split())} words):")
         print(f"    {s2[:150]}...")
 
+def test_cpu_vs_gpu(model_names=None, doc_filename="ecommerce_tos",
+                    output_file="cpu_vs_gpu_results.json"):
+    """
+    Benchmark each model on both CPU and GPU for a single document.
+    Prints a side-by-side timing comparison and saves results to JSON.
+    """
+    gpu_device = detect_device()
+    if gpu_device is None:
+        print("\nGPU not available — cannot run CPU vs GPU comparison.")
+        return None
+
+    text = load_tos_text(doc_filename)
+    if not text:
+        return None
+
+    if model_names is None:
+        model_names = list(SUMMARIZATION_MODELS.keys())
+
+    label = TOS_DOCUMENTS.get(doc_filename, doc_filename)
+    print(f"\n{'='*80}")
+    print(f"CPU vs GPU BENCHMARK — {label} ({len(text.split())} words)")
+    print(f"{'='*80}")
+
+    results = {}
+    for model_name in model_names:
+        print(f"\n--- {model_name} ---")
+        row = {}
+        for device in ["cpu", "cuda"]:
+            try:
+                # Warm-up run (load model, JIT compile kernels)
+                abstractive_summary(text, model_name=model_name, device=device)
+                # Timed run
+                if device == "cuda":
+                    torch.cuda.synchronize()
+                start = time.time()
+                summary = abstractive_summary(text, model_name=model_name, device=device)
+                if device == "cuda":
+                    torch.cuda.synchronize()
+                elapsed = round(time.time() - start, 2)
+                row[device] = {
+                    "summary_length": len(summary.split()),
+                    "time_seconds": elapsed,
+                }
+                print(f"  {device.upper():>5}: {elapsed}s  ({len(summary.split())} words)")
+            except Exception as e:
+                row[device] = {"error": str(e)}
+                print(f"  {device.upper():>5}: ERROR — {e}")
+
+        if "time_seconds" in row.get("cpu", {}) and "time_seconds" in row.get("cuda", {}):
+            speedup = round(row["cpu"]["time_seconds"] / row["cuda"]["time_seconds"], 2)
+            row["gpu_speedup"] = speedup
+            print(f"  Speedup: {speedup}x")
+
+        results[model_name] = row
+
+        # Free GPU memory before loading the next model
+        cache_key = f"{model_name}@cuda"
+        if cache_key in _model_cache:
+            del _model_cache[cache_key]
+        torch.cuda.empty_cache()
+
+    # ---- Summary table ----
+    print(f"\n{'='*80}")
+    print(f"{'Model':<25} {'CPU (s)':>10} {'GPU (s)':>10} {'Speedup':>10}")
+    print("-" * 60)
+    for model_name, row in results.items():
+        cpu_t = row.get("cpu", {}).get("time_seconds", "—")
+        gpu_t = row.get("cuda", {}).get("time_seconds", "—")
+        spd = row.get("gpu_speedup", "—")
+        print(f"{model_name:<25} {str(cpu_t):>10} {str(gpu_t):>10} {str(spd) + 'x' if spd != '—' else '—':>10}")
+
+    # ---- Save ----
+    output = {
+        "document": doc_filename,
+        "gpu": torch.cuda.get_device_name(0),
+        "results": results,
+    }
+    with open(output_file, "w", encoding="utf-8") as f:
+        json.dump(output, f, indent=2, ensure_ascii=False)
+    print(f"\nResults saved to: {output_file}")
+    return output
+
+
 if __name__ == "__main__":
-    # Run full comparison across all documents and models
+    gpu_device = detect_device()
+
+    # Run full comparison across all documents and models (CPU)
     results = test_all_models_all_docs()
+
+    # If GPU is available, also run CPU vs GPU benchmark
+    if gpu_device:
+        test_cpu_vs_gpu()
 
     # Uncomment to test a single model on one document:
     # text = load_tos_text("ecommerce_tos")

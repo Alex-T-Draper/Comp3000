@@ -6,6 +6,7 @@ from sumy.parsers.plaintext import PlaintextParser
 from sumy.nlp.tokenizers import Tokenizer
 from sumy.summarizers.text_rank import TextRankSummarizer
 import yake
+import torch
 from transformers import pipeline, AutoModelForSeq2SeqLM, AutoTokenizer
 from typing import List, Dict
 
@@ -403,34 +404,35 @@ SUMMARIZATION_MODELS = {
     "pegasus-cnn": "google/pegasus-cnn_dailymail",
     "t5-base": "t5-base",
     "bart-large-cnn-samsum": "philschmid/bart-large-cnn-samsum",
-    "led-base-16384": "allenai/led-base-16384-arxiv",
+    "led-base-16384": "allenai/led-base-16384",
 }
 
 # Cache for loaded models
 _model_cache = {}
 
-def get_summarization_model(model_name: str = "distilbart-cnn-12-6"):
-    """Load or retrieve a cached summarization model"""
+def get_summarization_model(model_name: str = "distilbart-cnn-12-6", device: str = "cpu"):
+    """Load or retrieve a cached summarization model on the specified device ('cpu' or 'cuda')"""
     if model_name not in SUMMARIZATION_MODELS:
         raise ValueError(f"Model '{model_name}' not found. Available: {list(SUMMARIZATION_MODELS.keys())}")
     
-    if model_name not in _model_cache:
+    cache_key = f"{model_name}@{device}"
+    if cache_key not in _model_cache:
         try:
             model_path = SUMMARIZATION_MODELS[model_name]
             tokenizer = AutoTokenizer.from_pretrained(model_path)
-            model = AutoModelForSeq2SeqLM.from_pretrained(model_path)
-            # Create a simple wrapper for the model
-            _model_cache[model_name] = {
+            model = AutoModelForSeq2SeqLM.from_pretrained(model_path).to(device)
+            _model_cache[cache_key] = {
                 'model': model,
                 'tokenizer': tokenizer,
-                'name': model_name
+                'name': model_name,
+                'device': device
             }
-            logger.info("Loaded model: %s", model_name)
+            logger.info("Loaded model: %s on %s", model_name, device)
         except Exception as e:
-            logger.error("Failed to load model '%s': %s", model_name, e)
-            _model_cache[model_name] = None
+            logger.error("Failed to load model '%s' on %s: %s", model_name, device, e)
+            _model_cache[cache_key] = None
     
-    return _model_cache[model_name]
+    return _model_cache[cache_key]
 
 def chunk_text(text: str, tokenizer, max_tokens: int = 900) -> List[str]:
     """Chunk text based on token count to avoid silent truncation"""
@@ -449,20 +451,22 @@ def chunk_text(text: str, tokenizer, max_tokens: int = 900) -> List[str]:
         chunks.append(current)
     return chunks
 
-def abstractive_summary(text: str, max_length: int = 120, min_length: int = 30, model_name: str = "distilbart-cnn-12-6") -> str:
-    """Generate abstractive summary using specified model"""
-    model_data = get_summarization_model(model_name)
+def abstractive_summary(text: str, max_length: int = 120, min_length: int = 30, model_name: str = "distilbart-cnn-12-6", device: str = "cpu") -> str:
+    """Generate abstractive summary using specified model on the given device ('cpu' or 'cuda')"""
+    model_data = get_summarization_model(model_name, device=device)
     if not model_data:
         return ""
     
     model = model_data['model']
     tokenizer = model_data['tokenizer']
+    dev = model_data['device']
     
     chunks = chunk_text(text, tokenizer)
     summaries = []
     
     for c in chunks:
         inputs = tokenizer(c, max_length=1024, truncation=True, return_tensors="pt")
+        inputs = {k: v.to(dev) for k, v in inputs.items()}
         summary_ids = model.generate(inputs["input_ids"], max_length=max_length, min_length=min_length, num_beams=4)
         summary = tokenizer.batch_decode(summary_ids, skip_special_tokens=True)[0]
         summaries.append(summary)
@@ -471,6 +475,7 @@ def abstractive_summary(text: str, max_length: int = 120, min_length: int = 30, 
     
     if len(combined.split()) > 250:
         inputs = tokenizer(combined, max_length=1024, truncation=True, return_tensors="pt")
+        inputs = {k: v.to(dev) for k, v in inputs.items()}
         summary_ids = model.generate(inputs["input_ids"], max_length=160, min_length=60, num_beams=4)
         return tokenizer.batch_decode(summary_ids, skip_special_tokens=True)[0]
     
