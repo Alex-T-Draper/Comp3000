@@ -322,9 +322,8 @@ export class TosAiHoverComponent implements OnInit, OnDestroy {
     this.tracking.saveMetrics().subscribe({
       next: () => {
         console.log('Condition 6 (AI Hover) metrics saved');
-        alert('Study complete! Thank you for participating.');
-        // TODO: Navigate to thank you page
-        // this.router.navigate(['/thank-you']);
+        // Navigate to thank you page
+        this.router.navigate(['/thank-you']);
       },
       error: (err: any) => {
         console.error('Error saving metrics:', err);

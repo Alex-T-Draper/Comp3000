@@ -1,0 +1,61 @@
+<!-- src/app/components/thank-you/thank-you.html -->
+<div class="thank-you-container">
+  
+  <!-- Header Section -->
+  <div class="header-section">
+    <div class="checkmark-circle">
+      <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+        <circle class="checkmark-circle-animation" cx="26" cy="26" r="25" fill="none"/>
+        <path class="checkmark-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+      </svg>
+    </div>
+    
+    <h1>Thank You, {{ userName }}!</h1>
+    <p class="subtitle">You have successfully completed the study</p>
+  </div>
+
+  <!-- Instructions -->
+  <div class="instructions-card">
+    <h2>📋 One Final Step</h2>
+    <p>
+      Please take a few moments to complete this short questionnaire about your experience. 
+      Your feedback is crucial for my research and will help me understand how different 
+      presentation methods affect comprehension of Terms of Service.
+    </p>
+    <p class="time-estimate">
+      ⏱️ Estimated time: <strong>5-7 minutes</strong>
+    </p>
+  </div>
+
+  <!-- Embedded Google Form -->
+  <div class="form-container">
+    <iframe 
+      [src]="formUrl" 
+      width="100%" 
+      height="2000" 
+      frameborder="0" 
+      marginheight="0" 
+      marginwidth="0">
+      Loading…
+    </iframe>
+  </div>
+
+  <!-- Alternative Link -->
+  <div class="alternative-section">
+    <p>Having trouble seeing the form?</p>
+    <button class="btn-open-form" (click)="openFormInNewTab()">
+      🔗 Open Form in New Tab
+    </button>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer-section">
+    <p class="contact-info">
+      If you have any questions about this study, please contact the research team.
+    </p>
+    <p class="thank-you-message">
+      Thank you for your valuable contribution to our research! 🎓
+    </p>
+  </div>
+
+</div>

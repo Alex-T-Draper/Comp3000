@@ -1,0 +1,72 @@
+{
+  "document": "ecommerce_tos",
+  "gpu": "NVIDIA GeForce RTX 3080",
+  "results": {
+    "distilbart-cnn-12-6": {
+      "cpu": {
+        "summary_length": 132,
+        "time_seconds": 10.16
+      },
+      "cuda": {
+        "summary_length": 132,
+        "time_seconds": 1.72
+      },
+      "gpu_speedup": 5.91
+    },
+    "bart-large-cnn": {
+      "cpu": {
+        "summary_length": 121,
+        "time_seconds": 17.26
+      },
+      "cuda": {
+        "summary_length": 121,
+        "time_seconds": 2.78
+      },
+      "gpu_speedup": 6.21
+    },
+    "pegasus-cnn": {
+      "cpu": {
+        "summary_length": 143,
+        "time_seconds": 30.02
+      },
+      "cuda": {
+        "summary_length": 143,
+        "time_seconds": 3.29
+      },
+      "gpu_speedup": 9.12
+    },
+    "t5-base": {
+      "cpu": {
+        "summary_length": 172,
+        "time_seconds": 32.88
+      },
+      "cuda": {
+        "summary_length": 172,
+        "time_seconds": 7.78
+      },
+      "gpu_speedup": 4.23
+    },
+    "bart-large-cnn-samsum": {
+      "cpu": {
+        "summary_length": 166,
+        "time_seconds": 31.98
+      },
+      "cuda": {
+        "summary_length": 166,
+        "time_seconds": 4.56
+      },
+      "gpu_speedup": 7.01
+    },
+    "led-base-16384": {
+      "cpu": {
+        "summary_length": 204,
+        "time_seconds": 19.21
+      },
+      "cuda": {
+        "summary_length": 204,
+        "time_seconds": 4.23
+      },
+      "gpu_speedup": 4.54
+    }
+  }
+}

@@ -7,6 +7,7 @@ import { TosScrollRequiredComponent } from './components/tos-scroll-required/tos
 import { TosFormattedComponent } from './components/tos-formatted/tos-formatted';
 import { TosAiSummaryComponent } from './components/tos-ai-summary/tos-ai-summary';
 import { TosAiHoverComponent } from './components/tos-ai-hover/tos-ai-hover';
+import { ThankYouComponent } from './components/thank-you/thank-you';
 
 export const routes: Routes = [
   { path: '', component: WelcomeComponent },
@@ -17,5 +18,6 @@ export const routes: Routes = [
   { path: 'tos-ai-summary', component: TosAiSummaryComponent },
   { path: 'tos-ai-enhanced', component: TosAiEnhancedComponent },
   { path: 'tos-ai-hover', component: TosAiHoverComponent },
+  { path: 'thank-you', component: ThankYouComponent },
   { path: '**', redirectTo: '' }
 ];
