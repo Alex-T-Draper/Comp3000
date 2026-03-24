@@ -281,6 +281,9 @@ export class TosFormattedComponent implements OnInit, OnDestroy {
 
     // Track scroll
     this.tracking.trackScroll(this.scrollDepth, scrollTop);
+
+    // Update eye tracking with scroll position
+    this.eyeTracking.updateScrollPosition(scrollTop);
   }
 
   /**

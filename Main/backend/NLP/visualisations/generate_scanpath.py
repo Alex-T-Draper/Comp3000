@@ -5,30 +5,41 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
+import numpy as np
 import matplotlib.pyplot as plt
 
 from gaze_utils import (SCANPATH_DIR, SCREEN_W, SCREEN_H,
                          get_sessions, get_gaze_points_with_time,
-                         detect_fixations, session_label)
+                         detect_fixations, session_label, apply_scroll_adjustment)
 
 
-def make_scanpath(gaze_x, gaze_y, timestamps, title, output_path):
-    """Generate and save a scanpath visualisation with fixations and saccades."""
-    fixations = detect_fixations(gaze_x, gaze_y, timestamps)
+def make_scanpath_from_pixels(px, py, timestamps, title, output_path):
+    """Generate scanpath from scroll-adjusted pixel coordinates."""
+    
+    # Convert pixels back to normalized for fixation detection
+    # (detect_fixations expects 0-1 normalized coords)
+    content_height = max(SCREEN_H, py.max() + 100) if len(py) > 0 else SCREEN_H
+    gx_norm = px / SCREEN_W
+    gy_norm = py / content_height
+    
+    fixations = detect_fixations(gx_norm, gy_norm, timestamps)
     if len(fixations) < 2:
         print("  Skipping scanpath — too few fixations detected.")
         return
 
-    fig, ax = plt.subplots(figsize=(16, 9))
+    # Convert fixations back to pixels
+    fx = [f['x'] * SCREEN_W for f in fixations]
+    fy = [f['y'] * content_height for f in fixations]
+    durations = [f['duration_ms'] for f in fixations]
+
+    # Adjust figure height for content
+    fig_height = max(9, (content_height / SCREEN_W) * 16)
+    fig, ax = plt.subplots(figsize=(16, fig_height))
     ax.set_xlim(0, SCREEN_W)
-    ax.set_ylim(SCREEN_H, 0)
+    ax.set_ylim(content_height, 0)  # ← Adjusted for content height
     ax.set_facecolor('#1a1a2e')
     fig.patch.set_facecolor('#1a1a2e')
     ax.set_aspect('equal')
-
-    fx = [f['x'] * SCREEN_W for f in fixations]
-    fy = [f['y'] * SCREEN_H for f in fixations]
-    durations = [f['duration_ms'] for f in fixations]
 
     # Saccade lines
     for k in range(len(fixations) - 1):
@@ -56,7 +67,7 @@ def make_scanpath(gaze_x, gaze_y, timestamps, title, output_path):
 
     ax.set_title(title, fontsize=14, pad=10, color='white')
     ax.set_xlabel('Screen X (px)', color='white')
-    ax.set_ylabel('Screen Y (px)', color='white')
+    ax.set_ylabel('Content Y (px)', color='white') 
     ax.tick_params(colors='white')
     for spine in ax.spines.values():
         spine.set_color('#333')
@@ -69,13 +80,15 @@ def make_scanpath(gaze_x, gaze_y, timestamps, title, output_path):
 
 
 def main():
+    import sys
     SCANPATH_DIR.mkdir(parents=True, exist_ok=True)
+    user_filter = sys.argv[1] if len(sys.argv) > 1 else None
     sessions = get_sessions()
-
+    if user_filter:
+        sessions = [row for row in sessions if row[3] == user_filter]
     if not sessions:
-        print("No gaze data found in the database.")
+        print("No gaze data found in the database for the specified user." if user_filter else "No gaze data found in the database.")
         return
-
     print(f"Found {len(sessions)} session(s) with gaze data.\n")
 
     for row in sessions:
@@ -86,14 +99,17 @@ def main():
         print(f"Session: {session_id}")
         print(f"  User: {user_label} | ToS: {tos_label} | Condition: {cond_label} | Samples: {valid}/{total}")
 
-        gx, gy, ts = get_gaze_points_with_time(session_id)
+        gx, gy, ts, scroll_pos = get_gaze_points_with_time(session_id)
         if gx is None or len(gx) < 10:
             print("  Skipping — too few valid samples.")
             continue
 
+        # Apply scroll adjustment
+        px, py = apply_scroll_adjustment(gx, gy, scroll_pos)
+
         title = f"Scanpath — {user_label} — {tos_label} ({cond_label})"
         filename = f"scanpath_{user_label}_{tos_label}_{cond_label}_{session_id[:15]}.png"
-        make_scanpath(gx, gy, ts, title, SCANPATH_DIR / filename)
+        make_scanpath_from_pixels(px, py, ts, title, SCANPATH_DIR / filename)
 
     print(f"\nAll scanpaths saved to: {SCANPATH_DIR.resolve()}")
 

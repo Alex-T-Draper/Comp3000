@@ -36,34 +36,59 @@ def get_sessions():
 
 
 def get_gaze_points(session_id):
-    """Return valid gaze points for a session as numpy arrays."""
+    """Return valid gaze points for a session as numpy arrays with scroll adjustment."""
     conn = sqlite3.connect(DB_PATH)
     rows = conn.execute('''
-        SELECT gaze_x, gaze_y FROM gaze_samples
+        SELECT gaze_x, gaze_y, scroll_position FROM gaze_samples
         WHERE session_id = ? AND gaze_valid = 1
           AND gaze_x IS NOT NULL AND gaze_y IS NOT NULL
+        ORDER BY timestamp
     ''', (session_id,)).fetchall()
     conn.close()
     if not rows:
-        return None, None
+        return None, None, None
     data = np.array(rows)
-    return data[:, 0], data[:, 1]
+    gaze_x = data[:, 0]
+    gaze_y = data[:, 1]
+    scroll_pos = data[:, 2]
+    return gaze_x, gaze_y, scroll_pos
 
 
 def get_gaze_points_with_time(session_id):
-    """Return valid gaze points with device timestamps."""
+    """Return valid gaze points with device timestamps and scroll position."""
     conn = sqlite3.connect(DB_PATH)
     rows = conn.execute('''
-        SELECT gaze_x, gaze_y, device_ts FROM gaze_samples
+        SELECT gaze_x, gaze_y, device_ts, scroll_position FROM gaze_samples
         WHERE session_id = ? AND gaze_valid = 1
           AND gaze_x IS NOT NULL AND gaze_y IS NOT NULL
         ORDER BY device_ts
     ''', (session_id,)).fetchall()
     conn.close()
     if not rows:
-        return None, None, None
+        return None, None, None, None
     data = np.array(rows)
-    return data[:, 0], data[:, 1], data[:, 2]
+    gaze_x = data[:, 0]
+    gaze_y = data[:, 1]
+    timestamps = data[:, 2]
+    scroll_pos = data[:, 3]
+    return gaze_x, gaze_y, timestamps, scroll_pos
+
+
+def apply_scroll_adjustment(gaze_x, gaze_y, scroll_pos, screen_w=SCREEN_W, screen_h=SCREEN_H):
+    """
+    Convert normalized gaze coordinates to pixel coordinates with scroll adjustment.
+    
+    Args:
+        gaze_x, gaze_y: Normalized coordinates (0-1)
+        scroll_pos: Scroll position in pixels
+        screen_w, screen_h: Screen resolution
+    
+    Returns:
+        x_px, y_px: Pixel coordinates adjusted for scroll
+    """
+    x_px = gaze_x * screen_w
+    y_px = gaze_y * screen_h + scroll_pos
+    return x_px, y_px
 
 
 def detect_fixations(gaze_x, gaze_y, timestamps,

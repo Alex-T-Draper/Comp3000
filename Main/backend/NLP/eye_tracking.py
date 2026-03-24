@@ -56,6 +56,8 @@ class EyeTrackingService:
         self._stop_event = threading.Event()
         self._gaze_cb_ref = None   # prevent GC of ctypes callback
         self._device_url = None
+        self._current_scroll_position = 0
+        self._scroll_lock = threading.Lock()
 
     # ── connection ──────────────────────────────────────────────
 
@@ -111,6 +113,7 @@ class EyeTrackingService:
             self.session_id = session_id
             self.is_tracking = True
             self._stop_event.clear()
+            self._current_scroll_position = 0
 
         dll = _load_dll()
 
@@ -119,12 +122,17 @@ class EyeTrackingService:
                 return
             gp = gaze_ptr.contents
             valid = gp.validity == 1
+            
+            with self._scroll_lock:
+                scroll_pos = self._current_scroll_position
+
             sample = {
                 "timestamp": datetime.now().isoformat(),
                 "device_ts": gp.timestamp_us,
                 "gaze_x": float(gp.position_xy[0]) if valid else None,
                 "gaze_y": float(gp.position_xy[1]) if valid else None,
                 "gaze_valid": valid,
+                "scroll_position": scroll_pos,
             }
             with self._lock:
                 self.gaze_data.append(sample)
@@ -164,6 +172,11 @@ class EyeTrackingService:
 
         print(f"[EyeTracking] Stopped tracking. Collected {len(data)} gaze samples.")
         return data
+    
+    def update_scroll_position(self, scroll_position: float):
+        """Update the current scroll position (called from WebSocket)."""
+        with self._scroll_lock:
+            self._current_scroll_position = scroll_position
 
     @property
     def is_connected(self) -> bool:

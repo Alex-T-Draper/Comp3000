@@ -119,6 +119,9 @@ export class TosAiHoverComponent implements OnInit, OnDestroy {
     this.scrollDepth = scrollableHeight > 0 ? (scrollTop / scrollableHeight) * 100 : 0;
 
     this.tracking.trackScroll(this.scrollDepth, scrollTop);
+
+    // Update eye tracking with scroll position
+    this.eyeTracking.updateScrollPosition(scrollTop);
   }
 
   /**

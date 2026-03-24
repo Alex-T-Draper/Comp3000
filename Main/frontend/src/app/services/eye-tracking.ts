@@ -58,6 +58,19 @@ export class EyeTrackingService implements OnDestroy {
   }
 
   /**
+   * Update scroll position for the current session.
+   * Sends the scroll position to the backend via WebSocket.
+   */
+  updateScrollPosition(scrollPosition: number): void {
+    if (this.ws && this.ws.readyState === WebSocket.OPEN) {
+      this.ws.send(JSON.stringify({
+        action: 'scroll',
+        scrollPosition: scrollPosition
+      }));
+    }
+  }
+
+  /**
    * Disconnect the WebSocket.
    */
   disconnect(): void {

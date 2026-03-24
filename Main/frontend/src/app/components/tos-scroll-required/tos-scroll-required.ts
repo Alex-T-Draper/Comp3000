@@ -101,6 +101,9 @@ export class TosScrollRequiredComponent implements OnInit, OnDestroy {
     // Track scroll
     this.tracking.trackScroll(this.scrollDepth, scrollTop);
 
+    // Update eye tracking with scroll position
+    this.eyeTracking.updateScrollPosition(scrollTop);
+
     // Check if reached bottom (99% to account for rounding)
     if (this.scrollDepth >= 99 && !this.hasScrolledToBottom) {
       this.hasScrolledToBottom = true;

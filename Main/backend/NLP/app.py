@@ -358,6 +358,10 @@ async def eyetracking_ws(websocket: WebSocket):
                     logger.error(f"[EyeTracking WS] Stop error: {e}")
                     await websocket.send_json({"status": "error", "message": str(e)})
 
+            elif action == "scroll":
+                scroll_position = msg.get("scrollPosition", 0)
+                eye_service.update_scroll_position(scroll_position)
+
             elif action == "status":
                 await websocket.send_json({
                     "status": "ok",

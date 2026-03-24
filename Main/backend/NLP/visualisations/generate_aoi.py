@@ -20,7 +20,7 @@ import matplotlib.pyplot as plt
 from matplotlib.colors import Normalize
 from matplotlib.patches import Rectangle
 
-from gaze_utils import (AOI_DIR, SCREEN_W, SCREEN_H,
+from gaze_utils import (AOI_DIR, SCREEN_W, SCREEN_H, apply_scroll_adjustment,
                          get_sessions, get_gaze_points_with_time,
                          detect_fixations, session_label)
 
@@ -57,14 +57,14 @@ def compute_aoi_stats(fixations):
     return count_grid, dwell_grid
 
 
-def _draw_aoi_grid(ax, grid, title, cmap, value_fmt, label):
+def _draw_aoi_grid(ax, grid, title, cmap, value_fmt, label, content_height):
     """Render a colour-coded AOI grid with value annotations."""
     ax.set_xlim(0, SCREEN_W)
-    ax.set_ylim(SCREEN_H, 0)
+    ax.set_ylim(content_height, 0)  
     ax.set_aspect('equal')
 
     cell_w_px = SCREEN_W / AOI_COLS
-    cell_h_px = SCREEN_H / AOI_ROWS
+    cell_h_px = content_height / AOI_ROWS  
 
     vmax = grid.max() if grid.max() > 0 else 1
     norm = Normalize(vmin=0, vmax=vmax)
@@ -101,12 +101,18 @@ def _draw_aoi_grid(ax, grid, title, cmap, value_fmt, label):
 
     ax.set_title(title, fontsize=14, pad=10)
     ax.set_xlabel('Screen X (px)')
-    ax.set_ylabel('Screen Y (px)')
+    ax.set_ylabel('Content Y (px)')  # ← Changed
 
 
-def make_aoi(gaze_x, gaze_y, timestamps, title_prefix, output_prefix):
-    """Generate AOI fixation-count and dwell-time grids."""
-    fixations = detect_fixations(gaze_x, gaze_y, timestamps)
+def make_aoi_from_pixels(px, py, timestamps, title_prefix, output_prefix):
+    """Generate AOI grids from scroll-adjusted pixel coordinates."""
+    
+    # Convert to normalized for fixation detection
+    content_height = max(SCREEN_H, py.max() + 100) if len(py) > 0 else SCREEN_H
+    gx_norm = px / SCREEN_W
+    gy_norm = py / content_height
+    
+    fixations = detect_fixations(gx_norm, gy_norm, timestamps)
     if len(fixations) < 2:
         print("  Skipping AOI — too few fixations detected.")
         return
@@ -114,11 +120,14 @@ def make_aoi(gaze_x, gaze_y, timestamps, title_prefix, output_prefix):
     count_grid, dwell_grid = compute_aoi_stats(fixations)
     total_dwell = dwell_grid.sum()
 
+    # Adjust figure height
+    fig_height = max(9, (content_height / SCREEN_W) * 16)
+
     # --- Fixation count grid ---
-    fig, ax = plt.subplots(figsize=(16, 9))
+    fig, ax = plt.subplots(figsize=(16, fig_height))
     _draw_aoi_grid(ax, count_grid,
                    f"{title_prefix} — Fixation Count per AOI",
-                   'Blues', '{:.0f}', 'fixations')
+                   'Blues', '{:.0f}', 'fixations', content_height)
     fig.tight_layout()
     count_path = AOI_DIR / f"{output_prefix}_aoi_count.png"
     fig.savefig(count_path, dpi=150, bbox_inches='tight')
@@ -126,14 +135,14 @@ def make_aoi(gaze_x, gaze_y, timestamps, title_prefix, output_prefix):
     print(f"  Saved: {count_path}")
 
     # --- Dwell time grid (absolute ms + percentage) ---
-    fig, ax = plt.subplots(figsize=(16, 9))
+    fig, ax = plt.subplots(figsize=(16, fig_height))
 
     ax.set_xlim(0, SCREEN_W)
-    ax.set_ylim(SCREEN_H, 0)
+    ax.set_ylim(content_height, 0)
     ax.set_aspect('equal')
 
     cell_w_px = SCREEN_W / AOI_COLS
-    cell_h_px = SCREEN_H / AOI_ROWS
+    cell_h_px = content_height / AOI_ROWS  
 
     vmax = dwell_grid.max() if dwell_grid.max() > 0 else 1
     norm = Normalize(vmin=0, vmax=vmax)
@@ -171,7 +180,7 @@ def make_aoi(gaze_x, gaze_y, timestamps, title_prefix, output_prefix):
 
     ax.set_title(f"{title_prefix} — Dwell Time per AOI", fontsize=14, pad=10)
     ax.set_xlabel('Screen X (px)')
-    ax.set_ylabel('Screen Y (px)')
+    ax.set_ylabel('Content Y (px)')
 
     fig.tight_layout()
     dwell_path = AOI_DIR / f"{output_prefix}_aoi_dwell.png"
@@ -193,13 +202,15 @@ def make_aoi(gaze_x, gaze_y, timestamps, title_prefix, output_prefix):
 
 
 def main():
+    import sys
     AOI_DIR.mkdir(parents=True, exist_ok=True)
+    user_filter = sys.argv[1] if len(sys.argv) > 1 else None
     sessions = get_sessions()
-
+    if user_filter:
+        sessions = [row for row in sessions if row[3] == user_filter]
     if not sessions:
-        print("No gaze data found in the database.")
+        print("No gaze data found in the database for the specified user." if user_filter else "No gaze data found in the database.")
         return
-
     print(f"Found {len(sessions)} session(s) with gaze data.\n")
 
     for row in sessions:
@@ -210,14 +221,17 @@ def main():
         print(f"Session: {session_id}")
         print(f"  User: {user_label} | ToS: {tos_label} | Condition: {cond_label} | Samples: {valid}/{total}")
 
-        gx, gy, ts = get_gaze_points_with_time(session_id)
+        gx, gy, ts, scroll_pos = get_gaze_points_with_time(session_id)
         if gx is None or len(gx) < 10:
             print("  Skipping — too few valid samples.")
             continue
 
+        # Apply scroll adjustment
+        px, py = apply_scroll_adjustment(gx, gy, scroll_pos)
+
         title_prefix = f"{user_label} — {tos_label} ({cond_label})"
         out_prefix = f"{user_label}_{tos_label}_{cond_label}_{session_id[:15]}"
-        make_aoi(gx, gy, ts, title_prefix, out_prefix)
+        make_aoi_from_pixels(px, py, ts, title_prefix, out_prefix)
 
     print(f"\nAll AOI charts saved to: {AOI_DIR.resolve()}")
 
