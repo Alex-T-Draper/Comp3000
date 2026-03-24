@@ -27,7 +27,7 @@ import tobiiresearch.implementation.EyeOpennessData
 for module_name, module_content in tobiiresearch.implementation.__dict__.items():
     if module_name in tobiiresearch.implementation.__all__:
         for global_name, global_value in module_content.__dict__.items():
-            if not global_name.endswith('__'):  # Don't import built in functionality.
+            if not global_name.endswith('__'):
                 globals()[global_name] = global_value
 
 __version__ = interop.get_sdk_version()
