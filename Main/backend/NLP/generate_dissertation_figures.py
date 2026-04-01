@@ -25,6 +25,10 @@ def main():
         ("Comprehension Scores",        "comprehension_scores.py"),
         ("Preference Rankings",         "preference_rankings.py"),
         ("Statistical Tests",           "statistical_tests.py"),
+        ("Completion Time",             "completion_time.py"),
+        ("Engagement Metrics",          "engagement_metrics.py"),
+        ("Scroll Behaviour",            "scroll_behaviour.py"),
+        ("Study Procedure",             "study_procedure.py"),
     ]
 
     if "--list" in sys.argv:

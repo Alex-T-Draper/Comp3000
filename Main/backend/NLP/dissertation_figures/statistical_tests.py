@@ -70,7 +70,7 @@ def _get_paired_reading_times():
         if cond_id is None:
             continue
         user_data.setdefault(r["name"], {})[cond_id] = (
-            r["total_reading_time"] / 1000.0
+            r["total_reading_time"]
         )
 
     # Only include participants with all 6 conditions

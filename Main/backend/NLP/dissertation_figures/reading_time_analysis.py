@@ -89,7 +89,7 @@ def _load_data():
     for r in rows:
         cond = str(r["condition_group"])
         pid = _anonymise(r["user_name"], anon)
-        time_s = r["total_reading_time"] / 1000.0  # ms → seconds
+        time_s = r["total_reading_time"]  # already in seconds
         data.setdefault(cond, []).append((pid, time_s))
 
     return data, anon
