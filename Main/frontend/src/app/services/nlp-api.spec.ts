@@ -9,6 +9,7 @@ describe('NlpApiService', () => {
   const apiUrl = 'http://127.0.0.1:8000';
 
   beforeEach(() => {
+    TestBed.resetTestingModule();
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
       providers: [NlpApiService]

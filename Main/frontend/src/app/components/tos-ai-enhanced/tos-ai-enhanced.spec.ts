@@ -1,18 +1,51 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { Router } from '@angular/router';
 
-import { TosViewer } from './tos-ai-enhanced';
+import { TosAiEnhancedComponent } from './tos-ai-enhanced';
+import { TrackingService } from '../../services/tracking';
+import { NlpApiService } from '../../services/nlp-api';
+import { EyeTrackingService } from '../../services/eye-tracking';
 
-describe('TosViewer', () => {
-  let component: TosViewer;
-  let fixture: ComponentFixture<TosViewer>;
+const mockRouter = { navigate: vi.fn(), navigateByUrl: vi.fn() };
+const mockTrackingService = {
+  startTracking: vi.fn(),
+  recordUserMetrics: vi.fn(),
+  getSessionId: vi.fn().mockReturnValue('test-session-id'),
+  startSession: vi.fn(),
+  endSession: vi.fn(),
+};
+const mockNlpApiService = {
+  analyzeText: vi.fn(),
+  loadTosFile: vi.fn().mockReturnValue({ subscribe: vi.fn() }),
+};
+const mockEyeTrackingService = {
+  connect: vi.fn(),
+  disconnect: vi.fn(),
+  startTracking: vi.fn(),
+  stopTracking: vi.fn(),
+};
+
+describe('TosAiEnhancedComponent', () => {
+  let component: TosAiEnhancedComponent;
+  let fixture: ComponentFixture<TosAiEnhancedComponent>;
 
   beforeEach(async () => {
+    TestBed.resetTestingModule();
+
     await TestBed.configureTestingModule({
-      imports: [TosViewer]
+      imports: [TosAiEnhancedComponent, HttpClientTestingModule],
+      providers: [
+        { provide: Router, useValue: mockRouter },
+        { provide: TrackingService, useValue: mockTrackingService },
+        { provide: NlpApiService, useValue: mockNlpApiService },
+        { provide: EyeTrackingService, useValue: mockEyeTrackingService },
+      ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(TosViewer);
+    fixture = TestBed.createComponent(TosAiEnhancedComponent);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

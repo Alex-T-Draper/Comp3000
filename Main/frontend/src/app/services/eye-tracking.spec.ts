@@ -21,8 +21,11 @@ describe('EyeTrackingService', () => {
       onmessage: null
     };
 
-    // Mock the global WebSocket constructor
-    vi.stubGlobal('WebSocket', vi.fn(() => mockWebSocket));
+    // Mock the global WebSocket constructor - use a proper function implementation
+    const MockWebSocket = vi.fn(function() {
+      return mockWebSocket;
+    });
+    vi.stubGlobal('WebSocket', MockWebSocket);
   });
 
   afterEach(() => {
@@ -37,7 +40,9 @@ describe('EyeTrackingService', () => {
   describe('startTracking', () => {
     it('should send start command when WebSocket is open', () => {
       const sessionId = 'test-session-123';
-      
+      // Pre-set ws to simulate an already-open connection
+      (service as any).ws = mockWebSocket;
+
       service.startTracking(sessionId);
       
       // Check if send was called
@@ -71,8 +76,9 @@ describe('EyeTrackingService', () => {
   describe('stopTracking', () => {
     it('should send stop command when WebSocket is open', () => {
       const sessionId = 'test-session-stop';
+      (service as any).ws = mockWebSocket;
       mockWebSocket.readyState = WebSocket.OPEN;
-      
+
       service.stopTracking(sessionId);
       
       expect(mockWebSocket.send).toHaveBeenCalledWith(
@@ -93,8 +99,9 @@ describe('EyeTrackingService', () => {
   describe('updateScrollPosition', () => {
     it('should send scroll position when WebSocket is open', () => {
       const scrollPosition = 42.5;
+      (service as any).ws = mockWebSocket;
       mockWebSocket.readyState = WebSocket.OPEN;
-      
+
       service.updateScrollPosition(scrollPosition);
       
       expect(mockWebSocket.send).toHaveBeenCalledWith(
@@ -115,6 +122,7 @@ describe('EyeTrackingService', () => {
     });
 
     it('should handle various scroll positions', () => {
+      (service as any).ws = mockWebSocket;
       mockWebSocket.readyState = WebSocket.OPEN;
       const positions = [0, 25, 50, 75, 100];
       

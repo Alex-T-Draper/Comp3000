@@ -38,7 +38,7 @@ jobs:
     - name: Run tests
       run: |
         cd Main/frontend
-        npm run test -- --run
+        npm run test:run
       continue-on-error: true
     
     - name: Type check
