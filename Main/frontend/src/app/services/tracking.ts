@@ -81,7 +81,7 @@ export interface UserMetrics {
 export class TrackingService {
   private metrics: UserMetrics;
   private scrollTrackingInterval: any;
-  private apiUrl = 'http://127.0.0.1:8000/api'; // Your FastAPI backend
+  private apiUrl = 'http://127.0.0.1:8000/api'; 
 
   // Pause detection state
   private lastScrollTime: number = 0;
@@ -103,9 +103,7 @@ export class TrackingService {
     this.metrics = this.initializeMetrics();
   }
 
-  /**
-   * Initialize a new tracking session
-   */
+  // Initialize a new tracking session
   startSession(userName: string, tosId: string, tosText: string, tosTitle: string, conditionGroup: 'control' | 'scroll-gate' | 'formatted' | 'ai-summary' | 'ai-enhanced' | 'ai-hover' = 'control'): void {
     this.metrics = {
       sessionId: this.generateSessionId(),
@@ -134,9 +132,7 @@ export class TrackingService {
     this.peakScrollDepth = 0;
   }
 
-  /**
-   * Track scroll position with direction and pause detection
-   */
+  // Track scroll position with direction and pause detection
   trackScroll(scrollDepth: number, scrollPosition: number): void {
     const now = Date.now();
     const direction: 'up' | 'down' = scrollDepth >= this.lastScrollDepth ? 'down' : 'up';
@@ -182,9 +178,7 @@ export class TrackingService {
     this.lastScrollTime = now;
   }
 
-  /**
-   * Detect reading pauses (user stops scrolling for PAUSE_THRESHOLD_MS)
-   */
+  // Detect reading pauses (user stops scrolling for PAUSE_THRESHOLD_MS)
   private detectPause(currentDepth: number, now: number): void {
     // Clear previous timer
     if (this.pauseTimer) {
@@ -213,9 +207,7 @@ export class TrackingService {
     }, this.PAUSE_THRESHOLD_MS);
   }
 
-  /**
-   * Track when user clicks "Generate Summary"
-   */
+  // Track when user clicks "Generate Summary"
   trackSummaryGeneration(riskScore: number, categories: string[]): void {
     this.metrics.summaryGenerated = true;
     this.metrics.summaryGeneratedAt = new Date();
@@ -224,9 +216,7 @@ export class TrackingService {
     this.metrics.detectedCategories = categories;
   }
 
-  /**
-   * Track when user clicks on a highlighted clause
-   */
+  // Track when user clicks on a highlighted clause
   trackClauseClick(category: string, position: { start: number; end: number }): void {
     this.metrics.clausesClicked.push({
       category,
@@ -235,18 +225,14 @@ export class TrackingService {
     });
   }
 
-  /**
-   * Track hover enter on a clause (for ai-hover condition)
-   */
+  // Track hover enter on a clause (for ai-hover condition)
   trackHoverEnter(category: string, clauseId: string): void {
     this.currentHoverStart = Date.now();
     this.currentHoverCategory = category;
     this.currentHoverClauseId = clauseId;
   }
 
-  /**
-   * Track hover leave on a clause (for ai-hover condition)
-   */
+  // Track hover leave on a clause (for ai-hover condition)
   trackHoverLeave(): void {
     if (this.currentHoverStart > 0) {
       const duration = Date.now() - this.currentHoverStart;
@@ -265,9 +251,7 @@ export class TrackingService {
     }
   }
 
-  /**
-   * End the session and calculate final metrics
-   */
+  // End the session and calculate final metrics
   endSession(): void {
     this.metrics.timeEnded = new Date();
     this.metrics.totalReadingTime = this.getElapsedSeconds();
@@ -303,9 +287,7 @@ export class TrackingService {
     this.stopScrollTracking();
   }
 
-  /**
-   * Send metrics to backend for analysis
-   */
+  // Send metrics to backend for analysis
   saveMetrics(): Observable<any> {
     this.endSession();
     
@@ -336,9 +318,7 @@ export class TrackingService {
     return this.http.post(`${this.apiUrl}/metrics`, metricsToSave);
   }
 
-  /**
-   * Get current metrics (for debugging or real-time display)
-   */
+  // Get current metrics (for debugging or real-time display)
   getCurrentMetrics(): UserMetrics {
     return { ...this.metrics };
   }
@@ -401,11 +381,6 @@ export class TrackingService {
     } else {
       return 'partial-read';
     }
-  }
-
-  private startScrollTracking(): void {
-    // This will be called from the component with actual scroll values
-    // The interval here is just a placeholder for periodic checks
   }
 
   private stopScrollTracking(): void {

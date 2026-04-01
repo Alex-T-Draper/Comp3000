@@ -8,10 +8,7 @@ export class EyeTrackingService implements OnDestroy {
   private reconnectAttempts = 0;
   private maxReconnectAttempts = 3;
 
-  /**
-   * Start eye tracking for a session.
-   * Connects the WebSocket if not already open, then sends the start command.
-   */
+  // Start eye tracking for a session. Connects the WebSocket if not already open, then sends the start command.
   startTracking(sessionId: string): void {
     const send = () => {
       this.ws!.send(JSON.stringify({ action: 'start', sessionId }));
@@ -46,10 +43,7 @@ export class EyeTrackingService implements OnDestroy {
     };
   }
 
-  /**
-   * Stop eye tracking for a session.
-   * The backend will save the gaze data to the database.
-   */
+  // Stop eye tracking for a session.
   stopTracking(sessionId: string): void {
     if (this.ws && this.ws.readyState === WebSocket.OPEN) {
       this.ws.send(JSON.stringify({ action: 'stop', sessionId }));
@@ -57,10 +51,8 @@ export class EyeTrackingService implements OnDestroy {
     }
   }
 
-  /**
-   * Update scroll position for the current session.
-   * Sends the scroll position to the backend via WebSocket.
-   */
+  // Update scroll position for the current session.
+  // Sends the scroll position to the backend via WebSocket.
   updateScrollPosition(scrollPosition: number): void {
     if (this.ws && this.ws.readyState === WebSocket.OPEN) {
       this.ws.send(JSON.stringify({
@@ -70,9 +62,7 @@ export class EyeTrackingService implements OnDestroy {
     }
   }
 
-  /**
-   * Disconnect the WebSocket.
-   */
+  // Disconnect the WebSocket.
   disconnect(): void {
     if (this.ws) {
       this.ws.close();
