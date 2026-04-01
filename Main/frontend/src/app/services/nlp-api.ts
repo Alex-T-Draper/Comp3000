@@ -83,7 +83,7 @@ export class NlpApiService {
       abstractive
     };
 
-    return this.http.post<NLPAnalysisResponse>(`${this.apiUrl}/summarize`, request);
+    return this.http.post<NLPAnalysisResponse>(`${this.apiUrl}/api/summarize`, request);
   }
 
   // Load a ToS document from the backend by filename (without extension)

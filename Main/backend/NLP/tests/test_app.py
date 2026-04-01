@@ -161,7 +161,7 @@ class TestMetricsEndpoints:
 
 
 # ---------------------------------------------------------------------------
-# POST /summarize
+# POST /api/summarize
 # ---------------------------------------------------------------------------
 
 _MOCK_ANALYSIS = {
@@ -180,7 +180,7 @@ class TestSummarizeEndpoint:
     def test_valid_text_returns_200(self, client):
         with patch("app.analyse_text", return_value=_MOCK_ANALYSIS):
             response = client.post(
-                "/summarize",
+                "/api/summarize",
                 json={"text": "A" * 100, "num_sentences": 3},
             )
         assert response.status_code == 200
@@ -188,28 +188,28 @@ class TestSummarizeEndpoint:
     def test_response_contains_bullets(self, client):
         with patch("app.analyse_text", return_value=_MOCK_ANALYSIS):
             data = client.post(
-                "/summarize",
+                "/api/summarize",
                 json={"text": "A" * 100, "num_sentences": 3},
             ).json()
         assert "bullets" in data
 
     def test_text_too_short_returns_422(self, client):
         response = client.post(
-            "/summarize",
+            "/api/summarize",
             json={"text": "Short", "num_sentences": 3},
         )
         assert response.status_code == 422
 
     def test_num_sentences_out_of_range_returns_422(self, client):
         response = client.post(
-            "/summarize",
+            "/api/summarize",
             json={"text": "A" * 100, "num_sentences": 50},
         )
         assert response.status_code == 422
 
     def test_text_too_long_returns_422(self, client):
         response = client.post(
-            "/summarize",
+            "/api/summarize",
             json={"text": "A" * 500_001, "num_sentences": 3},
         )
         assert response.status_code == 422
@@ -217,7 +217,7 @@ class TestSummarizeEndpoint:
     def test_abstractive_flag_passed_through(self, client):
         with patch("app.analyse_text", return_value=_MOCK_ANALYSIS) as mock_fn:
             client.post(
-                "/summarize",
+                "/api/summarize",
                 json={"text": "A" * 100, "num_sentences": 3, "abstractive": True},
             )
         mock_fn.assert_called_once()

@@ -110,7 +110,7 @@ def get_tos_file(filename: str):
     with open(filepath, "r", encoding="utf-8") as f:
         return f.read()
 
-@app.post("/summarize")
+@app.post("/api/summarize")
 def summarize(req: SummRequest):
     """
     Analyze Terms of Service text and return:

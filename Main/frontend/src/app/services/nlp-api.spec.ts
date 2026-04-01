@@ -35,7 +35,7 @@ describe('NlpApiService', () => {
 
       service.analyzeTos(testText, numSentences, abstractive).subscribe();
 
-      const req = httpTestingController.expectOne(`${apiUrl}/summarize`);
+      const req = httpTestingController.expectOne(`${apiUrl}/api/summarize`);
       expect(req.request.method).toBe('POST');
       expect(req.request.body).toEqual({
         text: testText,
@@ -49,7 +49,7 @@ describe('NlpApiService', () => {
 
       service.analyzeTos(testText).subscribe();
 
-      const req = httpTestingController.expectOne(`${apiUrl}/summarize`);
+      const req = httpTestingController.expectOne(`${apiUrl}/api/summarize`);
       expect(req.request.body.num_sentences).toBe(6);
       expect(req.request.body.abstractive).toBe(false);
     });
@@ -77,7 +77,7 @@ describe('NlpApiService', () => {
         expect(result.abstractive).toBe('Summary text');
       });
 
-      const req = httpTestingController.expectOne(`${apiUrl}/summarize`);
+      const req = httpTestingController.expectOne(`${apiUrl}/api/summarize`);
       req.flush(mockResponse);
     });
 
@@ -87,7 +87,7 @@ describe('NlpApiService', () => {
 
       service.analyzeTos(testText, 6, abstractive).subscribe();
 
-      const req = httpTestingController.expectOne(`${apiUrl}/summarize`);
+      const req = httpTestingController.expectOne(`${apiUrl}/api/summarize`);
       expect(req.request.body.abstractive).toBe(true);
     });
 
@@ -97,7 +97,7 @@ describe('NlpApiService', () => {
 
       sentenceCounts.forEach(count => {
         service.analyzeTos(testText, count).subscribe();
-        const req = httpTestingController.expectOne(`${apiUrl}/summarize`);
+        const req = httpTestingController.expectOne(`${apiUrl}/api/summarize`);
         expect(req.request.body.num_sentences).toBe(count);
       });
     });
@@ -116,7 +116,7 @@ describe('NlpApiService', () => {
         }
       );
 
-      const req = httpTestingController.expectOne(`${apiUrl}/summarize`);
+      const req = httpTestingController.expectOne(`${apiUrl}/api/summarize`);
       req.flush('Internal Server Error', { status: 500, statusText: 'Internal Server Error' });
       expect(errorReceived).toBe(true);
     });
@@ -211,7 +211,7 @@ describe('NlpApiService', () => {
       service.analyzeTos(text1).subscribe();
       service.analyzeTos(text2).subscribe();
 
-      const requests = httpTestingController.match(`${apiUrl}/summarize`);
+      const requests = httpTestingController.match(`${apiUrl}/api/summarize`);
       expect(requests.length).toBe(2);
       
       requests[0].flush({ bullets: ['point1'], keywords: [], detected_clauses: {}, grouped_clauses: {}, risk: { per_category: {}, raw_total: 0, normalized_percent: 0 }, affects_user: [], abstractive: 'sum1' });
