@@ -42,7 +42,7 @@ jobs:
     - name: Run tests
       run: |
         cd Main/backend/NLP
-        python -m pytest test_models.py -v --tb=short
+        python -m pytest tests/ -v --tb=short
       continue-on-error: true
     
     - name: Upload test results

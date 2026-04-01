@@ -31,3 +31,11 @@ NLP/output/
 NLP/results/
 # Ignore NLP model cache
 NLP/.cache/
+# Ignore pytest cache
+.pytest_cache/
+*/.pytest_cache/
+# Ignore IDE project files
+.idea/
+.vscode/
+# Ignore Hugging Face model cache
+.cache/huggingface/

@@ -13,3 +13,7 @@ yake
 sentencepiece
 tiktoken
 protobuf
+
+# Testing
+pytest
+httpx
