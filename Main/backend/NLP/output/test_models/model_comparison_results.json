@@ -10,37 +10,37 @@
           "summary": " BazaarBox is an online marketplace where registered users can list, browse, and purchase goods . We facilitate the transaction but are not responsible for the quality, safety, legality, or delivery of items purchased . We do not own, sell, or warehouse any of the items listed on the Marketplace .  Prohibited conduct includes price manipulation, shill bidding, fee avoidance, harassment of other users, and any form of fraud or deception . Platform content created by BazaarBox, including platform design, logos, software, and documentation, is our proprietary property .  We may amend these Terms at any time by posting the revised version on the Marketplace . Material changes will be communicated via email or Platform notification at least 14 days before taking effect . Continued use after the effective date constitutes acceptance .",
           "summary_length": 132,
           "compression_ratio": 0.1051,
-          "time_seconds": 13.08
+          "time_seconds": 13.7
         },
         "bart-large-cnn": {
           "summary": "BazaarBox is an online marketplace where registered users can list, browse, and purchase goods. We are not a party to any transaction between buyers and sellers, and we do not own, sell, resell, or warehouse any of the items listed on the Marketplace. Prohibited conduct includes price manipulation, shill bidding, fee avoidance, harassment of other users, and any form of fraud or deception. All content created by BazaarBox, including the platform design, logos, software, and documentation, is our proprietary property. We may amend these Terms at any time by posting the revised version on the Marketplace. Material changes will be communicated via email or Platform notification at least 14 days before taking effect. Continued use after the effective date constitutes acceptance.",
           "summary_length": 121,
           "compression_ratio": 0.0963,
-          "time_seconds": 21.17
+          "time_seconds": 24.52
         },
         "pegasus-cnn": {
           "summary": "group love information long dentist poemsrewide hop may – season wellin well may – too accountsre now data first late her need marketing home – role sparks goalkeeper disagree kostenlos well life good these much want industry baseline her building need filename first find best good these made much want industry baseline her building need songSpontaneous well only levels best good these made much want industry baseline her building need songSpontaneous well only levels best good these made much want industry baseline her building need songSpontaneous well only levels best good these made much want industry baseline her building need songSpontaneous well only levels best good these made much want industry baseline her building need songSpontaneous well only levels best good these made much want industry baseline her building need songSpontaneous well only levels best good these made much want industry baseline her",
           "summary_length": 143,
           "compression_ratio": 0.1139,
-          "time_seconds": 33.34
+          "time_seconds": 33.75
         },
         "t5-base": {
           "summary": "BazaarBox does not own, sell, resell, or warehouse any of the items listed on the Marketplace. We do not own, sell, resell, or warehouse any of the items listed on the Marketplace. Fees. BazaarBox charges the following fees to sellers: Listing Fee: £0.15 per item listed. Transaction Fee: 6.5% of the final sale price (excluding shipping). Payment Processing Fee: 3% of the total transaction amount plus £0.25 per transaction. Fees are deducted from the seller' Content that promotes hatred, violence, or discrimination. Human remains or body parts. Pornographic or sexually explicit material. Prohibited conduct includes shill bidding, shill bidding, fee avoidance, harassment of other users, and any form of fraud or deception. Prohibited conduct includes shill bidding, shill bidding, shill bidding, shill bidding, and shill bidding. Viruses, worms, worms, and These Terms may be amended at any time by posting the revised version on the Marketplace. by posting the revised version on the Marketplace. 12. BazaarBox Ltd. 13. Contact BazaarBox Ltd. Email: support@bazaarbox.example.com Address: 88 Market Street, Manchester, M1 1PW, United Kingdom",
           "summary_length": 172,
           "compression_ratio": 0.1369,
-          "time_seconds": 27.84
+          "time_seconds": 25.64
         },
         "bart-large-cnn-samsum": {
           "summary": "BazaarBox is an online marketplace where registered users can list, browse, and purchase goods. To buy or sell on BazaarBox, you must create an account. You must be at least 18 years old to register. You agree to provide accurate, current, and complete information during registration and to keep your account details updated. You are responsible for keeping your password secure and for all activities that occur under your account. Listings must comply with the Prohibited Items Policy. Bazaarbox charges the following fees to sellers: Listing Fee: £0.15 per item listed BazaarBox respects intellectual property rights and collects personal information necessary to operate the Marketplace. BazaarBox encourages buyers and sellers to resolve disputes directly. The Terms are governed by the laws of England and Wales. We may amend these Terms at any time by posting the revised version on the Marketplace. Material changes will be communicated via email or Platform notification at least 14 days before taking effect. Continued use after the effective date constitutes acceptance.",
           "summary_length": 166,
           "compression_ratio": 0.1322,
-          "time_seconds": 26.12
+          "time_seconds": 25.37
         },
         "led-base-16384": {
           "summary": "BazaarBox Marketplace — Terms and Conditions(Last Revised: February 2026)(Last Revised: February 2026)(Last Revised: February 2026)(Last Revised: February 2026)These Terms and Conditions (\"Terms\") apply to your use of the BazaarBox online marketplace platform, accessible at www.bazaarbox.example.com and through our mobile applications (the \"Marketplace\"). BazaarBox Ltd. (\"BazaarBox\", \"we\", \"our\") operates the Marketplace as a venue connecting buyers and sellers. Please read these Terms carefully before using the Illegal drugs, controlled substances, or drug paraphernalia. weapItems that promote hatred, violence, or discrimination. weapItems that promote hatred, violence, or discrimination. weapItems that promote hatred, violence, or discrimination. weapItems that promote hatred, violence, or discrimination. weapItems that promote hatred, violence, or discrimination. weapItems that promote hatred, violence, or discrimination. weapItems that promote hatred, violence, or discrimination. weapItems that promote hatred, violence, or discrimination. weapItems that promote hatred, violence, or discrimination. weapItems that promote hatred, We may amend these Terms at any time by posting the revised version on the Marketplace. Material changes will be communicated via email or Platform notification at least 14 days before taking effect. Continued use after the effective date constitutes acceptance. For more information, please contact us at [email protected] or [email protected]13. Contact UsBazaarBox Ltd.Email: support@bazaarbox.example.comAddress: 88 Market Street, Manchester, M1 1PW, United Kingdom",
           "summary_length": 204,
           "compression_ratio": 0.1624,
-          "time_seconds": 17.64
+          "time_seconds": 17.35
         }
       }
     },
@@ -52,37 +52,37 @@
           "summary": " VaultDrive provides cloud-based file storage, synchronisation, sharing, and collaboration tools . The Service allows you to upload, store, access, and share files and folders across multiple devices . VaultDrive offers both free and paid subscription tiers .  You retain full ownership of all files, documents, and data you upload to VaultDrive (\"Your Data\") We do not claim any intellectual property rights over Your Data . We use industry-standard encryption (AES-256) to protect your files at rest, and TLS 1.3 for data in transit .  You are responsible for maintaining your own backup copies of critical data . You agree to indemnify and hold harmless VaultDrive and its officers, directors, employees, and agents from any claims, damages, or expenses .",
           "summary_length": 119,
           "compression_ratio": 0.0773,
-          "time_seconds": 10.59
+          "time_seconds": 10.66
         },
         "bart-large-cnn": {
           "summary": "VaultDrive provides cloud-based file storage, synchronisation, sharing, and collaboration tools. The Service allows you to upload, store, access, and share files and folders across multiple devices. You retain full ownership of all files, documents, and data you upload to VaultDrive (\"Your Data\"). We do not claim any intellectual property rights over Your Data. By uploading Your Data, you grant VaultDrive a limited, non-exclusive license to store, process, transmit, and display Your Data for the purpose of providing and improving the Service. While we implement robust security measures, we cannot guarantee that your data will never be subject to unauthorised access, loss, or corruption. You are responsible for maintaining your own backup copies of critical data. You agree to indemnify and hold harmless VaultDrive and its officers, directors, employees, and agents.",
           "summary_length": 130,
           "compression_ratio": 0.0844,
-          "time_seconds": 20.93
+          "time_seconds": 18.96
         },
         "pegasus-cnn": {
           "summary": "He no – too before – season wellin well SchoolA while Boston her same Guaranteeth Orlando me well only because season wellin well SchoolA while Boston her same Guaranteeth Orlando very – too before 7 me well only because season wellin well SchoolA while Boston her same Guaranteeth Orlando very – too before 7 me well only because season wellin well SchoolA while Boston her same Guaranteeth Orlando very – too before 7 me well only because season wellin well SchoolA while Boston her same Guaranteeth Orlando very – too before 7 me well only because season wellin well SchoolA while life good these much feel area In own her heartp licensed first find many good theseS best good these go veryere don experienced then – connection green me well only because connection green no &re – community finish may – since number usinging way process her less very need search way So second her those being me well only because connection green no &re – community finish may – since number usinging way process her less very need search way So second her those being me well only because connection green no &re – community finish may – since number usinging way process her less very need search life good these while need show before power take good something US need economic go dayAlmost pools first find many air good back huge take If good back further best let well",
           "summary_length": 241,
           "compression_ratio": 0.1565,
-          "time_seconds": 47.15
+          "time_seconds": 42.9
         },
         "t5-base": {
           "summary": "request. 5. Terms and Conditions VaultDrive provides cloud-based file storage, synchronisation, sharing, and collaboration tools. 5. Terms and Conditions VaultDrive provides cloud-based file storage, synchronisation, sharing, and collaboration tools. 5. Terms and Conditions VaultDrive provides cloud-based file storage, synchronisation, sharing, and collaboration tools. True True True True True True True True True True True True True True True True True True True True True True True True True True True True True True True True True True True True True True",
           "summary_length": 81,
           "compression_ratio": 0.0526,
-          "time_seconds": 32.84
+          "time_seconds": 29.21
         },
         "bart-large-cnn-samsum": {
           "summary": "VaultDrive provides cloud-based file storage, synchronisation, sharing, and collaboration tools. It offers both free and paid subscription tiers: Free Plan: 5 GB of storage, basic file sharing, limited to 3 device connections, plus plan: 200 GB, professional plan: 2 TB of storage for 180 days, and enterprise plan: Unlimited storage. VaultDrive's Privacy Policy explains how it collects, uses and protects your personal information. It gives VaultDrive a limited, non-exclusive license to store, process, transmit, and display Your Data solely for the purpose of providing and improving the Service. Data is stored in data centres located in the United Kingdom and the European Economic Area. VaultDrive's total liability for any claim arising under this Agreement shall not exceed the total fees paid by you to VaultDrive during the twelve months immediately preceding the event giving rise to the claim. You agree to indemnify and hold harmless VaultDrive and its officers, directors, employees, and agents from any claims, damages, or expenses arising from your use of the Service. Disputes shall be resolved through binding arbitration administered in London.",
           "summary_length": 176,
           "compression_ratio": 0.1143,
-          "time_seconds": 26.52
+          "time_seconds": 24.58
         },
         "led-base-16384": {
           "summary": "VaultDrive Cloud Storage — Terms of Service (the \"Agreement\") and Service Description (the \"Service\") (the \"Service\") (the \"Service\") (the \"Service\") (the \"Service\") (the \"Service\") and the \"Provider\" (the \"Provider\") (the \"Provider\") (the \"Provider\") (the \"Provider\") (the \"Provider\") (the \"Provider\") (the \"Provider\") (the \"Provider\") (the \"Provider\") (the \"Provider\") (the \"Provider\") (the \"Provider\") (the \"Provider\") 6. Your Data and Privacy Policies, Summary, and Policies, Summary, Summary, Summary, Summary, Summary, Summary, Summary, Summary, Summary, Summary, Summary, Summary, Summary, Summary, Summary, Summary, Summary, Summary, Summary, Summary, Summary, Summary, Summary, Summary, Summary, Summary, Summary, Summary, Summary, Summary, Summary, Summary, Summary, Summary, Summary, Summary, Summary, Summary, Summary, Summary, Summary, Summary, Summary, Summary, Summary, Summary, Summary, Summary, Summary, Summary, Summary, Summary, Summary While we implement robust security measures, we cannot guarantee that your data will never be subject to unauthorised access, loss, or corruption. You are responsible for maintaining your own backup copies of critical data. Additionally, you are responsible for maintaining your own backup copies of critical data. Additionally, you are responsible for maintaining your own backup copies of critical data. Additionally, you are responsible for maintaining your own backup copies of critical data. Additionally, you are responsible for maintaining your own backup copies of critical data. Additionally, you are responsible for maintaining your own backup copies of critical data. Additionally,",
           "summary_length": 215,
           "compression_ratio": 0.1396,
-          "time_seconds": 16.17
+          "time_seconds": 16.51
         }
       }
     },
@@ -94,37 +94,37 @@
           "summary": " These Terms of Service govern your access to and use of the ConnectSphere platform . By creating an account or using the Platform, you agree to be bound by these Terms . You must be at least 13 years of age .  We use cookies, web beacons, pixels, and similar tracking technologies to personalise your experience . We may disclose your information to law enforcement or government authorities if required by law, legal process, or to protect the rights, property, or safety of ConnectSphere, its users, or the public .  These Terms, together with the Privacy Policy and any other agreements expressly incorporated by reference, constitute the entire agreement between you and ConnectSphere . If any provision of these Terms is found to be unenforceable, the remaining provisions will continue in full force and effect .",
           "summary_length": 136,
           "compression_ratio": 0.0798,
-          "time_seconds": 12.21
+          "time_seconds": 12.45
         },
         "bart-large-cnn": {
           "summary": "You must be at least 13 years of age to use the platform. You are solely responsible for maintaining the confidentiality of your login credentials. We reserve the right to suspend or terminate accounts that violate these provisions. We use cookies, web beacons, pixels, and similar tracking technologies to personalise your experience, deliver targeted advertising, and analyse Platform usage. We may share your data with third-party advertising partners, analytics providers, and business partners who assist us in operating the Platform. You may opt out of targeted advertising through your account settings. You agree to indemnify, defend, and hold harmless ConnectSphere and its officers, directors, employees, agents, and affiliates from and against any claims, damages, losses, liabilities, costs, and expenses (including reasonable legal fees) You waive your right to participate in a class action lawsuit or class-wide arbitration.",
           "summary_length": 137,
           "compression_ratio": 0.0804,
-          "time_seconds": 21.47
+          "time_seconds": 22.67
         },
         "pegasus-cnn": {
           "summary": "group no need show emailre usingwww her year singer then entry good calmed guide egg may Y - show outdoorre Joplin arranging might – PC” Health International well day season wellin well SchoolA 40 information long advising either” click customized power km me well only because licensed stylesA 40 information long ink either” click customized power km me well only because season wellin well SchoolA 40 information long advising either” click customized power km me well only because licensed stylesA 40 information long ink either” click customized power km me well only because season wellin well SchoolA 40 information long ink either” click customized power km me well day season wellin well School no broken need certain many place potential facility her New WWE before ‘ her getting very – deeply know laser today” – C me well only because certain place potential facility her New before ‘ her getting very could deep today” – C me well only because season wellin well School no broken need certain many place potential facility her New before ‘ her getting very – deeply know laser today” – C me well only because certain place potential facility her New before ‘ her getting very could deep today” – C me well",
           "summary_length": 208,
           "compression_ratio": 0.1221,
-          "time_seconds": 49.31
+          "time_seconds": 48.7
         },
         "t5-base": {
           "summary": ", translate, create derivative works from, translate, translate, create derivative works from, distribute, perform, and display your User Content in connection with operating and providing the Platform. Using the Platform to stalk, bully, or intimidate other users. Violating any applicable local, national, or international law or regulation. We reserve the right to suspend or permanently ban any user who violates these Terms. 5. Privacy and Data Collection We collect information you provide directly, such as your name, email address, profile picture, date of birth, and any ConnectSphere may share your personal data with third-party advertising partners, analytics providers, and business partners. You have the right to access, correct, delete, or export your personal data. 4. Termination and Suspension The Platform is provided \"AS IS\" AND \"AS AVAILABLE\" WITHOUT WARRANTIES OF ANY KIND, INCLUDING BUT NOT LIMITED TO IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, TITLE, AND TO THE FULLEST EXTENT PERMITTED BY APPLICABLE LAW, CONNECTSPHERE AND ITS OFFICERS, DIRECTORS, EMPLOYEES, AGENTS, AND AFFILIATES SHALL NOT BE LIABLE FOR ANY DAMAGES OR LOSSES ARISING OUT OF OR RELATED TO THE PLATFORM, YOUR USE OF THE PLATFORM, YOUR USE OF THE PLATFORM, OR YOUR INABILITY TO USE",
           "summary_length": 197,
           "compression_ratio": 0.1156,
-          "time_seconds": 27.26
+          "time_seconds": 30.31
         },
         "bart-large-cnn-samsum": {
           "summary": "Terms of Service govern access to and use of the ConnectSphere platform. You must be at least 13 years of age to create an account on ConnectSphere. You agree not to engage in the following activities on the platform: posting content that is illegal, defamatory, threatening, harassing, abusive, hateful, or discriminatory. ConnectSphere uses cookies, web beacons, pixels, and similar tracking technologies to personalise your experience, deliver targeted advertising, and analyse Platform usage. We share your data with third-party advertising partners, analytics providers, and business partners who assist us in operating the Platform. We retain your personal data for as long as your account is active and for a period of up to 3 years after account deletion for legal compliance, fraud prevention, and legitimate business purposes. You have the right to access, correct, delete, or export your data. You can opt out of targeted advertising through You agree to indemnify, defend, and hold harmless ConnectSphere and its officers, directors, employees, agents, and affiliates from and against any claims, damages, losses, liabilities, costs, and expenses related to your use of the Platform, your User Content, or your violation of these Terms. You waive your right to participate in a class action lawsuit or a class-wide arbitration. ",
           "summary_length": 205,
           "compression_ratio": 0.1203,
-          "time_seconds": 32.86
+          "time_seconds": 36.83
         },
         "led-base-16384": {
           "summary": "Terms of Service — ConnectSphere Social Platform, Incorporation of the Platform, Incorporation of the Platform, Incorporation of the Platform, Incorporation of the Platform, Incorporation of the Platform, Incorporation of the Platform, Incorporation of the Platform, Incorporation of the Platform, Incorporation of the Platform, Incorporation of the Platform, Incorporation of the Platform, Incorporation of the Platform, Incorporation of the Platform, Incorporation of the Platform, Incorporation of the Platform, Incorporation We use cookies, web beacons, pixels, and similar tracking technologies to personalise your experience, deliver targeted advertising, and analyse Platform usage. Additionally, we use cookies and other tracking technologies to collect and analyse your personal data. Additionally, we use cookies and other tracking technologies to analyse and analyse Platform usage. Additionally, we use cookies and other tracking technologies to analyse and analyse Platform usage. Additionally, we use cookies and other tracking technologies to analyse and analyse Platform usage. Additionally, we use cookies and other tracking technologies to analyse and analyse Platform usage. Additionally, we use cookies and other tracking TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, CONNECTSPHERE AND ITS OFFICERS, DIRECTORS, EMPLOYEES, AGENTS, AND AFFILIATES SHALL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, OR ANY LOSS OF PROFITS, DATA, USE, GOODWILL, OR OTHER INTANGIBLE LOSSES, ARISING OUT OF OR RELATED TO YOUR USE OF OR INABILITY TO",
           "summary_length": 221,
           "compression_ratio": 0.1297,
-          "time_seconds": 17.76
+          "time_seconds": 19.23
         }
       }
     },
@@ -136,37 +136,37 @@
           "summary": " LearnVault is an online education platform that connects students with instructors offering courses, workshops, tutorials, and certification programmes across a wide range of subjects . We act as a marketplace and host for educational content . We do not create course content ourselves and we do not employ instructors .  The LearnVault name, logo, website design, software, and proprietary technology are owned by LearnVaults Inc. and protected by intellectual property laws . Students may not reproduce, distribute, or create derivative works from course materials without instructor's written permission .  LearnVault does not verify the qualifications or credentials of instructors beyond basic identity verification . We are not responsible for the quality, accuracy, or outcomes of any course . We may suspend or terminate your account if you violate these Terms .",
           "summary_length": 131,
           "compression_ratio": 0.0781,
-          "time_seconds": 11.34
+          "time_seconds": 13.26
         },
         "bart-large-cnn": {
           "summary": "LearnVault Online Education Platform — Terms of Service —Effective Date: November 2025. These Terms constitute a legally binding agreement between you (\"Student\", \"Instructor\", or \"User\") and LearnVault Inc. governing your use of the LearnVaults online education platform. LearnVault Free. Access to a limited selection of free courses, community forums, and preview content. LearnVault Plus. Unlimited access to the Plus catalogue (over 5,000 courses), offline viewing on mobile, practice exercises, and basic certificates. LearnVault does not verify the qualifications or credentials of instructors. We are not responsible for the quality, accuracy, or outcomes of any course. We may suspend or terminate your account if you violate these Terms.",
           "summary_length": 107,
           "compression_ratio": 0.0638,
-          "time_seconds": 19.6
+          "time_seconds": 24.24
         },
         "pegasus-cnn": {
           "summary": "life good these while need manual data very – west Life first help sea change information long respective us interested change information long respective me well only engage west M see carriers her newest help sea first sheA while – since good these award west children very – clients producing me well only person air good back huge best air good back.\" go best air good back mobile me well",
           "summary_length": 70,
           "compression_ratio": 0.0417,
-          "time_seconds": 57.67
+          "time_seconds": 74.71
         },
         "t5-base": {
           "summary": "you are responsible for maintaining the confidentiality of your login credentials. You must notify us immediately if you suspect unauthorised access to your account. You may not record, download, redistribute, share, or commercially exploit any course content. You must notify us immediately if you suspect unauthorised access to your login credentials. You must notify us immediately if you suspect unauthorised access to your account. You must notify us immediately if you suspect unauthorised access to your login credentials. You must notify us immediately if you suspect unauthorised Unlimited access to the full catalogue (over 15,000 courses), offline viewing on mobile, practice exercises, and basic certificates. Enterprise Plan: Custom pricing for organisations. Includes centralised billing, team management dashboard, analytics and reporting, SSO integration, and dedicated account manager. 11. Privacy and Data Protection LearnVault collects personal information including your name, email, payment details, assessment results, forum posts, device information, and usage analytics. You are responsible for any applicable taxes in your jurisdiction. 13. Terms and Conditions LearnVault will not be liable for 12. Limitation of Liability TO THE MAXIMUM EXTENT PERMITTED BY LAW, LEARNVAULT SHALL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, INCLUDING BUT NOT LIMITED TO LOSS OF PROFITS, DATA, OR CAREER OPPORTUNITIES, ARISING OUT OF YOUR USE OF OR INABILITY TO USE THE PLATFORM.",
           "summary_length": 219,
           "compression_ratio": 0.1306,
-          "time_seconds": 25.12
+          "time_seconds": 35.58
         },
         "bart-large-cnn-samsum": {
           "summary": "LearnVault is an online education platform that connects students with instructors offering courses, workshops, tutorials, and certification programmes across a wide range of subjects. The Platform supports video lectures, live sessions, discussion forums, quizzes, assignments, downloadable resources, and certificate issuance. LearnVault Plus is £19.99/month and includes unlimited access to the Plus catalogue (over 5,000 courses), offline viewing on mobile, practice exercises, and basic certificates. LearnVault Pro is £34.99-£279/month with full catalogue, live workshop sessions, career path guidance, verified certificates and priority support. LearnVault does not verify the qualifications or credentials of instructors beyond basic identity verification. We are not responsible for the quality, accuracy, or outcomes of any course. Courses that discuss health, legal, financial, or professional topics are for informational purposes only.",
           "summary_length": 123,
           "compression_ratio": 0.0733,
-          "time_seconds": 20.36
+          "time_seconds": 26.29
         },
         "led-base-16384": {
           "summary": "LearnVault Online Education Platform — Terms of Service (Terms of Service)Effective Date: November 2025FilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilenameFilename LearnVault Free. Access to a limited selection of free courses, community forums, and preview content. Additionally, all courses must comply with our Terms of Service (SMS) and Privacy Policy. Additionally, all courses must comply with our Terms of Service (SMS) and Privacy Policy.Additionally, all courses must comply with our Terms of Service (SMS) and Privacy Policy. Additionally, all courses must comply with our Terms of Service (PAS) and Privacy Policy. Additionally, all courses must comply with our Terms of Service (SMS) and Privacy Policy. Additionally, THE PLATFORM AND ALL COURSE CONTENT ARE PROVIDED \"AS IS\" AND \"AS AVAILABLE.\" WE MAKE NO WARRANTIES REGARDING THE ACCURACY, COMPLETENESS, OR SUITABILITY OF ANY COURSE CONTENT FOR ANY PARTICULAR PURPOSE. exting extingacebookLearnVault does not verify the qualifications or credentials of instructors beyond basic identity verification. We are not responsible for the quality, accuracy, or outcomes of any course. exting extingacebookCourses that discuss health, legal, financial, or professional topics are for informational",
           "summary_length": 171,
           "compression_ratio": 0.102,
-          "time_seconds": 15.91
+          "time_seconds": 19.76
         }
       }
     },
@@ -178,37 +178,37 @@
           "summary": " These Terms of Use govern your access to and use of the PulseFit mobile application and associated wearable device integrations . The free version of PulseFit includes basic workout tracking, step counting, and limited exercise library access . Premium is priced at £7.99 per month or £59.99 a year .  Your health data is encrypted at rest using AES-256 encryption and in transit using TLS 1 . We implement access controls, regular security audits, and data minimisation practices to protect your information .  These Terms are governed by the laws of England and Wales . We may suspend or terminate your account if you violate these Terms . You may delete your account and uninstall the App at any time .",
           "summary_length": 121,
           "compression_ratio": 0.0903,
-          "time_seconds": 8.85
+          "time_seconds": 11.16
         },
         "bart-large-cnn": {
           "summary": "PulseFit is a fitness and wellness tool designed for general informational purposes only. The free version of PulseFit includes basic workout tracking, step counting, and limited exercise library access. PulseFit Premium unlocks personalised workout plans, nutrition tracking, sleep analysis, and integration with third-party wearables. PulseFit includes community features such as workout sharing, progress posts, challenges, and forums. Content you share through these features is visible to other users unless you adjust your privacy settings. You grant PulseFit a non-exclusive, worldwide, royalty-free license to display, distribute, and promote your Community Content. You may delete your account and uninstall the App at any time. We may suspend or terminate your account if you violate these Terms. Disputes shall be subject to the exclusive jurisdiction of the courts of England and Wales.",
           "summary_length": 129,
           "compression_ratio": 0.0963,
-          "time_seconds": 18.37
+          "time_seconds": 22.22
         },
         "pegasus-cnn": {
           "summary": "day financial no need professionalre – She houseOct Food” News me well only purely between” match me well only purely between” News me well only purely between” me well only 0.25 me well day season wellin well School no face states her exclusivelyS best3. wantvolume action may – whyre These search may Size well day season wellin well School no face states her exclusivelyS best3. wantvolume action may – whyre These search may Size well day season wellin well School no face states her exclusivelyS best3. want action may – whyre These search may Size well day season wellin well School no face states her exclusivelyS best3. want action may – whyre These search may Size well day season wellin well School no face states her exclusivelyS best3. want action",
           "summary_length": 130,
           "compression_ratio": 0.097,
-          "time_seconds": 24.96
+          "time_seconds": 29.81
         },
         "t5-base": {
           "summary": "access to live and on-demand fitness classes. Premium Subscription. PulseFit Premium unlocks personalised workout plans, nutrition tracking, sleep analysis, integration with third-party wearables (Fitbit, Apple Watch, Garmin) and access to live and on-demand fitness classes. Family Plan. PulseFit Family allows up to 5 members under a single subscription at £12.99 per month or £59.99 per year. Terms of Use Effective: November 2025 These Terms govern your access to and use of the PulseFit will retain your health data for as long as your account is active. You may export your data in standard formats (CSV, JSON) through the App settings. 3. App Content PulseFit is compatible with various wearable fitness devices and smartwatches. PulseFit does not manufacture these devices and is not responsible for their accuracy, reliability, or functionality. PulseFit does not warrant that the APP WILL BE ACCURATE, RELIABLE, ERROR-FR 9. Termination You may delete your account and uninstall the App at any time. Upon termination, your access to Premium features will end immediately. Disputes Subject to the exclusive jurisdiction of the courts of England and Wales. 12. Contact PulseFit Health Ltd. Email: support@pulsefit.example.com",
           "summary_length": 185,
           "compression_ratio": 0.1381,
-          "time_seconds": 21.7
+          "time_seconds": 23.67
         },
         "bart-large-cnn-samsum": {
           "summary": "PulseFit Health and Fitness App is a fitness and wellness tool designed for general informational purposes only. The free version of PulseFit includes basic workout tracking, step counting, and limited exercise library access. The Premium version unlocks personalised workout plans, nutrition tracking, sleep analysis, advanced health metrics, integration with third-party wearables, and access to live and on-demand fitness classes. The Family plan allows up to 5 members under a single subscription at £12.99 per month or £99 per year. PulseFit is compatible with various wearable fitness devices and smartwatches. Your health data is encrypted at rest using AES-256 encryption and in transit using TLS 1.3. Data is stored on secure servers within the European Economic Area. Community features such as workout sharing, progress posts, challenges and forums are visible to other users unless you adjust your privacy settings. You may delete your account and uninstall the App at any time. We may suspend or terminate your account if you violate these Terms. You will not receive a refund for any remaining subscription period unless required by applicable consumer protection law. Disputes shall be subject to the exclusive jurisdiction of the courts of England and Wales.",
           "summary_length": 195,
           "compression_ratio": 0.1455,
-          "time_seconds": 25.75
+          "time_seconds": 29.22
         },
         "led-base-16384": {
           "summary": "PulseFit Health and Fitness App — Terms of Use, Terms of Use, Terms of Use, and Terms of Service (together, the \"App\")Effective: November 2025, you must be at least 16 years old to use the App.These Terms of Use (\"Terms\") govern your access to and use of the PulseFit mobile application and associated wearable device integrations (together, the \"App\"). The App is operated by PulseFit Health Ltd. (\"PulseFit\", \"we\", \"us\"). By downloading, installing, or using the App, you agree to these Terms Third-Party Integrations. If you choose to connect PulseFit with third-party services (such as Apple Health, Google Fit, Fitbit, Strava, or MyFitnessPal),",
           "summary_length": 103,
           "compression_ratio": 0.0769,
-          "time_seconds": 20.1
+          "time_seconds": 21.8
         }
       }
     },
@@ -220,37 +220,37 @@
           "summary": " These Terms of Service govern your use of the SonicWave music streaming service . The availability of specific tracks, albums, and podcasts may vary by region due to licensing restrictions and may change over time without notice .  Premium and HiFi subscribers may download content for offline listening . Downloaded content is encrypted and can only be played through the SonicWave app . Artists may upload original music directly to SonicWave . By uploading artists grant SonicWave a non-exclusive licence to distribute, stream, and promote their music on the Service .  These Terms are governed by the laws of England and Wales . Disputes will be resolved in the courts of London, United Kingdom, subject to any mandatory consumer protection laws in your jurisdiction .",
           "summary_length": 125,
           "compression_ratio": 0.1007,
-          "time_seconds": 8.65
+          "time_seconds": 10.12
         },
         "bart-large-cnn": {
           "summary": "SonicWave provides on-demand access to a catalogue of licensed music, podcasts, and audio content. The availability of specific tracks, albums, and podcasts may vary by region due to licensing restrictions. Premium and HiFi subscribers may download content for offline listening. Downloaded content is encrypted and can only be played through the SonicWave app. Offline content requires periodic internet connection (at least once every 30 days) These Terms are governed by the laws of England and Wales. Any disputes shall be resolved in the courts of London, United Kingdom, subject to any mandatory consumer protection laws in your jurisdiction.",
           "summary_length": 98,
           "compression_ratio": 0.079,
-          "time_seconds": 13.16
+          "time_seconds": 15.9
         },
         "pegasus-cnn": {
           "summary": "And need too very – known first – various user directly sample Yet Avenue her need sites 4re Women foxes well2- highly” digital result well day 5.0 definition shaped populated said meVault highlyE then house first Panic wellInterested first us – various user directly sample Avenue mevp her looking firstsouth wellink highly well And need boots her Bar plan very transmission first want evolve metroA direct her man very want decision program good these patients passionate world business way trail her Additionally best me well only because metro firsting hospitals her Thursday evolve first am high said trail her Additionally herR don These her University me well only because program women see while trail her Additionally herR could These her University me well only because program women see while trail her Additionally herR could These her University me well only because program women see while trail her Additionally herR could These her University me well only because program women see while trail herR could",
           "summary_length": 164,
           "compression_ratio": 0.1322,
-          "time_seconds": 27.66
+          "time_seconds": 34.15
         },
         "t5-base": {
           "summary": "Unlimited skips. No offline downloads. Unlimited skips. unlimited skips. Unlimited skips. No offline downloads. Unlimited skips. No lyrics display. Unlimited skips. Unlimited skips. No offline downloads. Unlimited skips. Unlimited skips. Unlimited skips. Unlimited skips. Unlimited skips. Unlimited skips. Unlimited skips. Unlimited skips. Unlimited skips. Unlimited skips. Unlimited skips. Unlimited skips. Unlimited skips. Unlimited skips. Unlimited skips. SonicWave is not responsible for any user-generated content. You may not reverse-engineer, decompile, or disassemble any part of the SonicWave application. 5. Offline Content. Premium and HiFi subscribers may download content for offline listening. SonicWave uses your data to provide and personalise the Service, generate music recommendations, create personalised playlists, and deliver targeted advertising to free-tier users. SONICWAVE SHALL NOT BE LIABLE FOR ANY DAMAGES OF ANY KIND. 13. Upon termination, your access to the Service will cease, offline downloads will be deleted, and your playlists and listening history may be permanently removed after 90 days. 12. Governing Law These Terms are governed by the laws of England and Wales. Any disputes shall be resolved in the courts of London, United Kingdom, subject to any mandatory consumer protection laws in your jurisdiction.",
           "summary_length": 188,
           "compression_ratio": 0.1515,
-          "time_seconds": 21.91
+          "time_seconds": 23.36
         },
         "bart-large-cnn-samsum": {
           "summary": "SonicWave provides on-demand access to a catalogue of licensed music, podcasts, and audio content. The availability of specific tracks, albums, and podcasts may vary by region due to licensing restrictions and may change over time without notice. You must be at least 13 years old to create a SonicWave account. You may not share your account credentials with others or allow multiple people to use a single account simultaneously. Premium and HiFi subscribers can download content for offline listening. Downloaded content is encrypted and can only be played through the SonicWave app. Offline content requires periodic internet connection (at least once every 30 days) to verify subscription status. User-Generated Content and Playlists: You may create playlists, follow other users, and share content links. Artist and Creator Programme: SonicWave supports independent artists through the Creator Programme. Third-party Integrations: The Service integrates with third-party services and devices. These Terms are governed by the laws of England and Wales. Disputes shall be resolved in the courts of London, United Kingdom.",
           "summary_length": 167,
           "compression_ratio": 0.1346,
-          "time_seconds": 25.82
+          "time_seconds": 24.34
         },
         "led-base-16384": {
           "summary": "SonicWave Music Streaming — Terms of Service (SonicWave, \"we\", \"us\")Last Updated: December 2025: December 2025: December 2025: December 2025: December 2025: December 2025: December 2025: December 2025: December 2025: December 2025: December 2025: December 2025: December 2025: December 2025: December 2025: December 2025: December 2025: December 2025: December 2025: December 2025: December 2025: December 2025: December 2025: December 2025: December 2025: December 2025: December 2025: December 2025: December 2025: December 2025: December 2025: December 2025 Offline Content. Premium and HiFi subscribers may download content for offline listening. Downloaded content is encrypted and can only be played through the SonicWave app. Offline content requires periodic internet connection (at least once every 30 days) to verify your subscription status. Downloaded content will become unavailable if your subscription lapses.▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ These Terms are governed by the laws of England and Wales. Any disputes shall be resolved in the courts of London, United Kingdom, subject to any mandatory consumer protection laws in your jurisdiction. For further information, please contact: [email protected]14. Contact:SonicWave Entertainment Ltd.Email: support@sonicwave.example.comAddress: 200 Music Row, London, W1D 3AF, United Kingdom",
           "summary_length": 178,
           "compression_ratio": 0.1434,
-          "time_seconds": 15.82
+          "time_seconds": 14.11
         }
       }
     }
@@ -259,42 +259,42 @@
     "distilbart-cnn-12-6": {
       "avg_summary_length": 127.3,
       "avg_compression_ratio": 0.0886,
-      "avg_time_seconds": 10.79,
+      "avg_time_seconds": 11.89,
       "documents_succeeded": 6,
       "documents_failed": 0
     },
     "bart-large-cnn": {
       "avg_summary_length": 120.3,
       "avg_compression_ratio": 0.0834,
-      "avg_time_seconds": 19.12,
+      "avg_time_seconds": 21.42,
       "documents_succeeded": 6,
       "documents_failed": 0
     },
     "pegasus-cnn": {
       "avg_summary_length": 159.3,
       "avg_compression_ratio": 0.1106,
-      "avg_time_seconds": 40.02,
+      "avg_time_seconds": 44.0,
       "documents_succeeded": 6,
       "documents_failed": 0
     },
     "t5-base": {
       "avg_summary_length": 173.7,
       "avg_compression_ratio": 0.1209,
-      "avg_time_seconds": 26.11,
+      "avg_time_seconds": 27.96,
       "documents_succeeded": 6,
       "documents_failed": 0
     },
     "bart-large-cnn-samsum": {
       "avg_summary_length": 172.0,
       "avg_compression_ratio": 0.12,
-      "avg_time_seconds": 26.24,
+      "avg_time_seconds": 27.77,
       "documents_succeeded": 6,
       "documents_failed": 0
     },
     "led-base-16384": {
       "avg_summary_length": 182.0,
       "avg_compression_ratio": 0.1257,
-      "avg_time_seconds": 17.23,
+      "avg_time_seconds": 18.13,
       "documents_succeeded": 6,
       "documents_failed": 0
     }

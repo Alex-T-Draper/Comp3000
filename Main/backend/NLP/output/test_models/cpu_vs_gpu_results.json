@@ -5,68 +5,68 @@
     "distilbart-cnn-12-6": {
       "cpu": {
         "summary_length": 132,
-        "time_seconds": 10.33
+        "time_seconds": 9.59
       },
       "cuda": {
         "summary_length": 132,
-        "time_seconds": 1.83
+        "time_seconds": 1.7
       },
       "gpu_speedup": 5.64
     },
     "bart-large-cnn": {
       "cpu": {
         "summary_length": 121,
-        "time_seconds": 16.43
+        "time_seconds": 17.17
       },
       "cuda": {
         "summary_length": 121,
-        "time_seconds": 2.76
+        "time_seconds": 2.69
       },
-      "gpu_speedup": 5.95
+      "gpu_speedup": 6.38
     },
     "pegasus-cnn": {
       "cpu": {
         "summary_length": 143,
-        "time_seconds": 25.85
+        "time_seconds": 26.72
       },
       "cuda": {
         "summary_length": 143,
-        "time_seconds": 3.6
+        "time_seconds": 3.34
       },
-      "gpu_speedup": 7.18
+      "gpu_speedup": 8.0
     },
     "t5-base": {
       "cpu": {
         "summary_length": 172,
-        "time_seconds": 21.76
+        "time_seconds": 21.41
       },
       "cuda": {
         "summary_length": 172,
-        "time_seconds": 7.01
+        "time_seconds": 6.69
       },
-      "gpu_speedup": 3.1
+      "gpu_speedup": 3.2
     },
     "bart-large-cnn-samsum": {
       "cpu": {
         "summary_length": 166,
-        "time_seconds": 25.74
+        "time_seconds": 21.79
       },
       "cuda": {
         "summary_length": 166,
-        "time_seconds": 7.68
+        "time_seconds": 3.46
       },
-      "gpu_speedup": 3.35
+      "gpu_speedup": 6.3
     },
     "led-base-16384": {
       "cpu": {
         "summary_length": 204,
-        "time_seconds": 18.92
+        "time_seconds": 14.46
       },
       "cuda": {
         "summary_length": 204,
-        "time_seconds": 3.82
+        "time_seconds": 3.38
       },
-      "gpu_speedup": 4.95
+      "gpu_speedup": 4.28
     }
   }
 }

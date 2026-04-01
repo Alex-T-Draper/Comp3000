@@ -29,6 +29,7 @@ def main():
         ("Engagement Metrics",          "engagement_metrics.py"),
         ("Scroll Behaviour",            "scroll_behaviour.py"),
         ("Study Procedure",             "study_procedure.py"),
+        ("Model Benchmarking",          "model_benchmarking.py"),
     ]
 
     if "--list" in sys.argv:
