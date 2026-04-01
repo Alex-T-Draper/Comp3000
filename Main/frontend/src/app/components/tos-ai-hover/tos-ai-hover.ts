@@ -102,9 +102,6 @@ export class TosAiHoverComponent implements OnInit, OnDestroy {
   // Handle scroll events for tracking
   @HostListener('window:scroll')
   onScroll(): void {
-    const element = this.tosContainer?.nativeElement;
-    if (!element) return;
-
     const windowHeight = window.innerHeight;
     const documentHeight = document.documentElement.scrollHeight;
     const scrollTop = window.pageYOffset || document.documentElement.scrollTop;

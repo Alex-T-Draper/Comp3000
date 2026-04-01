@@ -302,9 +302,11 @@ export class ComprehensionTestComponent implements OnInit {
 
   // Calculate recognition score
   calculateRecognitionScore(): number {
-    const answered = this.recognitionQuestions.filter(q => q.userAnswer !== 'unsure' && q.userAnswer !== null);
-    const correct = answered.filter(q => (q.userAnswer === 'true') === q.isTrue).length;
-    return answered.length > 0 ? Math.round((correct / answered.length) * 100) : 0;
+    const total = this.recognitionQuestions.length;
+    const correct = this.recognitionQuestions.filter(q =>
+      q.userAnswer !== 'unsure' && q.userAnswer !== null && (q.userAnswer === 'true') === q.isTrue
+    ).length;
+    return total > 0 ? Math.round((correct / total) * 100) : 0;
   }
 
   // Calculate per-condition recognition scores for dissertation
@@ -320,10 +322,11 @@ export class ComprehensionTestComponent implements OnInit {
 
     return [1, 2, 3, 4, 5, 6].map(c => {
       const questions = this.recognitionQuestions.filter(q => q.condition === c);
-      const answered   = questions.filter(q => q.userAnswer !== 'unsure' && q.userAnswer !== null);
-      const correct    = answered.filter(q => (q.userAnswer === 'true') === q.isTrue).length;
+      const correct   = questions.filter(q =>
+        q.userAnswer !== 'unsure' && q.userAnswer !== null && (q.userAnswer === 'true') === q.isTrue
+      ).length;
       const total      = questions.length;
-      const percentage = answered.length > 0 ? Math.round((correct / answered.length) * 100) : 0;
+      const percentage = total > 0 ? Math.round((correct / total) * 100) : 0;
       return { condition: c, ...conditionMeta[c], correct, total, percentage };
     });
   }
