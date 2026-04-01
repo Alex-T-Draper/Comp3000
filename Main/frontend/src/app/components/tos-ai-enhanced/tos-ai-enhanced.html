@@ -12,18 +12,6 @@
     <div class="tos-document" #tosContainer>
       <div class="tos-text">{{ tosText }}</div>
     </div>
-    
-    <!-- Generate Summary Button -->
-    <div class="action-section">
-      <button 
-        class="btn-generate"
-        (click)="generateSummary()"
-        [disabled]="isLoading">
-        <span *ngIf="!isLoading">🤖 Generate AI Summary</span>
-        <span *ngIf="isLoading">⏳ Analyzing...</span>
-      </button>
-      <p class="helper-text">Click to see an AI analysis of this document</p>
-    </div>
   </div>
 
   <!-- Two Column Layout (After Summary Generated) -->
@@ -134,16 +122,26 @@
 
   </div>
 
-  <!-- Finish Button -->
+  <!-- Bottom Action Bar -->
   <div class="actions">
-    <button 
-      class="btn-finish"
-      (click)="proceedToNextPhase()">
-      ✓ I've Finished Reading
-    </button>
-    <p class="helper-text">
-      Click when you're done to continue to the next part
-    </p>
+    <div class="actions-inner">
+      <div class="actions-left" *ngIf="!summaryGenerated">
+        <button 
+          class="btn-generate"
+          (click)="generateSummary()"
+          [disabled]="isLoading">
+          <span *ngIf="!isLoading">🤖 Generate AI Summary</span>
+          <span *ngIf="isLoading">⏳ Analyzing...</span>
+        </button>
+      </div>
+      <div class="actions-right">
+        <button 
+          class="btn-finish"
+          (click)="proceedToNextPhase()">
+          ✓ Continue
+        </button>
+      </div>
+    </div>
   </div>
 
   <!-- Error Message -->

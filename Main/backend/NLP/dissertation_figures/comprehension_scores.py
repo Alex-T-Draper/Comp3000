@@ -230,11 +230,12 @@ def generate():
         # Trend line
         r, p_val = sp_stats.pearsonr(conf_scores, rec_scores)
         z = np.polyfit(conf_scores, rec_scores, 1)
-        xline = np.linspace(min(conf_scores) - 0.2,
-                            max(conf_scores) + 0.2, 50)
+        xline = np.linspace(1, 5, 50)
         ax.plot(xline, np.polyval(z, xline), "--", color="#E53935", lw=1.5,
                 label=f"r = {r:.2f}, p = {p_val:.3f}")
 
+        ax.set_xlim(0.8, 5.2)
+        ax.set_xticks([1, 2, 3, 4, 5])
         ax.set_xlabel("Average Confidence Rating (1–5)", fontsize=11)
         ax.set_ylabel("Recognition Accuracy (%)", fontsize=11)
         ax.set_title("Confidence vs. Comprehension Accuracy", fontsize=13,

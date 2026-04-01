@@ -3,8 +3,7 @@
 .tos-container {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 2rem;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  padding: 2rem;  padding-bottom: 7rem;  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   min-height: 100vh;
 }
 
@@ -47,39 +46,6 @@
     color: #333;
     white-space: pre-wrap;
     font-size: 1rem;
-  }
-
-  .action-section {
-    text-align: center;
-
-    .btn-generate {
-      background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
-      color: white;
-      border: none;
-      padding: 1rem 2rem;
-      font-size: 1.1rem;
-      font-weight: 600;
-      border-radius: 50px;
-      cursor: pointer;
-      box-shadow: 0 4px 12px rgba(74, 144, 226, 0.4);
-      transition: all 0.3s;
-
-      &:hover:not(:disabled) {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 16px rgba(74, 144, 226, 0.5);
-      }
-
-      &:disabled {
-        opacity: 0.6;
-        cursor: not-allowed;
-      }
-    }
-
-    .helper-text {
-      margin-top: 0.75rem;
-      color: #666;
-      font-size: 0.9rem;
-    }
   }
 }
 
@@ -428,9 +394,53 @@
 
 // Actions
 .actions {
-  text-align: center;
-  margin-top: 2rem;
-  padding: 2rem 0;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding: 1rem 2rem;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+
+  .actions-inner {
+    max-width: 800px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .actions-left {
+    .btn-generate {
+      background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
+      color: white;
+      border: none;
+      padding: 1rem 2rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(74, 144, 226, 0.4);
+      transition: all 0.3s;
+
+      &:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(74, 144, 226, 0.5);
+      }
+
+      &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+    }
+  }
+
+  .actions-right {
+    margin-left: auto;
+  }
 
   .btn-finish {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -452,12 +462,6 @@
     &:active {
       transform: translateY(0);
     }
-  }
-
-  .helper-text {
-    margin-top: 1rem;
-    color: #666;
-    font-size: 0.9rem;
   }
 }
 
