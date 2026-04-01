@@ -35,6 +35,8 @@ jobs:
         # re-resolve or upgrade torch from PyPI (which serves CUDA wheels by default)
         grep -Ev "(extra-index-url|^torch$)" Main/backend/NLP/requirements.txt > /tmp/ci-requirements.txt
         pip install -r /tmp/ci-requirements.txt
+        # Download NLTK data required by sumy tokenizer
+        python -c "import nltk; nltk.download('punkt_tab')"
     
     - name: Lint with flake8
       run: |
@@ -81,6 +83,7 @@ jobs:
         pip install torch --index-url https://download.pytorch.org/whl/cpu
         grep -Ev "(extra-index-url|^torch$)" Main/backend/NLP/requirements.txt > /tmp/ci-requirements.txt
         pip install -r /tmp/ci-requirements.txt
+        python -c "import nltk; nltk.download('punkt_tab')"
     
     - name: Build backend
       run: |
