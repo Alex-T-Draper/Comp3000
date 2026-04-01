@@ -69,9 +69,6 @@ export class TosFormattedComponent implements OnInit, OnDestroy {
 
   // Apply keyword-based formatting to the ToS text
   applyFormatting(): void {
-    // First escape HTML to prevent injection
-    let formatted = this.escapeHtml(this.tosText);
-
     // High-risk keywords (red highlight) — critical clauses that users must pay attention to
     const highRiskKeywords = [
       // Data sharing & privacy
@@ -204,29 +201,52 @@ export class TosFormattedComponent implements OnInit, OnDestroy {
     mediumRiskKeywords.sort((a, b) => b.length - a.length);
     boldKeywords.sort((a, b) => b.length - a.length);
 
-    // Apply high-risk highlighting (case insensitive)
-    highRiskKeywords.forEach(keyword => {
-      const regex = new RegExp(`(${this.escapeRegex(keyword)})`, 'gi');
-      formatted = formatted.replace(regex, '<span class="highlight-high">$1</span>');
-    });
+    // Inner helper: apply all keyword highlights to an already-escaped HTML string
+    const applyHighlights = (text: string): string => {
+      let result = text;
+      highRiskKeywords.forEach(kw => {
+        result = result.replace(new RegExp(`(${this.escapeRegex(kw)})`, 'gi'), '<span class="highlight-high">$1</span>');
+      });
+      mediumRiskKeywords.forEach(kw => {
+        result = result.replace(new RegExp(`(${this.escapeRegex(kw)})`, 'gi'), '<span class="highlight-medium">$1</span>');
+      });
+      boldKeywords.forEach(kw => {
+        result = result.replace(new RegExp(`(${this.escapeRegex(kw)})`, 'gi'), '<strong class="bold-important">$1</strong>');
+      });
+      return result;
+    };
 
-    // Apply medium-risk highlighting
-    mediumRiskKeywords.forEach(keyword => {
-      const regex = new RegExp(`(${this.escapeRegex(keyword)})`, 'gi');
-      formatted = formatted.replace(regex, '<span class="highlight-medium">$1</span>');
-    });
+    // Regex patterns for structural block detection
+    const sectionHeadingRegex = /^\d+\.\s+\S/;
 
-    // Apply bold to important phrases
-    boldKeywords.forEach(keyword => {
-      const regex = new RegExp(`(${this.escapeRegex(keyword)})`, 'gi');
-      formatted = formatted.replace(regex, '<strong class="bold-important">$1</strong>');
-    });
+    // Split into logical blocks on blank lines, then render each with appropriate HTML element
+    const blocks = this.tosText.split(/\n{2,}/);
+    const processedBlocks = blocks.map((block, index) => {
+      const trimmed = block.trim();
+      if (!trimmed) return '';
 
-    // Preserve line breaks
-    formatted = formatted.replace(/\n/g, '<br>');
+      // Escape HTML first, then highlight, then convert internal newlines
+      const escaped = this.escapeHtml(trimmed);
+      const highlighted = applyHighlights(escaped);
+      const withBreaks = highlighted.replace(/\n/g, '<br>');
+
+      // First block is the document's internal title
+      if (index === 0) {
+        return `<p class="doc-title">${withBreaks}</p>`;
+      }
+      // "Last Updated" / date meta line
+      if (/^last updated/i.test(trimmed)) {
+        return `<p class="meta-line">${withBreaks}</p>`;
+      }
+      // Numbered section heading e.g. "1. Eligibility and Account Registration"
+      if (sectionHeadingRegex.test(trimmed)) {
+        return `<h2 class="section-heading">${withBreaks}</h2>`;
+      }
+      return `<p class="tos-paragraph">${withBreaks}</p>`;
+    });
 
     // Sanitize and mark as safe HTML
-    this.formattedHtml = this.sanitizer.bypassSecurityTrustHtml(formatted);
+    this.formattedHtml = this.sanitizer.bypassSecurityTrustHtml(processedBlocks.filter(b => b).join(''));
   }
 
   // Escape HTML characters to prevent XSS
