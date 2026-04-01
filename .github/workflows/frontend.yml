@@ -12,7 +12,7 @@ jobs:
     
     strategy:
       matrix:
-        node-version: [20.x]
+        node-version: [22.x]
     
     steps:
     - uses: actions/checkout@v5
@@ -53,7 +53,7 @@ jobs:
     
     strategy:
       matrix:
-        node-version: [20.x]
+        node-version: [22.x]
     
     steps:
     - uses: actions/checkout@v5
@@ -76,7 +76,7 @@ jobs:
         npm run build
     
     - name: Upload build artifacts
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       with:
         name: frontend-build
         path: Main/frontend/dist/

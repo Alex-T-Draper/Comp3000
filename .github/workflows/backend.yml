@@ -18,7 +18,7 @@ jobs:
     - uses: actions/checkout@v5
     
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@v6
       with:
         python-version: ${{ matrix.python-version }}
         cache: 'pip'
@@ -42,15 +42,15 @@ jobs:
     - name: Run tests
       run: |
         cd Main/backend/NLP
-        python -m pytest tests/ -v --tb=short
+        python -m pytest tests/ -v --tb=short --junit-xml=test-results.xml
       continue-on-error: true
     
     - name: Upload test results
       if: always()
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       with:
-        name: test-results
-        path: Main/backend/NLP/test_*.json
+        name: backend-test-results
+        path: Main/backend/NLP/test-results.xml
       continue-on-error: true
 
   build:
@@ -61,7 +61,7 @@ jobs:
     - uses: actions/checkout@v5
     
     - name: Set up Python
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@v6
       with:
         python-version: '3.11'
         cache: 'pip'
