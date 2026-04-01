@@ -22,28 +22,28 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-        cache-dependency-path: 'main/frontend/package.json'
+        cache-dependency-path: 'Main/frontend/package-lock.json'
     
     - name: Install dependencies
       run: |
-        cd main/frontend
+        cd Main/frontend
         npm ci
     
     - name: Lint code
       run: |
-        cd main/frontend
+        cd Main/frontend
         npm run lint || true
       continue-on-error: true
     
     - name: Run tests
       run: |
-        cd main/frontend
+        cd Main/frontend
         npm run test -- --run
       continue-on-error: true
     
     - name: Type check
       run: |
-        cd main/frontend
+        cd Main/frontend
         npx tsc --noEmit
       continue-on-error: true
 
@@ -63,21 +63,21 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-        cache-dependency-path: 'main/frontend/package.json'
+        cache-dependency-path: 'Main/frontend/package-lock.json'
     
     - name: Install dependencies
       run: |
-        cd main/frontend
+        cd Main/frontend
         npm ci
     
     - name: Build production bundle
       run: |
-        cd main/frontend
+        cd Main/frontend
         npm run build
     
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
       with:
         name: frontend-build
-        path: main/frontend/dist/
+        path: Main/frontend/dist/
         retention-days: 7
