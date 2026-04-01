@@ -233,22 +233,24 @@ async def save_comprehension_test(data: dict):
                 avg_confidence REAL,
                 recognition_answers TEXT,
                 confidence_answers TEXT,
+                condition_scores TEXT,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
         ''')
-        
+
         # Insert test results
         c.execute('''
             INSERT INTO comprehension_tests 
-            (user_name, timestamp, recognition_score, avg_confidence, recognition_answers, confidence_answers)
-            VALUES (?, ?, ?, ?, ?, ?)
+            (user_name, timestamp, recognition_score, avg_confidence, recognition_answers, confidence_answers, condition_scores)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
         ''', (
             data.get('userName'),
             data.get('timestamp'),
             data.get('recognitionScore'),
             data.get('avgConfidence'),
             json.dumps(data.get('recognitionAnswers', [])),
-            json.dumps(data.get('confidenceAnswers', []))
+            json.dumps(data.get('confidenceAnswers', [])),
+            json.dumps(data.get('conditionScores', []))
         ))
         
         conn.commit()
@@ -258,6 +260,98 @@ async def save_comprehension_test(data: dict):
     
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error saving comprehension test: {str(e)}")
+
+@app.get("/api/comprehension-test")
+async def get_comprehension_tests():
+    """Return all comprehension test results"""
+    try:
+        conn = sqlite3.connect('tos_research.db')
+        conn.row_factory = sqlite3.Row
+        c = conn.cursor()
+        c.execute('SELECT * FROM comprehension_tests ORDER BY created_at DESC')
+        rows = c.fetchall()
+        conn.close()
+
+        results = []
+        for row in rows:
+            results.append({
+                "id": row["id"],
+                "userName": row["user_name"],
+                "timestamp": row["timestamp"],
+                "recognitionScore": row["recognition_score"],
+                "avgConfidence": row["avg_confidence"],
+                "conditionScores": json.loads(row["condition_scores"]) if row["condition_scores"] else [],
+                "recognitionAnswers": json.loads(row["recognition_answers"]) if row["recognition_answers"] else [],
+                "confidenceAnswers": json.loads(row["confidence_answers"]) if row["confidence_answers"] else [],
+                "createdAt": row["created_at"],
+            })
+
+        return {"total": len(results), "results": results}
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error fetching comprehension tests: {str(e)}")
+
+@app.get("/api/export/comprehension-csv")
+async def export_comprehension_csv():
+    """Export all comprehension test results as a flat CSV for analysis"""
+    import csv
+    from io import StringIO
+
+    try:
+        conn = sqlite3.connect('tos_research.db')
+        conn.row_factory = sqlite3.Row
+        c = conn.cursor()
+        c.execute('SELECT * FROM comprehension_tests ORDER BY created_at ASC')
+        rows = c.fetchall()
+        conn.close()
+
+        if not rows:
+            raise HTTPException(status_code=404, detail="No comprehension test data to export")
+
+        output = StringIO()
+        writer = csv.writer(output)
+
+        # Header
+        writer.writerow([
+            'id', 'user_name', 'timestamp', 'recognition_score', 'avg_confidence',
+            'c1_correct', 'c1_total', 'c1_pct',
+            'c2_correct', 'c2_total', 'c2_pct',
+            'c3_correct', 'c3_total', 'c3_pct',
+            'c4_correct', 'c4_total', 'c4_pct',
+            'c5_correct', 'c5_total', 'c5_pct',
+            'c6_correct', 'c6_total', 'c6_pct',
+            'created_at'
+        ])
+
+        for row in rows:
+            condition_scores = json.loads(row['condition_scores']) if row['condition_scores'] else []
+            # Index by condition number for reliable lookup
+            by_condition = {cs['condition']: cs for cs in condition_scores}
+
+            csv_row = [
+                row['id'],
+                row['user_name'],
+                row['timestamp'],
+                row['recognition_score'],
+                row['avg_confidence'],
+            ]
+            for cnum in range(1, 7):
+                cs = by_condition.get(cnum, {})
+                csv_row += [cs.get('correct', ''), cs.get('total', ''), cs.get('percentage', '')]
+
+            csv_row.append(row['created_at'])
+            writer.writerow(csv_row)
+
+        return Response(
+            content=output.getvalue(),
+            media_type="text/csv",
+            headers={"Content-Disposition": "attachment; filename=comprehension_test_results.csv"}
+        )
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error exporting comprehension CSV: {str(e)}")
     
 # ===== Utility Endpoints =====
 

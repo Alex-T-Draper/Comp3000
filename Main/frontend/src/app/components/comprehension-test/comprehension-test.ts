@@ -10,6 +10,7 @@ interface RecognitionQuestion {
   statement: string;
   isTrue: boolean; // Whether the statement was actually in the ToS
   tosSource: string; // Which ToS document this is from
+  condition: number; // Which reading condition (1–6) this question maps to
   userAnswer: 'true' | 'false' | 'unsure' | null;
 }
 
@@ -30,120 +31,160 @@ export class ComprehensionTestComponent implements OnInit {
   userName: string = '';
   currentSection: 'intro' | 'recognition' | 'confidence' | 'complete' = 'intro';
   
-  // Recognition questions (mix of true and false statements)
+  // Recognition questions split by condition (2–3 per condition)
+  // C1=Plain/BazaarBox | C2=Scroll-Gated/VaultDrive | C3=Formatted/ConnectSphere
+  // C4=AI Summary/LearnVault | C5=AI Enhanced/PulseFit | C6=AI Hover/SonicWave
   recognitionQuestions: RecognitionQuestion[] = [
+    // --- Condition 1: Plain Text — BazaarBox (ecommerce) ---
     {
       id: 1,
-      statement: 'The company may share your information with third-party service providers.',
-      isTrue: true,
-      tosSource: 'multiple',
+      statement: 'BazaarBox charges sellers a transaction fee of 10% on every sale.',
+      isTrue: false,
+      tosSource: 'ecommerce',
+      condition: 1,
       userAnswer: null
     },
     {
       id: 2,
       statement: 'You can get a full refund at any time, even after using the service for months.',
       isTrue: false,
-      tosSource: 'multiple',
+      tosSource: 'ecommerce',
+      condition: 1,
       userAnswer: null
     },
     {
       id: 3,
-      statement: 'The company is not liable for any indirect or consequential damages.',
+      statement: 'You retain full ownership of content and listings you upload to BazaarBox.',
       isTrue: true,
-      tosSource: 'multiple',
+      tosSource: 'ecommerce',
+      condition: 1,
       userAnswer: null
     },
+    // --- Condition 2: Scroll-Gated — VaultDrive (cloud storage) ---
     {
       id: 4,
-      statement: 'Your subscription will automatically renew unless you cancel.',
+      statement: 'VaultDrive stores your data exclusively in UK and European Economic Area data centres.',
       isTrue: true,
-      tosSource: 'multiple',
+      tosSource: 'cloudstorage',
+      condition: 2,
       userAnswer: null
     },
     {
       id: 5,
       statement: 'The company guarantees 100% uptime and will compensate you for any downtime.',
       isTrue: false,
-      tosSource: 'multiple',
+      tosSource: 'cloudstorage',
+      condition: 2,
       userAnswer: null
     },
     {
       id: 6,
-      statement: 'You retain full ownership of content you upload.',
+      statement: 'The service is provided "as is" without warranties.',
       isTrue: true,
-      tosSource: 'multiple',
+      tosSource: 'cloudstorage',
+      condition: 2,
       userAnswer: null
     },
+    // --- Condition 3: Formatted & Highlighted — ConnectSphere (social media) ---
     {
       id: 7,
-      statement: 'The company can change the terms at any time without notifying you.',
-      isTrue: false,
-      tosSource: 'multiple',
+      statement: 'The company may share your information with third-party service providers.',
+      isTrue: true,
+      tosSource: 'socialmedia',
+      condition: 3,
       userAnswer: null
     },
     {
       id: 8,
-      statement: 'The service is provided "as is" without warranties.',
+      statement: 'ConnectSphere retains your personal data for up to 3 years after you delete your account.',
       isTrue: true,
-      tosSource: 'multiple',
+      tosSource: 'socialmedia',
+      condition: 3,
       userAnswer: null
     },
     {
       id: 9,
-      statement: 'ConnectSphere retains your personal data for up to 3 years after you delete your account.',
+      statement: 'ConnectSphere users waive their right to participate in class action lawsuits.',
       isTrue: true,
       tosSource: 'socialmedia',
+      condition: 3,
       userAnswer: null
     },
+    // --- Condition 4: AI Summary — LearnVault (education) ---
     {
       id: 10,
-      statement: 'VaultDrive stores your data exclusively in UK and European Economic Area data centres.',
-      isTrue: true,
-      tosSource: 'cloudstorage',
+      statement: 'The company can change the terms at any time without notifying you.',
+      isTrue: false,
+      tosSource: 'education',
+      condition: 4,
       userAnswer: null
     },
     {
       id: 11,
-      statement: 'BazaarBox charges sellers a transaction fee of 10% on every sale.',
+      statement: 'LearnVault certificates are equivalent to formal academic credits.',
       isTrue: false,
-      tosSource: 'ecommerce',
+      tosSource: 'education',
+      condition: 4,
       userAnswer: null
     },
     {
       id: 12,
-      statement: 'SonicWave requires you to connect to the internet at least every 30 days to keep offline downloads.',
+      statement: 'LearnVault offers a full refund within 14 days if you have completed less than 25% of a course.',
       isTrue: true,
-      tosSource: 'musicstreaming',
+      tosSource: 'education',
+      condition: 4,
       userAnswer: null
     },
+    // --- Condition 5: AI Enhanced — PulseFit (fitness) ---
     {
       id: 13,
       statement: 'PulseFit may sell your health data to insurance companies.',
       isTrue: false,
       tosSource: 'fitness',
+      condition: 5,
       userAnswer: null
     },
     {
       id: 14,
-      statement: 'LearnVault certificates are equivalent to formal academic credits.',
-      isTrue: false,
-      tosSource: 'education',
+      statement: 'The company is not liable for any indirect or consequential damages.',
+      isTrue: true,
+      tosSource: 'fitness',
+      condition: 5,
       userAnswer: null
     },
     {
-      id: 15,
-      statement: 'ConnectSphere users waive their right to participate in class action lawsuits.',
+      id: 17,
+      statement: 'PulseFit permanently deletes your health data within 60 days of account deletion.',
       isTrue: true,
-      tosSource: 'socialmedia',
+      tosSource: 'fitness',
+      condition: 5,
+      userAnswer: null
+    },
+    // --- Condition 6: AI Hover — SonicWave (music streaming) ---
+    {
+      id: 15,
+      statement: 'SonicWave requires you to connect to the internet at least every 30 days to keep offline downloads.',
+      isTrue: true,
+      tosSource: 'musicstreaming',
+      condition: 6,
       userAnswer: null
     },
     {
       id: 16,
-      statement: 'LearnVault offers a full refund within 14 days if you have completed less than 25% of a course.',
+      statement: 'Your subscription will automatically renew unless you cancel.',
       isTrue: true,
-      tosSource: 'education',
+      tosSource: 'musicstreaming',
+      condition: 6,
       userAnswer: null
-    }
+    },
+    {
+      id: 18,
+      statement: 'SonicWave Free tier subscribers can download music for offline listening.',
+      isTrue: false,
+      tosSource: 'musicstreaming',
+      condition: 6,
+      userAnswer: null
+    },
   ];
 
   // Confidence questions
@@ -189,16 +230,12 @@ export class ComprehensionTestComponent implements OnInit {
     this.recognitionQuestions = this.shuffleArray(this.recognitionQuestions);
   }
 
-  /**
-   * Start the test
-   */
+  // Start the test
   startTest(): void {
     this.currentSection = 'recognition';
   }
 
-  /**
-   * Answer recognition question
-   */
+  // Answer recognition question
   answerRecognition(answer: 'true' | 'false' | 'unsure'): void {
     this.recognitionQuestions[this.currentRecognitionIndex].userAnswer = answer;
     
@@ -210,9 +247,7 @@ export class ComprehensionTestComponent implements OnInit {
     }
   }
 
-  /**
-   * Answer confidence question
-   */
+  // Answer confidence question
   answerConfidence(rating: number): void {
     this.confidenceQuestions[this.currentConfidenceIndex].userAnswer = rating;
     
@@ -224,23 +259,21 @@ export class ComprehensionTestComponent implements OnInit {
     }
   }
 
-  /**
-   * Complete test and save results
-   */
+  // Complete test and save results
   completeTest(): void {
     this.currentSection = 'complete';
     this.saveResults();
   }
 
-  /**
-   * Save test results to backend
-   */
+  // Save test results to backend
   saveResults(): void {
     const results = {
       userName: this.userName,
       timestamp: new Date().toISOString(),
       recognitionAnswers: this.recognitionQuestions.map(q => ({
         questionId: q.id,
+        condition: q.condition,
+        tosSource: q.tosSource,
         statement: q.statement,
         correctAnswer: q.isTrue,
         userAnswer: q.userAnswer
@@ -251,6 +284,7 @@ export class ComprehensionTestComponent implements OnInit {
         rating: q.userAnswer
       })),
       recognitionScore: this.calculateRecognitionScore(),
+      conditionScores: this.getConditionScores(),
       avgConfidence: this.calculateAverageConfidence()
     };
 
@@ -266,27 +300,35 @@ export class ComprehensionTestComponent implements OnInit {
       });
   }
 
-  /**
-   * Calculate recognition score
-   */
+  // Calculate recognition score
   calculateRecognitionScore(): number {
-    let correct = 0;
-    this.recognitionQuestions.forEach(q => {
-      if (q.userAnswer === 'unsure') return; // Don't count unsure answers
-      
-      const userAnsweredTrue = q.userAnswer === 'true';
-      if (userAnsweredTrue === q.isTrue) {
-        correct++;
-      }
-    });
-    
-    const attempted = this.recognitionQuestions.filter(q => q.userAnswer !== 'unsure').length;
-    return attempted > 0 ? Math.round((correct / attempted) * 100) : 0;
+    const answered = this.recognitionQuestions.filter(q => q.userAnswer !== 'unsure' && q.userAnswer !== null);
+    const correct = answered.filter(q => (q.userAnswer === 'true') === q.isTrue).length;
+    return answered.length > 0 ? Math.round((correct / answered.length) * 100) : 0;
   }
 
-  /**
-   * Calculate average confidence
-   */
+  // Calculate per-condition recognition scores for dissertation
+  getConditionScores(): Array<{ condition: number; label: string; tosName: string; correct: number; total: number; percentage: number }> {
+    const conditionMeta: Record<number, { label: string; tosName: string }> = {
+      1: { label: 'C1 — Plain Text',          tosName: 'BazaarBox'     },
+      2: { label: 'C2 — Scroll-Gated',        tosName: 'VaultDrive'    },
+      3: { label: 'C3 — Formatted',           tosName: 'ConnectSphere' },
+      4: { label: 'C4 — AI Summary',          tosName: 'LearnVault'    },
+      5: { label: 'C5 — AI Enhanced',         tosName: 'PulseFit'      },
+      6: { label: 'C6 — AI Hover',            tosName: 'SonicWave'     },
+    };
+
+    return [1, 2, 3, 4, 5, 6].map(c => {
+      const questions = this.recognitionQuestions.filter(q => q.condition === c);
+      const answered   = questions.filter(q => q.userAnswer !== 'unsure' && q.userAnswer !== null);
+      const correct    = answered.filter(q => (q.userAnswer === 'true') === q.isTrue).length;
+      const total      = questions.length;
+      const percentage = answered.length > 0 ? Math.round((correct / answered.length) * 100) : 0;
+      return { condition: c, ...conditionMeta[c], correct, total, percentage };
+    });
+  }
+
+  // Calculate average confidence
   calculateAverageConfidence(): number {
     const answers = this.confidenceQuestions
       .map(q => q.userAnswer)
@@ -296,44 +338,32 @@ export class ComprehensionTestComponent implements OnInit {
     return Math.round((answers.reduce((a, b) => a + b, 0) / answers.length) * 10) / 10;
   }
 
-  /**
-   * Continue to thank you page
-   */
+  // Continue to thank you page
   continue(): void {
     this.router.navigate(['/thank-you']);
   }
 
-  /**
-   * Get current recognition question
-   */
+  // Get current recognition question
   getCurrentRecognitionQuestion(): RecognitionQuestion {
     return this.recognitionQuestions[this.currentRecognitionIndex];
   }
 
-  /**
-   * Get current confidence question
-   */
+  // Get current confidence question
   getCurrentConfidenceQuestion(): ConfidenceQuestion {
     return this.confidenceQuestions[this.currentConfidenceIndex];
   }
 
-  /**
-   * Get progress for recognition questions
-   */
+  // Get progress for recognition questions
   getRecognitionProgress(): string {
     return `${this.currentRecognitionIndex + 1} / ${this.recognitionQuestions.length}`;
   }
 
-  /**
-   * Get progress for confidence questions
-   */
+  // Get progress for confidence questions
   getConfidenceProgress(): string {
     return `${this.currentConfidenceIndex + 1} / ${this.confidenceQuestions.length}`;
   }
 
-  /**
-   * Shuffle array
-   */
+  // Shuffle array
   private shuffleArray<T>(array: T[]): T[] {
     const shuffled = [...array];
     for (let i = shuffled.length - 1; i > 0; i--) {
@@ -343,9 +373,7 @@ export class ComprehensionTestComponent implements OnInit {
     return shuffled;
   }
 
-  /**
-   * Get confidence label
-   */
+  // Get confidence label
   getConfidenceLabel(rating: number): string {
     const labels = ['Not at all', 'Slightly', 'Moderately', 'Very', 'Extremely'];
     return labels[rating - 1] || '';

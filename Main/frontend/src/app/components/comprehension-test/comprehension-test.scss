@@ -296,6 +296,76 @@
   }
 }
 
+// Completion Screen — wider to fit the condition table
+.completion-screen {
+  width: 100%;
+  max-width: 820px;
+}
+
+// Per-condition score breakdown
+.condition-scores {
+  margin: 0 0 2rem;
+
+  .condition-scores-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #555;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin: 0 0 0.75rem;
+  }
+}
+
+.condition-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+
+  thead tr {
+    background: #f0f1fa;
+  }
+
+  th {
+    padding: 0.6rem 0.75rem;
+    text-align: left;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #555;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    border-bottom: 2px solid #dee2e6;
+  }
+
+  tbody tr {
+    border-bottom: 1px solid #f0f0f0;
+
+    &:last-child { border-bottom: none; }
+    &:hover { background: #fafafa; }
+  }
+
+  td {
+    padding: 0.65rem 0.75rem;
+    vertical-align: middle;
+  }
+
+  .cond-label   { font-weight: 600; color: #333; white-space: nowrap; }
+  .cond-tos     { color: #666; }
+  .cond-fraction { color: #444; text-align: center; }
+  .cond-pct     { text-align: right; }
+
+  .pct-badge {
+    display: inline-block;
+    padding: 0.25rem 0.6rem;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 0.9rem;
+
+    &.pct-high { background: #d4edda; color: #155724; }
+    &.pct-mid  { background: #fff3cd; color: #856404; }
+    &.pct-low  { background: #f8d7da; color: #721c24; }
+  }
+}
+
 // Responsive
 @media (max-width: 768px) {
   .intro-box,

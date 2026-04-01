@@ -35,8 +35,8 @@ describe('ComprehensionTestComponent', () => {
     expect(component.currentSection).toBe('intro');
   });
 
-  it('should have 16 recognition questions and 5 confidence questions', () => {
-    expect(component.recognitionQuestions.length).toBe(16);
+  it('should have 18 recognition questions and 5 confidence questions', () => {
+    expect(component.recognitionQuestions.length).toBe(18);
     expect(component.confidenceQuestions.length).toBe(5);
   });
 
@@ -55,7 +55,7 @@ describe('ComprehensionTestComponent', () => {
 
   it('answerRecognition on last question should switch to confidence section', () => {
     component.startTest();
-    for (let i = 0; i < 15; i++) {
+    for (let i = 0; i < 17; i++) {
       component.answerRecognition('false');
     }
     expect(component.currentSection).toBe('recognition');
@@ -116,7 +116,7 @@ describe('ComprehensionTestComponent', () => {
 
   it('getRecognitionProgress should return correct fraction string', () => {
     component.currentRecognitionIndex = 3;
-    expect(component.getRecognitionProgress()).toBe('4 / 16');
+    expect(component.getRecognitionProgress()).toBe('4 / 18');
   });
 
   it('getConfidenceProgress should return correct fraction string', () => {

@@ -85,16 +85,47 @@
       <p class="completion-text">
         Your responses have been recorded.
       </p>
-      
+
+      <!-- Overall summary row -->
       <div class="results-summary">
         <div class="result-item">
-          <div class="result-label">Recognition Score</div>
+          <div class="result-label">Overall Recognition Score</div>
           <div class="result-value">{{ calculateRecognitionScore() }}%</div>
         </div>
         <div class="result-item">
           <div class="result-label">Average Confidence</div>
           <div class="result-value">{{ calculateAverageConfidence() }} / 5</div>
         </div>
+      </div>
+
+      <!-- Per-condition breakdown table -->
+      <div class="condition-scores">
+        <h3 class="condition-scores-title">Score by Reading Condition</h3>
+        <table class="condition-table">
+          <thead>
+            <tr>
+              <th>Condition</th>
+              <th>ToS Document</th>
+              <th>Score</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let c of getConditionScores()">
+              <td class="cond-label">{{ c.label }}</td>
+              <td class="cond-tos">{{ c.tosName }}</td>
+              <td class="cond-fraction">{{ c.correct }} / {{ c.total }}</td>
+              <td class="cond-pct">
+                <span class="pct-badge"
+                  [class.pct-high]="c.percentage >= 67"
+                  [class.pct-mid]="c.percentage >= 34 && c.percentage < 67"
+                  [class.pct-low]="c.percentage < 34">
+                  {{ c.percentage }}%
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
 
       <button class="btn-continue" (click)="continue()">
