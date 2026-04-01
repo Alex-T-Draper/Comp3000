@@ -15,14 +15,14 @@ jobs:
         node-version: [20.x]
     
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     
     - name: Set up Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v5
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-        cache-dependency-path: 'main/frontend/package-lock.json'
+        cache-dependency-path: 'main/frontend/package.json'
     
     - name: Install dependencies
       run: |
@@ -56,14 +56,14 @@ jobs:
         node-version: [20.x]
     
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     
     - name: Set up Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v5
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-        cache-dependency-path: 'main/frontend/package-lock.json'
+        cache-dependency-path: 'main/frontend/package.json'
     
     - name: Install dependencies
       run: |
@@ -76,7 +76,7 @@ jobs:
         npm run build
     
     - name: Upload build artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: frontend-build
         path: main/frontend/dist/
