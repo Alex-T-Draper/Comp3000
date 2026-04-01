@@ -1,3 +1,4 @@
+--extra-index-url https://download.pytorch.org/whl/cu128
 fastapi
 uvicorn
 websockets
@@ -9,3 +10,6 @@ torch
 transformers
 sumy
 yake
+sentencepiece
+tiktoken
+protobuf

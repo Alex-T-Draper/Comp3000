@@ -48,9 +48,7 @@ export class TosFormattedComponent implements OnInit, OnDestroy {
     this.tracking.endSession();
   }
 
-  /**
-   * Load the ToS document
-   */
+  // Load the ToS document
   loadTosDocument(): void {
     this.tosTitle = 'ConnectSphere Terms of Service';
     this.tosId = 'formatted-tos-003';
@@ -69,14 +67,12 @@ export class TosFormattedComponent implements OnInit, OnDestroy {
     });
   }
 
-  /**
-   * Apply keyword-based formatting to the ToS text
-   */
+  // Apply keyword-based formatting to the ToS text
   applyFormatting(): void {
     // First escape HTML to prevent injection
     let formatted = this.escapeHtml(this.tosText);
 
-    // High-risk keywords (red highlight) — clauses with significant legal impact
+    // High-risk keywords (red highlight) — critical clauses that users must pay attention to
     const highRiskKeywords = [
       // Data sharing & privacy
       'may share your information',
@@ -135,7 +131,7 @@ export class TosFormattedComponent implements OnInit, OnDestroy {
       'without your prior consent',
     ];
 
-    // Medium-risk keywords (yellow highlight) — important but less severe
+    // Medium-risk keywords (yellow highlight) — important but less severe clauses that users should be aware of
     const mediumRiskKeywords = [
       // Payments & subscriptions
       'payment',
@@ -233,25 +229,19 @@ export class TosFormattedComponent implements OnInit, OnDestroy {
     this.formattedHtml = this.sanitizer.bypassSecurityTrustHtml(formatted);
   }
 
-  /**
-   * Escape HTML characters to prevent XSS
-   */
+  // Escape HTML characters to prevent XSS
   private escapeHtml(text: string): string {
     const div = document.createElement('div');
     div.textContent = text;
     return div.innerHTML;
   }
 
-  /**
-   * Escape special regex characters
-   */
+  // Escape special regex characters
   private escapeRegex(str: string): string {
     return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   }
 
-  /**
-   * Initialize tracking session
-   */
+  // Initialize tracking session
   initializeTracking(): void {
     this.tracking.startSession(
       this.userId,
@@ -263,9 +253,7 @@ export class TosFormattedComponent implements OnInit, OnDestroy {
     this.eyeTracking.startTracking(this.tracking.getSessionId());
   }
 
-  /**
-   * Handle scroll events for tracking
-   */
+  // Handle scroll events for tracking
   @HostListener('window:scroll')
   onScroll(): void {
     const element = this.tosContainer?.nativeElement;
@@ -286,9 +274,7 @@ export class TosFormattedComponent implements OnInit, OnDestroy {
     this.eyeTracking.updateScrollPosition(scrollTop);
   }
 
-  /**
-   * Finish reading and save metrics
-   */
+  // Finish reading and save metrics
   finishReading(): void {
     this.tracking.saveMetrics().subscribe({
       next: () => {

@@ -36,7 +36,7 @@ def make_scanpath_from_pixels(px, py, timestamps, title, output_path):
     fig_height = max(9, (content_height / SCREEN_W) * 16)
     fig, ax = plt.subplots(figsize=(16, fig_height))
     ax.set_xlim(0, SCREEN_W)
-    ax.set_ylim(content_height, 0)  # ← Adjusted for content height
+    ax.set_ylim(content_height, 0)
     ax.set_facecolor('#1a1a2e')
     fig.patch.set_facecolor('#1a1a2e')
     ax.set_aspect('equal')

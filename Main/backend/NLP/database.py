@@ -4,7 +4,6 @@ from datetime import datetime
 import json
 from pathlib import Path
 
-# Database file location
 DB_PATH = Path(__file__).parent / "tos_research.db"
 
 def init_database():

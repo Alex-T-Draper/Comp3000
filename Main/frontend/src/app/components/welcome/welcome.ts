@@ -31,9 +31,7 @@ export class WelcomeComponent implements AfterViewInit {
     // ViewChild is ready
   }
 
-  /**
-   * Validate and start the study
-   */
+  // Validate and start the study
   startStudy(): void {
     // Validate name
     if (!this.userName || this.userName.trim().length === 0) {
@@ -93,9 +91,7 @@ export class WelcomeComponent implements AfterViewInit {
       });
   }
 
-  /**
-   * Handle Enter key press
-   */
+  // Handle Enter key press
   onKeyPress(event: KeyboardEvent): void {
     if (event.key === 'Enter') {
       this.startStudy();

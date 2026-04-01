@@ -101,7 +101,7 @@ def _draw_aoi_grid(ax, grid, title, cmap, value_fmt, label, content_height):
 
     ax.set_title(title, fontsize=14, pad=10)
     ax.set_xlabel('Screen X (px)')
-    ax.set_ylabel('Content Y (px)')  # ← Changed
+    ax.set_ylabel('Content Y (px)')
 
 
 def make_aoi_from_pixels(px, py, timestamps, title_prefix, output_prefix):

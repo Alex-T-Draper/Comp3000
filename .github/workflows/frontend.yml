@@ -1,0 +1,85 @@
+name: Frontend CI/CD
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths: [ 'main/frontend/**' ]
+  pull_request:
+    branches: [ main, develop ]
+    paths: [ 'main/frontend/**' ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        node-version: [20.x]
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+        cache-dependency-path: 'main/frontend/package-lock.json'
+    
+    - name: Install dependencies
+      run: |
+        cd main/frontend
+        npm ci
+    
+    - name: Lint code
+      run: |
+        cd main/frontend
+        npm run lint || true
+      continue-on-error: true
+    
+    - name: Run tests
+      run: |
+        cd main/frontend
+        npm run test -- --run
+      continue-on-error: true
+    
+    - name: Type check
+      run: |
+        cd main/frontend
+        npx tsc --noEmit
+      continue-on-error: true
+
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        node-version: [20.x]
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+        cache-dependency-path: 'main/frontend/package-lock.json'
+    
+    - name: Install dependencies
+      run: |
+        cd main/frontend
+        npm ci
+    
+    - name: Build production bundle
+      run: |
+        cd main/frontend
+        npm run build
+    
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: frontend-build
+        path: main/frontend/dist/
+        retention-days: 7

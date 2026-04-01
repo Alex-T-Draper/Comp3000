@@ -96,10 +96,10 @@ export class DistractorMathQuizComponent implements OnInit {
    * Generate percentage question
    */
   private generatePercentage(): Question {
-    const total = Math.floor(Math.random() * 100) + 50;
     const percent = [10, 20, 25, 50][Math.floor(Math.random() * 4)];
-    const answer = Math.floor((total * percent) / 100);
-    
+    // Pick a random integer answer between 10 and 50
+    const answer = Math.floor(Math.random() * 41) + 10;
+    const total = answer * 100 / percent;
     return {
       question: `What is ${percent}% of ${total}?`,
       options: this.generateOptions(answer),
@@ -111,13 +111,17 @@ export class DistractorMathQuizComponent implements OnInit {
    * Generate average question
    */
   private generateAverage(): Question {
-    const nums = [
-      Math.floor(Math.random() * 30) + 60,
-      Math.floor(Math.random() * 30) + 60,
-      Math.floor(Math.random() * 30) + 60
-    ];
-    const answer = Math.floor(nums.reduce((a, b) => a + b, 0) / nums.length);
-    
+    // Pick a random integer average between 60 and 90
+    const answer = Math.floor(Math.random() * 31) + 60;
+    // Pick two random numbers,
+    const num1 = Math.floor(Math.random() * 31) + 60;
+    const num2 = Math.floor(Math.random() * 31) + 60;
+    const num3 = 3 * answer - num1 - num2;
+    if (num3 < 60 || num3 > 90) {
+      // If not, regenerate
+      return this.generateAverage();
+    }
+    const nums = [num1, num2, num3];
     return {
       question: `What is the average of ${nums[0]}, ${nums[1]}, and ${nums[2]}?`,
       options: this.generateOptions(answer),

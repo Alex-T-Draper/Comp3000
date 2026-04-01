@@ -13,7 +13,7 @@ SCANPATH_DIR = OUTPUT_BASE / "scanpaths"
 BUBBLES_DIR = OUTPUT_BASE / "bubbles"
 AOI_DIR = OUTPUT_BASE / "aoi"
 
-# Screen resolution (adjust to match your display)
+# Screen resolution
 SCREEN_W = 2560
 SCREEN_H = 1440
 

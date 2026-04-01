@@ -48,9 +48,7 @@ export class TosScrollRequiredComponent implements OnInit, OnDestroy {
     this.tracking.endSession();
   }
 
-  /**
-   * Load the ToS document
-   */
+  // Load the ToS document
   loadTosDocument(): void {
     this.tosTitle = 'VaultDrive Terms of Service';
     this.tosId = 'scroll-required-tos-002';
@@ -68,9 +66,7 @@ export class TosScrollRequiredComponent implements OnInit, OnDestroy {
     });
   }
 
-  /**
-   * Initialize tracking session
-   */
+  // Initialize tracking session
   initializeTracking(): void {
     this.tracking.startSession(
       this.userId,
@@ -82,9 +78,7 @@ export class TosScrollRequiredComponent implements OnInit, OnDestroy {
     this.eyeTracking.startTracking(this.tracking.getSessionId());
   }
 
-  /**
-   * Handle scroll events for tracking
-   */
+  // Handle scroll events for tracking
   @HostListener('window:scroll')
   onScroll(): void {
     const element = this.tosContainer?.nativeElement;
@@ -111,16 +105,12 @@ export class TosScrollRequiredComponent implements OnInit, OnDestroy {
     }
   }
 
-  /**
-   * Check if button should be enabled
-   */
+  // Check if button should be enabled
   canProceed(): boolean {
     return this.hasScrolledToBottom;
   }
 
-  /**
-   * Finish reading and save metrics
-   */
+  // Finish reading and save metrics
   finishReading(): void {
     if (!this.canProceed()) {
       alert('Please scroll to the bottom of the document to continue.');

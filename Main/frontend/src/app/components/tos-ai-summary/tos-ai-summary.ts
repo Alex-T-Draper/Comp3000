@@ -51,9 +51,7 @@ export class TosAiSummaryComponent implements OnInit, OnDestroy {
     this.tracking.endSession();
   }
 
-  /**
-   * Load the ToS document
-   */
+  // Load the ToS document
   loadTosDocument(): void {
     this.tosTitle = 'LearnVault Terms of Service';
     this.tosId = 'ai-summary-tos-004';
@@ -71,9 +69,7 @@ export class TosAiSummaryComponent implements OnInit, OnDestroy {
     });
   }
 
-  /**
-   * Initialize tracking session
-   */
+  // Initialize tracking session
   initializeTracking(): void {
     this.tracking.startSession(
       this.userId,
@@ -85,9 +81,7 @@ export class TosAiSummaryComponent implements OnInit, OnDestroy {
     this.eyeTracking.startTracking(this.tracking.getSessionId());
   }
 
-  /**
-   * Handle scroll events for tracking
-   */
+  // Handle scroll events for tracking
   @HostListener('window:scroll')
   onScroll(): void {
     const element = this.tosContainer?.nativeElement;
@@ -108,9 +102,7 @@ export class TosAiSummaryComponent implements OnInit, OnDestroy {
     this.eyeTracking.updateScrollPosition(scrollTop);    
   }
 
-  /**
-   * Generate AI summary
-   */
+  // Generate AI summary
   generateSummary(): void {
     this.isLoading = true;
     this.error = null;
@@ -139,9 +131,7 @@ export class TosAiSummaryComponent implements OnInit, OnDestroy {
     });
   }
 
-  /**
-   * Get severity color
-   */
+  // Get severity color
   getSeverityColor(severity: string): string {
     switch (severity) {
       case 'high': return 'red';
@@ -151,18 +141,14 @@ export class TosAiSummaryComponent implements OnInit, OnDestroy {
     }
   }
 
-  /**
-   * Get risk level category
-   */
+  // Get risk level category
   getRiskLevel(score: number): string {
     if (score >= 60) return 'high';
     if (score >= 30) return 'medium';
     return 'low';
   }
 
-  /**
-   * Get risk description based on score
-   */
+  // Get risk description based on score
   getRiskDescription(score: number): string {
     if (score >= 60) {
       return 'This Terms of Service contains several high-risk clauses that require careful attention.';
@@ -173,9 +159,7 @@ export class TosAiSummaryComponent implements OnInit, OnDestroy {
     }
   }
 
-  /**
-   * Finish reading and save metrics
-   */
+  // Finish reading and save metrics
   finishReading(): void {
     this.tracking.saveMetrics().subscribe({
       next: () => {

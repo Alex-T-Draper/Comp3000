@@ -66,9 +66,7 @@ export class TosAiHoverComponent implements OnInit, OnDestroy {
     this.tracking.endSession();
   }
 
-  /**
-   * Load the ToS document
-   */
+  // Load the ToS document
   loadTosDocument(): void {
     this.tosTitle = 'SonicWave Terms of Service';
     this.tosId = 'ai-hover-tos-006';
@@ -89,9 +87,7 @@ export class TosAiHoverComponent implements OnInit, OnDestroy {
     });
   }
 
-  /**
-   * Initialize tracking session
-   */
+  // Initialize tracking session
   initializeTracking(): void {
     this.tracking.startSession(
       this.userId,
@@ -103,9 +99,7 @@ export class TosAiHoverComponent implements OnInit, OnDestroy {
     this.eyeTracking.startTracking(this.tracking.getSessionId());
   }
 
-  /**
-   * Handle scroll events for tracking
-   */
+  // Handle scroll events for tracking
   @HostListener('window:scroll')
   onScroll(): void {
     const element = this.tosContainer?.nativeElement;
@@ -124,9 +118,7 @@ export class TosAiHoverComponent implements OnInit, OnDestroy {
     this.eyeTracking.updateScrollPosition(scrollTop);
   }
 
-  /**
-   * Generate AI summary
-   */
+  // Generate AI summary
   generateSummary(): void {
     this.isLoading = true;
     this.error = null;
@@ -160,9 +152,7 @@ export class TosAiHoverComponent implements OnInit, OnDestroy {
     });
   }
 
-  /**
-   * Apply subtle highlighting with hover capability
-   */
+  // Apply subtle highlighting with hover capability
   applyHoverHighlighting(): void {
     if (!this.analysis) return;
 
@@ -177,7 +167,7 @@ export class TosAiHoverComponent implements OnInit, OnDestroy {
 
     const segments: Segment[] = [];
 
-    // Use the positions returned by the NLP API (they come from the same tosText we sent)
+    // Use the positions returned by the NLP API
     Object.entries(this.analysis.grouped_clauses).forEach(([, group]: [string, any]) => {
       Object.entries(group.categories).forEach(([categoryName, category]: [string, any]) => {
         category.detections.forEach((detection: any) => {
@@ -212,7 +202,7 @@ export class TosAiHoverComponent implements OnInit, OnDestroy {
     // Sort left-to-right for a single-pass HTML build
     noOverlap.sort((a, b) => a.start - b.start);
 
-    // Build HTML in one pass — no position-shifting issues
+    // Build HTML in one pass
     let html = '';
     let pos = 0;
     let clauseIndex = 0;
@@ -233,11 +223,7 @@ export class TosAiHoverComponent implements OnInit, OnDestroy {
     this.highlightedHtml = this.sanitizer.bypassSecurityTrustHtml(html);
   }
 
-  /**
-   * Detect clause hover via document-level mousemove.
-   * document:* HostListeners always run inside Angular's zone,
-   * so change detection fires automatically.
-   */
+  // Detect clause hover via document-level mousemove
   @HostListener('document:mousemove', ['$event'])
   onDocumentMouseMove(event: MouseEvent): void {
     const target = (event.target as HTMLElement).closest('[data-clause-id]') as HTMLElement | null;
@@ -272,25 +258,19 @@ export class TosAiHoverComponent implements OnInit, OnDestroy {
     };
   }
 
-  /**
-   * Escape HTML
-   */
+  // Escape HTML
   private escapeHtml(text: string): string {
     const div = document.createElement('div');
     div.textContent = text;
     return div.innerHTML.replace(/\n/g, '<br>');
   }
 
-  /**
-   * Escape HTML attributes
-   */
+  // Escape HTML attributes
   private escapeAttribute(text: string): string {
     return text.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
   }
 
-  /**
-   * Get severity color
-   */
+  // Get severity color
   getSeverityColor(severity: string): string {
     switch (severity) {
       case 'high': return 'red';
@@ -300,18 +280,14 @@ export class TosAiHoverComponent implements OnInit, OnDestroy {
     }
   }
 
-  /**
-   * Get risk level
-   */
+  // Get risk level
   getRiskLevel(score: number): string {
     if (score >= 60) return 'high';
     if (score >= 30) return 'medium';
     return 'low';
   }
 
-  /**
-   * Get risk description
-   */
+  // Get risk description
   getRiskDescription(score: number): string {
     if (score >= 60) {
       return 'This Terms of Service contains several high-risk clauses that require careful attention.';
@@ -322,9 +298,7 @@ export class TosAiHoverComponent implements OnInit, OnDestroy {
     }
   }
 
-  /**
-   * Finish reading and save metrics
-   */
+  // Finish reading and save metrics
   finishReading(): void {
     this.tracking.saveMetrics().subscribe({
       next: () => {

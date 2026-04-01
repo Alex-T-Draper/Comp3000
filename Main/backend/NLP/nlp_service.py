@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 def _clean_bullet(sentence: str, section_headings: List[str] = None) -> str:
     """Clean up a raw legal sentence into a more readable bullet point"""
     s = sentence.strip()
-    # Remove leading section numbering like "1.", "2)", "a."
+    # Remove leading section numbering
     s = re.sub(r'^\d+[\.)\-]\s*', '', s)
     s = re.sub(r'^[a-zA-Z][\.)\-]\s+', '', s)
     
@@ -36,7 +36,7 @@ def _clean_bullet(sentence: str, section_headings: List[str] = None) -> str:
 def extractive_summary(text: str, num_sentences: int = 6) -> List[str]:
     parser = PlaintextParser.from_string(text, Tokenizer("english"))
     summarizer = TextRankSummarizer()
-    # Request extra candidates so we can filter low-value ones
+    # Get more sentences than needed to allow for filtering out short/boilerplate ones
     summary_sentences = summarizer(parser.document, num_sentences + 4)
     
     # Detect section headings to strip them from bullets
@@ -148,10 +148,7 @@ def extract_keywords(text: str, max_keywords: int = 8) -> List[str]:
         if len(words) > 1:
             if words[0].lower() in TOS_STOPWORDS or words[-1].lower() in TOS_STOPWORDS:
                 continue
-        # For single words: reject if too frequent relative to document length.
-        # Short docs need a lower threshold since every word has high frequency;
-        # longer docs can afford a higher threshold. This adapts to any document
-        # rather than relying on a hardcoded blocklist.
+        # For single-word keywords, apply a frequency threshold to filter out common words that aren't in the stopword list
         if len(words) == 1:
             freq_ratio = word_freq.get(kw.lower(), 0) / max(total_words, 1)
             # Scale threshold: 0.5% for short docs (<500 words), up to 2% for long docs (>5000 words)
