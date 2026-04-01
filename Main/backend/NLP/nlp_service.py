@@ -848,8 +848,8 @@ def analyse_text(text: str, num_sentences: int = 6, do_abstractive: bool = False
     result = {
         "bullets": bullets,
         "keywords": keywords,
-        "detected_clauses": detected,  # Keep original format for backwards compatibility
-        "grouped_clauses": grouped_clauses,  # New grouped format
+        "detected_clauses": detected, 
+        "grouped_clauses": grouped_clauses,  
         "risk": risk,
         "affects_user": affects_user,
         "abstractive": abstr,
