@@ -121,6 +121,7 @@ def init_database():
             gaze_x REAL,
             gaze_y REAL,
             gaze_valid INTEGER,
+            scroll_position REAL DEFAULT 0,
             FOREIGN KEY (session_id) REFERENCES sessions(session_id)
         )
     ''')
