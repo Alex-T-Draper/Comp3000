@@ -16,4 +16,6 @@ protobuf
 
 # Testing
 pytest
+pytest-cov
 httpx
+rouge-score

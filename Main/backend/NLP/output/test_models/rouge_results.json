@@ -1,0 +1,326 @@
+{
+  "reference": "extractive_summary (TextRank, 6 sentences)",
+  "documents_tested": 6,
+  "per_document": {
+    "ecommerce_tos": {
+      "label": "E-Commerce (BazaarBox)",
+      "models": {
+        "distilbart-cnn-12-6": {
+          "rouge1_f": 0.4751,
+          "rouge2_f": 0.2548,
+          "rougeL_f": 0.2375,
+          "rouge1_p": 0.5,
+          "rouge1_r": 0.4526
+        },
+        "bart-large-cnn": {
+          "rouge1_f": 0.4651,
+          "rouge2_f": 0.2422,
+          "rougeL_f": 0.3101,
+          "rouge1_p": 0.4959,
+          "rouge1_r": 0.438
+        },
+        "pegasus-cnn": {
+          "rouge1_f": 0.0217,
+          "rouge2_f": 0.0,
+          "rougeL_f": 0.0072,
+          "rouge1_p": 0.0214,
+          "rouge1_r": 0.0219
+        },
+        "t5-base": {
+          "rouge1_f": 0.4063,
+          "rouge2_f": 0.1661,
+          "rougeL_f": 0.2032,
+          "rouge1_p": 0.3596,
+          "rouge1_r": 0.4672
+        },
+        "bart-large-cnn-samsum": {
+          "rouge1_f": 0.4013,
+          "rouge2_f": 0.0861,
+          "rougeL_f": 0.1711,
+          "rouge1_p": 0.3653,
+          "rouge1_r": 0.4453
+        },
+        "led-base-16384": {
+          "rouge1_f": 0.3399,
+          "rouge2_f": 0.2507,
+          "rougeL_f": 0.3116,
+          "rouge1_p": 0.2778,
+          "rouge1_r": 0.438
+        }
+      }
+    },
+    "cloudstorage_tos": {
+      "label": "Cloud Storage (VaultDrive)",
+      "models": {
+        "distilbart-cnn-12-6": {
+          "rouge1_f": 0.3857,
+          "rouge2_f": 0.1367,
+          "rougeL_f": 0.25,
+          "rouge1_p": 0.4655,
+          "rouge1_r": 0.3293
+        },
+        "bart-large-cnn": {
+          "rouge1_f": 0.4797,
+          "rouge2_f": 0.2993,
+          "rougeL_f": 0.3716,
+          "rouge1_p": 0.5379,
+          "rouge1_r": 0.4329
+        },
+        "pegasus-cnn": {
+          "rouge1_f": 0.0459,
+          "rouge2_f": 0.0,
+          "rougeL_f": 0.0255,
+          "rouge1_p": 0.0395,
+          "rouge1_r": 0.0549
+        },
+        "t5-base": {
+          "rouge1_f": 0.129,
+          "rouge2_f": 0.0,
+          "rougeL_f": 0.1048,
+          "rouge1_p": 0.1905,
+          "rouge1_r": 0.0976
+        },
+        "bart-large-cnn-samsum": {
+          "rouge1_f": 0.4419,
+          "rouge2_f": 0.1813,
+          "rougeL_f": 0.2326,
+          "rouge1_p": 0.4222,
+          "rouge1_r": 0.4634
+        },
+        "led-base-16384": {
+          "rouge1_f": 0.2857,
+          "rouge2_f": 0.0479,
+          "rougeL_f": 0.1693,
+          "rouge1_p": 0.2523,
+          "rouge1_r": 0.3293
+        }
+      }
+    },
+    "socialmedia_tos": {
+      "label": "Social Media (ConnectSphere)",
+      "models": {
+        "distilbart-cnn-12-6": {
+          "rouge1_f": 0.4407,
+          "rouge2_f": 0.2614,
+          "rougeL_f": 0.3446,
+          "rouge1_p": 0.6047,
+          "rouge1_r": 0.3467
+        },
+        "bart-large-cnn": {
+          "rouge1_f": 0.3297,
+          "rouge2_f": 0.0497,
+          "rougeL_f": 0.1484,
+          "rouge1_p": 0.4317,
+          "rouge1_r": 0.2667
+        },
+        "pegasus-cnn": {
+          "rouge1_f": 0.019,
+          "rouge2_f": 0.0,
+          "rougeL_f": 0.0143,
+          "rouge1_p": 0.0204,
+          "rouge1_r": 0.0178
+        },
+        "t5-base": {
+          "rouge1_f": 0.5118,
+          "rouge2_f": 0.1857,
+          "rougeL_f": 0.2322,
+          "rouge1_p": 0.5482,
+          "rouge1_r": 0.48
+        },
+        "bart-large-cnn-samsum": {
+          "rouge1_f": 0.4259,
+          "rouge2_f": 0.107,
+          "rougeL_f": 0.2037,
+          "rouge1_p": 0.4444,
+          "rouge1_r": 0.4089
+        },
+        "led-base-16384": {
+          "rouge1_f": 0.3101,
+          "rouge2_f": 0.0542,
+          "rougeL_f": 0.1528,
+          "rouge1_p": 0.3136,
+          "rouge1_r": 0.3067
+        }
+      }
+    },
+    "education_tos": {
+      "label": "Education (LearnVault)",
+      "models": {
+        "distilbart-cnn-12-6": {
+          "rouge1_f": 0.4621,
+          "rouge2_f": 0.2083,
+          "rougeL_f": 0.2759,
+          "rouge1_p": 0.5403,
+          "rouge1_r": 0.4036
+        },
+        "bart-large-cnn": {
+          "rouge1_f": 0.4835,
+          "rouge2_f": 0.214,
+          "rougeL_f": 0.315,
+          "rouge1_p": 0.6168,
+          "rouge1_r": 0.3976
+        },
+        "pegasus-cnn": {
+          "rouge1_f": 0.0429,
+          "rouge2_f": 0.0,
+          "rougeL_f": 0.0343,
+          "rouge1_p": 0.0746,
+          "rouge1_r": 0.0301
+        },
+        "t5-base": {
+          "rouge1_f": 0.3161,
+          "rouge2_f": 0.0365,
+          "rougeL_f": 0.1451,
+          "rouge1_p": 0.2773,
+          "rouge1_r": 0.3675
+        },
+        "bart-large-cnn-samsum": {
+          "rouge1_f": 0.3525,
+          "rouge2_f": 0.0273,
+          "rougeL_f": 0.1424,
+          "rouge1_p": 0.4031,
+          "rouge1_r": 0.3133
+        },
+        "led-base-16384": {
+          "rouge1_f": 0.3432,
+          "rouge2_f": 0.0714,
+          "rougeL_f": 0.1775,
+          "rouge1_p": 0.3372,
+          "rouge1_r": 0.3494
+        }
+      }
+    },
+    "fitness_tos": {
+      "label": "Fitness (PulseFit)",
+      "models": {
+        "distilbart-cnn-12-6": {
+          "rouge1_f": 0.3972,
+          "rouge2_f": 0.1754,
+          "rougeL_f": 0.2718,
+          "rouge1_p": 0.4914,
+          "rouge1_r": 0.3333
+        },
+        "bart-large-cnn": {
+          "rouge1_f": 0.5017,
+          "rouge2_f": 0.206,
+          "rougeL_f": 0.297,
+          "rouge1_p": 0.5758,
+          "rouge1_r": 0.4444
+        },
+        "pegasus-cnn": {
+          "rouge1_f": 0.0269,
+          "rouge2_f": 0.0,
+          "rougeL_f": 0.0202,
+          "rouge1_p": 0.0317,
+          "rouge1_r": 0.0234
+        },
+        "t5-base": {
+          "rouge1_f": 0.4384,
+          "rouge2_f": 0.1377,
+          "rougeL_f": 0.2027,
+          "rouge1_p": 0.4124,
+          "rouge1_r": 0.4678
+        },
+        "bart-large-cnn-samsum": {
+          "rouge1_f": 0.4474,
+          "rouge2_f": 0.0921,
+          "rougeL_f": 0.1725,
+          "rouge1_p": 0.415,
+          "rouge1_r": 0.4854
+        },
+        "led-base-16384": {
+          "rouge1_f": 0.5054,
+          "rouge2_f": 0.3709,
+          "rougeL_f": 0.3755,
+          "rouge1_p": 0.6604,
+          "rouge1_r": 0.4094
+        }
+      }
+    },
+    "musicstreaming_tos": {
+      "label": "Music Streaming (SonicWave)",
+      "models": {
+        "distilbart-cnn-12-6": {
+          "rouge1_f": 0.4945,
+          "rouge2_f": 0.29,
+          "rougeL_f": 0.3911,
+          "rouge1_p": 0.5678,
+          "rouge1_r": 0.4379
+        },
+        "bart-large-cnn": {
+          "rouge1_f": 0.3651,
+          "rouge2_f": 0.144,
+          "rougeL_f": 0.2302,
+          "rouge1_p": 0.4646,
+          "rouge1_r": 0.3007
+        },
+        "pegasus-cnn": {
+          "rouge1_f": 0.0317,
+          "rouge2_f": 0.0,
+          "rougeL_f": 0.0254,
+          "rouge1_p": 0.0309,
+          "rouge1_r": 0.0327
+        },
+        "t5-base": {
+          "rouge1_f": 0.2791,
+          "rouge2_f": 0.0351,
+          "rougeL_f": 0.1279,
+          "rouge1_p": 0.2513,
+          "rouge1_r": 0.3137
+        },
+        "bart-large-cnn-samsum": {
+          "rouge1_f": 0.4568,
+          "rouge2_f": 0.1801,
+          "rougeL_f": 0.2716,
+          "rouge1_p": 0.4327,
+          "rouge1_r": 0.4837
+        },
+        "led-base-16384": {
+          "rouge1_f": 0.2196,
+          "rouge2_f": 0.0478,
+          "rougeL_f": 0.1068,
+          "rouge1_p": 0.2011,
+          "rouge1_r": 0.2418
+        }
+      }
+    }
+  },
+  "aggregate": {
+    "distilbart-cnn-12-6": {
+      "avg_rouge1_f": 0.4425,
+      "avg_rouge2_f": 0.2211,
+      "avg_rougeL_f": 0.2952,
+      "documents_scored": 6
+    },
+    "bart-large-cnn": {
+      "avg_rouge1_f": 0.4375,
+      "avg_rouge2_f": 0.1925,
+      "avg_rougeL_f": 0.2787,
+      "documents_scored": 6
+    },
+    "pegasus-cnn": {
+      "avg_rouge1_f": 0.0314,
+      "avg_rouge2_f": 0.0,
+      "avg_rougeL_f": 0.0212,
+      "documents_scored": 6
+    },
+    "t5-base": {
+      "avg_rouge1_f": 0.3468,
+      "avg_rouge2_f": 0.0935,
+      "avg_rougeL_f": 0.1693,
+      "documents_scored": 6
+    },
+    "bart-large-cnn-samsum": {
+      "avg_rouge1_f": 0.421,
+      "avg_rouge2_f": 0.1123,
+      "avg_rougeL_f": 0.199,
+      "documents_scored": 6
+    },
+    "led-base-16384": {
+      "avg_rouge1_f": 0.334,
+      "avg_rouge2_f": 0.1405,
+      "avg_rougeL_f": 0.2156,
+      "documents_scored": 6
+    }
+  }
+}

@@ -3,12 +3,14 @@
 Reads:
     output/test_models/cpu_vs_gpu_results.json
     output/test_models/model_comparison_results.json
+    output/test_models/rouge_results.json
 
 Produces:
     output/dissertation/gpu_vs_cpu_inference.png
     output/dissertation/model_comparison_time.png
     output/dissertation/model_summary_quality.png
     output/dissertation/gpu_speedup_factor.png
+    output/dissertation/rouge_scores.png
 """
 
 import json
@@ -22,6 +24,7 @@ import numpy as np
 ROOT = Path(__file__).resolve().parent.parent
 GPU_CPU_FILE = ROOT / "output" / "test_models" / "cpu_vs_gpu_results.json"
 COMPARISON_FILE = ROOT / "output" / "test_models" / "model_comparison_results.json"
+ROUGE_FILE = ROOT / "output" / "test_models" / "rouge_results.json"
 OUT_DIR = ROOT / "output" / "dissertation"
 OUT_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -275,6 +278,54 @@ def model_summary_quality():
     _save(fig, "model_summary_quality.png")
 
 
+# ── Figure 5: ROUGE scores (grouped bar) ────────────────────
+def rouge_scores_chart():
+    with open(ROUGE_FILE, encoding="utf-8") as f:
+        data = json.load(f)
+
+    agg = data["aggregate"]
+    models = [m for m in MODEL_ORDER if m in agg and agg[m].get("documents_scored", 0) > 0]
+    labels = [MODEL_LABELS[m] for m in models]
+
+    r1 = [agg[m]["avg_rouge1_f"] for m in models]
+    r2 = [agg[m]["avg_rouge2_f"] for m in models]
+    rl = [agg[m]["avg_rougeL_f"] for m in models]
+
+    x = np.arange(len(models))
+    width = 0.25
+
+    fig, ax = plt.subplots(figsize=(12, 6))
+    bars1 = ax.bar(x - width, r1, width, label="ROUGE-1", color="#4472C4",
+                   edgecolor="white", linewidth=0.5)
+    bars2 = ax.bar(x, r2, width, label="ROUGE-2", color="#ED7D31",
+                   edgecolor="white", linewidth=0.5)
+    bars3 = ax.bar(x + width, rl, width, label="ROUGE-L", color="#70AD47",
+                   edgecolor="white", linewidth=0.5)
+
+    # Value labels
+    for bars in [bars1, bars2, bars3]:
+        for bar in bars:
+            h = bar.get_height()
+            if h > 0.01:
+                ax.text(bar.get_x() + bar.get_width() / 2, h + 0.008,
+                        f"{h:.3f}", ha="center", va="bottom", fontsize=8, rotation=45)
+
+    ax.set_ylabel("F1 Score")
+    ax.set_title("ROUGE Scores by Model (vs Extractive Reference)", fontsize=14, fontweight="bold")
+    ax.set_xticks(x)
+    ax.set_xticklabels(labels, rotation=15, ha="right")
+    ax.legend(loc="upper right")
+    ax.set_ylim(0, max(r1) * 1.35)
+
+    fig.text(0.5, -0.02,
+             f"Figure: ROUGE F1 scores averaged over {data['documents_tested']} ToS documents. "
+             "Reference = extractive summary (TextRank, 6 sentences).",
+             ha="center", fontsize=9, style="italic")
+
+    fig.tight_layout()
+    _save(fig, "rouge_scores.png")
+
+
 # ── main ─────────────────────────────────────────────────────
 def main():
     missing = []
@@ -294,6 +345,11 @@ def main():
     gpu_speedup_chart()
     model_comparison_time()
     model_summary_quality()
+
+    if ROUGE_FILE.exists():
+        rouge_scores_chart()
+    else:
+        print(f"[SKIP] {ROUGE_FILE} not found — run test_models.py evaluate_rouge() first.")
 
 
 if __name__ == "__main__":

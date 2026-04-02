@@ -8,9 +8,11 @@ import json
 import os
 import time
 import torch
+from rouge_score import rouge_scorer
 from nlp_service import (
     compare_summarization_models,
     abstractive_summary,
+    extractive_summary,
     SUMMARIZATION_MODELS,
     _model_cache
 )
@@ -291,6 +293,86 @@ def test_cpu_vs_gpu(model_names=None, doc_filename="ecommerce_tos",
     return output
 
 
+def evaluate_rouge(output_file: str = os.path.join(RESULTS_DIR, "rouge_results.json")):
+    """
+    Compute ROUGE-1, ROUGE-2, and ROUGE-L scores for each model.
+    Uses the extractive summary (TextRank via sumy) as the reference.
+    """
+    docs = load_all_documents()
+    if not docs:
+        print("No documents loaded — aborting.")
+        return None
+
+    scorer = rouge_scorer.RougeScorer(["rouge1", "rouge2", "rougeL"], use_stemmer=True)
+
+    print(f"\n{'='*80}")
+    print("ROUGE EVALUATION — Reference: extractive summary (TextRank)")
+    print(f"{'='*80}")
+
+    per_document = {}
+    model_scores = {m: {"rouge1": [], "rouge2": [], "rougeL": []} for m in SUMMARIZATION_MODELS}
+
+    for filename, text in docs.items():
+        label = TOS_DOCUMENTS[filename]
+        # Build reference from extractive summary
+        ref_bullets = extractive_summary(text, num_sentences=6)
+        reference = " ".join(ref_bullets)
+        print(f"\n--- {label} (ref: {len(reference.split())} words) ---")
+
+        doc_results = {}
+        for model_name in SUMMARIZATION_MODELS:
+            try:
+                hypothesis = abstractive_summary(text, model_name=model_name)
+                scores = scorer.score(reference, hypothesis)
+                row = {
+                    "rouge1_f": round(scores["rouge1"].fmeasure, 4),
+                    "rouge2_f": round(scores["rouge2"].fmeasure, 4),
+                    "rougeL_f": round(scores["rougeL"].fmeasure, 4),
+                    "rouge1_p": round(scores["rouge1"].precision, 4),
+                    "rouge1_r": round(scores["rouge1"].recall, 4),
+                }
+                doc_results[model_name] = row
+                model_scores[model_name]["rouge1"].append(scores["rouge1"].fmeasure)
+                model_scores[model_name]["rouge2"].append(scores["rouge2"].fmeasure)
+                model_scores[model_name]["rougeL"].append(scores["rougeL"].fmeasure)
+                print(f"  {model_name:<25}  R1={row['rouge1_f']:.4f}  R2={row['rouge2_f']:.4f}  RL={row['rougeL_f']:.4f}")
+            except Exception as e:
+                doc_results[model_name] = {"error": str(e)}
+                print(f"  {model_name:<25}  ERROR — {e}")
+
+        per_document[filename] = {"label": label, "models": doc_results}
+
+    # Aggregate averages
+    aggregates = {}
+    print(f"\n{'='*80}")
+    print(f"{'Model':<25} {'ROUGE-1':>10} {'ROUGE-2':>10} {'ROUGE-L':>10}")
+    print("-" * 60)
+    for model_name, scores in model_scores.items():
+        if scores["rouge1"]:
+            avg = {
+                "avg_rouge1_f": round(sum(scores["rouge1"]) / len(scores["rouge1"]), 4),
+                "avg_rouge2_f": round(sum(scores["rouge2"]) / len(scores["rouge2"]), 4),
+                "avg_rougeL_f": round(sum(scores["rougeL"]) / len(scores["rougeL"]), 4),
+                "documents_scored": len(scores["rouge1"]),
+            }
+            aggregates[model_name] = avg
+            print(f"{model_name:<25} {avg['avg_rouge1_f']:>10.4f} {avg['avg_rouge2_f']:>10.4f} {avg['avg_rougeL_f']:>10.4f}")
+        else:
+            aggregates[model_name] = {"documents_scored": 0}
+            print(f"{model_name:<25} {'—':>10} {'—':>10} {'—':>10}")
+
+    output = {
+        "reference": "extractive_summary (TextRank, 6 sentences)",
+        "documents_tested": len(docs),
+        "per_document": per_document,
+        "aggregate": aggregates,
+    }
+    with open(output_file, "w", encoding="utf-8") as f:
+        json.dump(output, f, indent=2, ensure_ascii=False)
+    print(f"\nResults saved to: {output_file}")
+    return output
+
+
 if __name__ == "__main__":
     gpu_device = detect_device()
 
@@ -300,6 +382,9 @@ if __name__ == "__main__":
     # If GPU is available, also run CPU vs GPU benchmark
     if gpu_device:
         test_cpu_vs_gpu()
+
+    # ROUGE evaluation against extractive reference
+    evaluate_rouge()
 
     # Test a single model on one document
     # text = load_tos_text("ecommerce_tos")

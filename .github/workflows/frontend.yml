@@ -32,20 +32,17 @@ jobs:
     - name: Lint code
       run: |
         cd Main/frontend
-        npm run lint || true
-      continue-on-error: true
+        npm run lint
     
     - name: Run tests
       run: |
         cd Main/frontend
         npm run test:run
-      continue-on-error: true
     
     - name: Type check
       run: |
         cd Main/frontend
         npx tsc --noEmit
-      continue-on-error: true
 
   build:
     needs: test
