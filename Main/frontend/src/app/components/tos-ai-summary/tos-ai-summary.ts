@@ -112,6 +112,7 @@ export class TosAiSummaryComponent implements OnInit, OnDestroy {
         this.analysis = response;
         this.summaryGenerated = true;
         this.isLoading = false;
+        this.cdr.detectChanges();
 
         // Scroll to top so user sees the summary panel
         window.scrollTo({ top: 0, behavior: 'smooth' });

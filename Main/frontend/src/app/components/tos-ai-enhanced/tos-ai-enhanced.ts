@@ -122,6 +122,7 @@ export class TosAiEnhancedComponent implements OnInit, OnDestroy {
 
         // Apply highlighting to the ToS text
         this.applyHighlighting();
+        this.cdr.detectChanges();
 
         // Scroll to top so user sees the summary panel
         window.scrollTo({ top: 0, behavior: 'smooth' });

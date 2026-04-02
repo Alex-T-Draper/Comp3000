@@ -130,6 +130,7 @@ export class TosAiHoverComponent implements OnInit, OnDestroy {
 
         // Apply subtle highlighting with hover
         this.applyHoverHighlighting();
+        this.cdr.detectChanges();
 
         // Scroll to top so user sees the highlighted document
         window.scrollTo({ top: 0, behavior: 'smooth' });
