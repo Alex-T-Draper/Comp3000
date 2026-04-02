@@ -8,7 +8,8 @@
     "watch": "ng build --watch --configuration development",
     "test": "vitest",
     "test:run": "vitest run",
-    "serve:ssr:frontend": "node dist/frontend/server/server.mjs"
+    "serve:ssr:frontend": "node dist/frontend/server/server.mjs",
+    "lint": "ng lint"
   },
   "prettier": {
     "printWidth": 100,
@@ -42,10 +43,14 @@
     "@angular/build": "^21.2.0",
     "@angular/cli": "^21.2.0",
     "@angular/compiler-cli": "^21.2.0",
+    "@eslint/js": "^10.0.1",
     "@types/express": "^5.0.1",
     "@types/node": "^20.17.19",
+    "angular-eslint": "21.3.1",
+    "eslint": "^10.0.3",
     "jsdom": "^27.1.0",
     "typescript": "~5.9.2",
+    "typescript-eslint": "8.56.1",
     "vitest": "^4.0.8"
   }
 }
