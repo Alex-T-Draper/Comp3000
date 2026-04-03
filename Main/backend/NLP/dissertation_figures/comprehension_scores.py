@@ -176,6 +176,8 @@ def generate():
         q_ratings = {}
         for p in participants:
             for ca in p["confidence_answers"]:
+                if not isinstance(ca, dict):
+                    continue
                 qid = ca.get("questionId", ca.get("question", ""))
                 rating = ca.get("rating")
                 if rating is not None:
