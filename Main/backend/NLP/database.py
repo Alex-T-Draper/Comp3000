@@ -111,7 +111,7 @@ def init_database():
         )
     ''')
 
-    # Gaze samples table (Tobii eye tracking - consumer device)
+    # Gaze samples table (Tobii eye tracking)
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS gaze_samples (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
