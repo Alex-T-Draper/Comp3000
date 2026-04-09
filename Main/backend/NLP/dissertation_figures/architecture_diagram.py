@@ -98,15 +98,16 @@ def generate():
                  C_DB)
 
     # ── Arrows ───────────────────────────────────────────────────────
-    _arrow(ax, (2.25, 5.5), (2.25, 4.3), "REST / metrics")
-    _arrow(ax, (7.75, 5.5), (7.75, 4.3), "gaze stream")
+    _arrow(ax, (2.5, 5.5), (2.5, 4.3), "REST / metrics")    # Frontend → FastAPI
+    _arrow(ax, (7.75, 5.5), (3.85, 4.3), "gaze stream")    # Tobii → FastAPI
     _arrow(ax, (4.0, 3.6), (6.0, 3.6), "ToS text")
     _arrow(ax, (6.0, 3.3), (4.0, 3.3), "summaries / risk")
-    _arrow(ax, (2.25, 3.0), (4.0, 2.1), "save data")
-    _arrow(ax, (7.75, 3.0), (7.0, 2.1), "save gaze")
+    _arrow(ax, (2.1, 3.0), (3.7, 2.1), "save data")        # FastAPI → DB
+    _arrow(ax, (2.7, 3.0), (4.3, 2.1), "save gaze")        # FastAPI → DB
 
-    # WebSocket arrow (curved)
-    _arrow(ax, (4.0, 6.2), (6.0, 6.2), "WebSocket", curved=True)
+    # WebSocket arrows (bidirectional, Frontend ↔ FastAPI) — offset left of REST
+    _arrow(ax, (1.7, 5.5), (1.7, 4.3), "WebSocket")
+    _arrow(ax, (1.3, 4.3), (1.3, 5.5), "")
 
     # ── Legend ────────────────────────────────────────────────────────
     legend_items = [
