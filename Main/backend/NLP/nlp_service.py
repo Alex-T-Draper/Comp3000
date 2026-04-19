@@ -755,7 +755,6 @@ def group_clauses(detected_clauses: Dict[str, List[Dict]]) -> Dict:
             grouped[group_name] = {
                 "description": group_info["description"],
                 "severity": group_info["severity"],
-                "icon": group_info["icon"],
                 "total_mentions": total_mentions,
                 "categories": group_clauses
             }
