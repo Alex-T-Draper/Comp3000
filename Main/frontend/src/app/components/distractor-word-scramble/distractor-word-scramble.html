@@ -3,7 +3,7 @@
   
   <!-- Instructions -->
   <div class="header" *ngIf="!isComplete">
-    <h1>🎯 Word Scramble</h1>
+    <h1>Word Scramble</h1>
     <p class="subtitle">Unscramble these shopping-related words</p>
     <p class="progress">Question {{ getProgress() }}</p>
   </div>
@@ -40,7 +40,7 @@
 
   <!-- Completion Screen -->
   <div class="completion-screen" *ngIf="isComplete">
-    <h1>✅ Great Job!</h1>
+    <h1>Great Job!</h1>
     <p class="score">You got {{ correctCount }} out of {{ words.length }} correct</p>
     <button class="btn-continue" (click)="continue()">
       Continue to Next Section →

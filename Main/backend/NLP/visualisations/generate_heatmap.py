@@ -15,29 +15,43 @@ from gaze_utils import (DB_PATH, HEATMAP_DIR, SCREEN_W, SCREEN_H,
                          apply_scroll_adjustment)
 
 
-def make_heatmap_from_pixels(px, py, title, output_path, sigma=30):
+def make_heatmap_from_pixels(px, py, title, output_path, sigma=30, bg_image=None):
     """Generate and save a gaze heatmap from pixel coordinates."""
     
-    # Determine content height (max Y coordinate)
-    content_height = max(SCREEN_H, int(py.max()) + 100) if len(py) > 0 else SCREEN_H
+    # Determine canvas dimensions
+    if bg_image is not None:
+        content_height = bg_image.shape[0]
+        canvas_width = bg_image.shape[1]
+    else:
+        content_height = max(SCREEN_H, int(py.max()) + 100) if len(py) > 0 else SCREEN_H
+        canvas_width = SCREEN_W
     
     # Clamp to bounds
-    px = np.clip(px, 0, SCREEN_W - 1)
+    px = np.clip(px, 0, canvas_width - 1)
     py = np.clip(py, 0, content_height - 1)
     
     # Build 2D histogram
     heatmap, _, _ = np.histogram2d(py, px,
-                                   bins=[content_height // 2, SCREEN_W // 2],
-                                   range=[[0, content_height], [0, SCREEN_W]])
+                                   bins=[content_height // 2, canvas_width // 2],
+                                   range=[[0, content_height], [0, canvas_width]])
     
     # Smooth with Gaussian filter
     heatmap = gaussian_filter(heatmap, sigma=sigma)
     
     # Plot with adjusted height
-    fig_height = max(9, (content_height / SCREEN_W) * 16)
+    fig_height = max(9, (content_height / canvas_width) * 16)
     fig, ax = plt.subplots(figsize=(16, fig_height))
-    ax.imshow(heatmap, cmap='hot', interpolation='bilinear',
-              extent=[0, SCREEN_W, content_height, 0], aspect='auto')
+    
+    if bg_image is not None:
+        ax.imshow(bg_image, extent=[0, canvas_width, content_height, 0], aspect='auto')
+        # Mask low values so the document shows through
+        heatmap_masked = np.ma.masked_less(heatmap, heatmap.max() * 0.05)
+        ax.imshow(heatmap_masked, cmap='jet', interpolation='bilinear',
+                  extent=[0, canvas_width, content_height, 0], aspect='auto', alpha=0.4)
+    else:
+        ax.imshow(heatmap, cmap='hot', interpolation='bilinear',
+                  extent=[0, canvas_width, content_height, 0], aspect='auto')
+    
     ax.set_title(title, fontsize=14, pad=10)
     ax.set_xlabel('Screen X (px)')
     ax.set_ylabel('Content Y (px)') 
@@ -79,7 +93,7 @@ def main():
 
         title = f"Gaze Heatmap — {user_label} — {tos_label} ({cond_label})"
         filename = f"heatmap_{user_label}_{tos_label}_{cond_label}_{session_id[:15]}.png"
-        make_heatmap_from_pixels(px, py, title, HEATMAP_DIR / filename)  # ✅ Fixed
+        make_heatmap_from_pixels(px, py, title, HEATMAP_DIR / filename)
 
     # Combined heatmap per condition group
     print("\n--- Combined heatmaps by condition ---")
@@ -117,7 +131,7 @@ def main():
         title = f"Combined Gaze Heatmap — Condition: {condition}"
         filename = f"heatmap_combined_{condition}.png"
         print(f"Condition: {condition} ({len(rows)} samples)")
-        make_heatmap_from_pixels(px, py, title, HEATMAP_DIR / filename) 
+        make_heatmap_from_pixels(px, py, title, HEATMAP_DIR / filename)
 
     print(f"\nAll heatmaps saved to: {HEATMAP_DIR.resolve()}")
 

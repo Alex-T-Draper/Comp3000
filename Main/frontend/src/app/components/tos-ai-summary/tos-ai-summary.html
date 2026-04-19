@@ -28,7 +28,7 @@
     <div class="summary-column">
       
       <div class="summary-panel">
-        <h2>📊 AI Analysis</h2>
+        <h2>AI Analysis</h2>
 
         <!-- Overall Risk Score -->
         <div class="risk-card">
@@ -48,7 +48,7 @@
 
         <!-- Key Points -->
         <div class="key-points">
-          <h3>📝 Key Points</h3>
+          <h3>Key Points</h3>
           <ul>
             <li *ngFor="let bullet of analysis.bullets">{{ bullet }}</li>
           </ul>
@@ -56,7 +56,7 @@
 
         <!-- Grouped Clauses -->
         <div class="clause-groups">
-          <h3>🔍 Detected Clauses</h3>
+          <h3>Detected Clauses</h3>
           
           <div 
             *ngFor="let group of analysis.grouped_clauses | keyvalue"
@@ -64,7 +64,7 @@
             [class]="'severity-' + group.value.severity">
             
             <div class="group-header">
-              <span class="group-icon">{{ group.value.icon }}</span>
+
               <div class="group-info">
                 <h4>{{ group.key }}</h4>
                 <p>{{ group.value.description }}</p>
@@ -108,8 +108,8 @@
           class="btn-generate"
           (click)="generateSummary()"
           [disabled]="isLoading">
-          <span *ngIf="!isLoading">🤖 Generate AI Summary</span>
-          <span *ngIf="isLoading">⏳ Analyzing...</span>
+          <span *ngIf="!isLoading">Generate AI Summary</span>
+          <span *ngIf="isLoading">Analyzing...</span>
         </button>
       </div>
       <div class="actions-right">
@@ -124,7 +124,7 @@
 
   <!-- Error Message -->
   <div class="error-message" *ngIf="error">
-    ⚠️ {{ error }}
+    {{ error }}
   </div>
 
 </div>

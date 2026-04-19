@@ -498,50 +498,42 @@ CLAUSE_GROUPS = {
     "Privacy & Data": {
         "description": "How your personal information is collected, used, shared, and protected",
         "severity": "high",
-        "categories": ["data_collection", "data_sharing", "data_retention", "data_security", "privacy_rights", "data_breach", "cross_border_data", "automated_decisions"],
-        "icon": "🔒"
+        "categories": ["data_collection", "data_sharing", "data_retention", "data_security", "privacy_rights", "data_breach", "cross_border_data", "automated_decisions"]
     },
     "Financial": {
         "description": "Payment terms, fees, subscriptions, refunds, and billing practices",
         "severity": "medium",
-        "categories": ["payment", "cancellation_refund", "automatic_renewal", "free_trial", "price_changes"],
-        "icon": "💳"
+        "categories": ["payment", "cancellation_refund", "automatic_renewal", "free_trial", "price_changes"]
     },
     "Legal & Liability": {
         "description": "Legal protections, warranties, dispute resolution, and liability limitations",
         "severity": "high",
-        "categories": ["liability", "arbitration_waiver", "jurisdiction", "indemnification"],
-        "icon": "⚖️"
+        "categories": ["liability", "arbitration_waiver", "jurisdiction", "indemnification"]
     },
     "Content & Intellectual Property": {
         "description": "Your rights and licenses regarding content you create, upload, or access",
         "severity": "medium",
-        "categories": ["user_content_license", "user_content_removal", "intellectual_property", "prohibited_conduct", "content_moderation"],
-        "icon": "📝"
+        "categories": ["user_content_license", "user_content_removal", "intellectual_property", "prohibited_conduct", "content_moderation"]
     },
     "Account & Access": {
         "description": "Requirements and rules for creating and maintaining your account",
         "severity": "medium",
-        "categories": ["age_requirement", "account_termination", "account_security"],
-        "icon": "👤"
+        "categories": ["age_requirement", "account_termination", "account_security"]
     },
     "Service Terms": {
         "description": "How the service operates, changes, and integrates with other services",
         "severity": "low",
-        "categories": ["service_modification", "service_availability", "third_party_services"],
-        "icon": "⚙️"
+        "categories": ["service_modification", "service_availability", "third_party_services"]
     },
     "Communication": {
         "description": "How the company will contact you and use your information for marketing",
         "severity": "low",
-        "categories": ["contact_communication", "marketing"],
-        "icon": "📧"
+        "categories": ["contact_communication", "marketing"]
     },
     "Legal Boilerplate": {
         "description": "Standard legal clauses that are common in most agreements",
         "severity": "low",
-        "categories": ["force_majeure", "severability", "entire_agreement", "assignment", "survival_clauses"],
-        "icon": "📋"
+        "categories": ["force_majeure", "severability", "entire_agreement", "assignment", "survival_clauses"]
     }
 }
 

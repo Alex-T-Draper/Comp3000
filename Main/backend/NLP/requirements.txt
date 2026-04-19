@@ -19,3 +19,6 @@ pytest
 pytest-cov
 httpx
 rouge-score
+
+# Screenshots (for with-background visualisations)
+playwright

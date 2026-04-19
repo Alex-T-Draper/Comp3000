@@ -15,12 +15,13 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
+import sqlite3
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.colors import Normalize
 from matplotlib.patches import Rectangle
 
-from gaze_utils import (AOI_DIR, SCREEN_W, SCREEN_H, apply_scroll_adjustment,
+from gaze_utils import (DB_PATH, AOI_DIR, SCREEN_W, SCREEN_H, apply_scroll_adjustment,
                          get_sessions, get_gaze_points_with_time,
                          detect_fixations, session_label)
 
@@ -57,13 +58,14 @@ def compute_aoi_stats(fixations):
     return count_grid, dwell_grid
 
 
-def _draw_aoi_grid(ax, grid, title, cmap, value_fmt, label, content_height):
+def _draw_aoi_grid(ax, grid, title, cmap, value_fmt, label, content_height,
+                   canvas_width=SCREEN_W, rect_alpha=0.85):
     """Render a colour-coded AOI grid with value annotations."""
-    ax.set_xlim(0, SCREEN_W)
+    ax.set_xlim(0, canvas_width)
     ax.set_ylim(content_height, 0)  
     ax.set_aspect('equal')
 
-    cell_w_px = SCREEN_W / AOI_COLS
+    cell_w_px = canvas_width / AOI_COLS
     cell_h_px = content_height / AOI_ROWS  
 
     vmax = grid.max() if grid.max() > 0 else 1
@@ -77,7 +79,7 @@ def _draw_aoi_grid(ax, grid, title, cmap, value_fmt, label, content_height):
             rect = Rectangle((c * cell_w_px, r * cell_h_px),
                               cell_w_px, cell_h_px,
                               facecolor=colour, edgecolor='white',
-                              linewidth=1.5, alpha=0.85)
+                              linewidth=1.5, alpha=rect_alpha)
             ax.add_patch(rect)
 
             # Cell value
@@ -104,12 +106,22 @@ def _draw_aoi_grid(ax, grid, title, cmap, value_fmt, label, content_height):
     ax.set_ylabel('Content Y (px)')
 
 
-def make_aoi_from_pixels(px, py, timestamps, title_prefix, output_prefix):
+def make_aoi_from_pixels(px, py, timestamps, title_prefix, output_prefix,
+                         bg_image=None, output_dir=None):
     """Generate AOI grids from scroll-adjusted pixel coordinates."""
+    if output_dir is None:
+        output_dir = AOI_DIR
+    
+    # Determine canvas dimensions
+    if bg_image is not None:
+        content_height = bg_image.shape[0]
+        canvas_width = bg_image.shape[1]
+    else:
+        content_height = max(SCREEN_H, py.max() + 100) if len(py) > 0 else SCREEN_H
+        canvas_width = SCREEN_W
     
     # Convert to normalized for fixation detection
-    content_height = max(SCREEN_H, py.max() + 100) if len(py) > 0 else SCREEN_H
-    gx_norm = px / SCREEN_W
+    gx_norm = px / canvas_width
     gy_norm = py / content_height
     
     fixations = detect_fixations(gx_norm, gy_norm, timestamps)
@@ -121,15 +133,19 @@ def make_aoi_from_pixels(px, py, timestamps, title_prefix, output_prefix):
     total_dwell = dwell_grid.sum()
 
     # Adjust figure height
-    fig_height = max(9, (content_height / SCREEN_W) * 16)
+    fig_height = max(9, (content_height / canvas_width) * 16)
+    rect_alpha = 0.5 if bg_image is not None else 0.85
 
     # --- Fixation count grid ---
     fig, ax = plt.subplots(figsize=(16, fig_height))
+    if bg_image is not None:
+        ax.imshow(bg_image, extent=[0, canvas_width, content_height, 0], aspect='auto')
     _draw_aoi_grid(ax, count_grid,
                    f"{title_prefix} — Fixation Count per AOI",
-                   'Blues', '{:.0f}', 'fixations', content_height)
+                   'Blues', '{:.0f}', 'fixations', content_height,
+                   canvas_width=canvas_width, rect_alpha=rect_alpha)
     fig.tight_layout()
-    count_path = AOI_DIR / f"{output_prefix}_aoi_count.png"
+    count_path = output_dir / f"{output_prefix}_aoi_count.png"
     fig.savefig(count_path, dpi=150, bbox_inches='tight')
     plt.close(fig)
     print(f"  Saved: {count_path}")
@@ -137,11 +153,14 @@ def make_aoi_from_pixels(px, py, timestamps, title_prefix, output_prefix):
     # --- Dwell time grid (absolute ms + percentage) ---
     fig, ax = plt.subplots(figsize=(16, fig_height))
 
-    ax.set_xlim(0, SCREEN_W)
+    if bg_image is not None:
+        ax.imshow(bg_image, extent=[0, canvas_width, content_height, 0], aspect='auto')
+
+    ax.set_xlim(0, canvas_width)
     ax.set_ylim(content_height, 0)
     ax.set_aspect('equal')
 
-    cell_w_px = SCREEN_W / AOI_COLS
+    cell_w_px = canvas_width / AOI_COLS
     cell_h_px = content_height / AOI_ROWS  
 
     vmax = dwell_grid.max() if dwell_grid.max() > 0 else 1
@@ -156,7 +175,7 @@ def make_aoi_from_pixels(px, py, timestamps, title_prefix, output_prefix):
             rect = Rectangle((c * cell_w_px, r * cell_h_px),
                               cell_w_px, cell_h_px,
                               facecolor=colour, edgecolor='white',
-                              linewidth=1.5, alpha=0.85)
+                              linewidth=1.5, alpha=rect_alpha)
             ax.add_patch(rect)
 
             cx = c * cell_w_px + cell_w_px / 2
@@ -183,14 +202,14 @@ def make_aoi_from_pixels(px, py, timestamps, title_prefix, output_prefix):
     ax.set_ylabel('Content Y (px)')
 
     fig.tight_layout()
-    dwell_path = AOI_DIR / f"{output_prefix}_aoi_dwell.png"
+    dwell_path = output_dir / f"{output_prefix}_aoi_dwell.png"
     fig.savefig(dwell_path, dpi=150, bbox_inches='tight')
     plt.close(fig)
     print(f"  Saved: {dwell_path}")
 
     # Print summary table
     print(f"  {'AOI':<25} {'Fixations':>10} {'Dwell (ms)':>12} {'%':>8}")
-    print(f"  {'─' * 57}")
+    print(f"  {'-' * 57}")
     for r in range(AOI_ROWS):
         for c in range(AOI_COLS):
             idx = r * AOI_COLS + c
@@ -232,6 +251,45 @@ def main():
         title_prefix = f"{user_label} — {tos_label} ({cond_label})"
         out_prefix = f"{user_label}_{tos_label}_{cond_label}_{session_id[:15]}"
         make_aoi_from_pixels(px, py, ts, title_prefix, out_prefix)
+
+    # Combined AOI per condition group
+    print("\n--- Combined AOI charts by condition ---")
+    conn = sqlite3.connect(DB_PATH)
+    conditions = conn.execute('''
+        SELECT DISTINCT s.condition_group
+        FROM gaze_samples g
+        JOIN sessions s ON g.session_id = s.session_id
+        WHERE s.condition_group IS NOT NULL
+    ''').fetchall()
+    conn.close()
+
+    for (condition,) in conditions:
+        conn = sqlite3.connect(DB_PATH)
+        rows = conn.execute('''
+            SELECT g.gaze_x, g.gaze_y, g.device_ts, g.scroll_position
+            FROM gaze_samples g
+            JOIN sessions s ON g.session_id = s.session_id
+            WHERE s.condition_group = ? AND g.gaze_valid = 1
+              AND g.gaze_x IS NOT NULL AND g.gaze_y IS NOT NULL
+            ORDER BY g.device_ts
+        ''', (condition,)).fetchall()
+        conn.close()
+
+        if len(rows) < 10:
+            continue
+
+        data = np.array(rows)
+        gaze_x = data[:, 0]
+        gaze_y = data[:, 1]
+        timestamps = data[:, 2]
+        scroll_pos = data[:, 3]
+
+        px, py = apply_scroll_adjustment(gaze_x, gaze_y, scroll_pos)
+
+        print(f"Condition: {condition} ({len(rows)} samples)")
+        title_prefix = f"Combined — Condition: {condition}"
+        out_prefix = f"combined_{condition}"
+        make_aoi_from_pixels(px, py, timestamps, title_prefix, out_prefix)
 
     print(f"\nAll AOI charts saved to: {AOI_DIR.resolve()}")
 

@@ -42,13 +42,13 @@
     <div class="score-display">
       <span class="score-item correct">✓ {{ score }}</span>
       <span class="score-item miss">✗ {{ misses }}</span>
-      <span class="score-item false">⚠ {{ falseAlarms }}</span>
+      <span class="score-item false">! {{ falseAlarms }}</span>
     </div>
   </div>
 
   <!-- Completion Screen -->
   <div class="completion-screen" *ngIf="phase === 'complete'">
-    <h1>🎯 Great Reflexes!</h1>
+    <h1>Great Reflexes!</h1>
     <div class="stats">
       <div class="stat">
         <div class="stat-value">{{ score }}</div>

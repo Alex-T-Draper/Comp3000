@@ -85,7 +85,7 @@
 
   <!-- Completion Screen -->
   <div class="completion-screen" *ngIf="phase === 'complete'">
-    <h1>🎯 Well Done!</h1>
+    <h1>Well Done!</h1>
     <p class="score">You matched {{ score }} out of {{ totalRounds * 9 }} cells</p>
     <p class="percentage">{{ getScorePercentage() }}% accuracy</p>
     <button class="btn-continue" (click)="continue()">

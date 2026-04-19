@@ -12,6 +12,13 @@ HEATMAP_DIR = OUTPUT_BASE / "heatmaps"
 SCANPATH_DIR = OUTPUT_BASE / "scanpaths"
 BUBBLES_DIR = OUTPUT_BASE / "bubbles"
 AOI_DIR = OUTPUT_BASE / "aoi"
+SCREENSHOTS_DIR = OUTPUT_BASE / "screenshots"
+
+# With-background subdirectories
+HEATMAP_BG_DIR = HEATMAP_DIR / "with_background"
+SCANPATH_BG_DIR = SCANPATH_DIR / "with_background"
+BUBBLES_BG_DIR = BUBBLES_DIR / "with_background"
+AOI_BG_DIR = AOI_DIR / "with_background"
 
 # Screen resolution
 SCREEN_W = 2560
@@ -140,3 +147,12 @@ def session_label(session_row):
         condition or "unknown",
         user_name or "anonymous",
     )
+
+
+def get_screenshot_path(condition_group):
+    """Return path to a document screenshot for the given condition, or None."""
+    for ext in ('png', 'jpg', 'jpeg'):
+        path = SCREENSHOTS_DIR / f"screenshot_{condition_group}.{ext}"
+        if path.exists():
+            return path
+    return None
