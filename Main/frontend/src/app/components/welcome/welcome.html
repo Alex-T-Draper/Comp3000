@@ -20,19 +20,15 @@
       
       <div class="info-points">
         <div class="info-point">
-          <span class="icon">⏱️</span>
           <span>Estimated time: 15-30 minutes</span>
         </div>
         <div class="info-point">
-          <span class="icon">👁️</span>
           <span>Eye tracking will be used during reading tasks</span>
         </div>
         <div class="info-point">
-          <span class="icon">🖱️</span>
           <span>Scrolling, clicks, and task interactions will be recorded</span>
         </div>
         <div class="info-point">
-          <span class="icon"></span>
           <span>Your data will be handled confidentially and used for academic research only</span>
         </div>
       </div>
@@ -77,7 +73,6 @@
       (click)="startStudy()"
       [disabled]="isLoading || !userName">
       <span *ngIf="!isLoading">
-        <span class="button-icon">🚀</span>
         Start Study
       </span>
       <span *ngIf="isLoading">
