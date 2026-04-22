@@ -27,12 +27,15 @@ from gaze_utils import (DB_PATH, AOI_DIR, SCREEN_W, SCREEN_H, apply_scroll_adjus
 
 # Grid dimensions (columns x rows)
 AOI_COLS = 4
-AOI_ROWS = 3
+AOI_ROWS = 6
 
 AOI_LABELS = [
-    "Top-Left",    "Top-Centre-Left",    "Top-Centre-Right",    "Top-Right",
-    "Mid-Left",    "Mid-Centre-Left",    "Mid-Centre-Right",    "Mid-Right",
-    "Bottom-Left", "Bottom-Centre-Left", "Bottom-Centre-Right", "Bottom-Right",
+    "Row1-Left", "Row1-Centre-Left", "Row1-Centre-Right", "Row1-Right",
+    "Row2-Left", "Row2-Centre-Left", "Row2-Centre-Right", "Row2-Right",
+    "Row3-Left", "Row3-Centre-Left", "Row3-Centre-Right", "Row3-Right",
+    "Row4-Left", "Row4-Centre-Left", "Row4-Centre-Right", "Row4-Right",
+    "Row5-Left", "Row5-Centre-Left", "Row5-Centre-Right", "Row5-Right",
+    "Row6-Left", "Row6-Centre-Left", "Row6-Centre-Right", "Row6-Right",
 ]
 
 
