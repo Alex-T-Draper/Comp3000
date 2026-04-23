@@ -150,29 +150,39 @@ def generate():
     colours = [CONDITION_COLOURS.get(c, "#999") for c in conditions]
     outputs = []
 
-    # ── 1. Max scroll depth boxplot ──────────────────────────────────
+    # ── 1. Max scroll depth strip plot ───────────────────────────────
     fig, ax = plt.subplots(figsize=(10, 6))
-    vals = [depth_data[c] for c in conditions]
-    bp = ax.boxplot(vals, labels=labels, patch_artist=True, widths=0.5)
-    for patch, col in zip(bp["boxes"], colours):
-        patch.set_facecolor(col)
-        patch.set_alpha(0.75)
+    rng = np.random.default_rng(42)
+    x_positions = np.arange(len(conditions))
+
+    for i, (c, col) in enumerate(zip(conditions, colours)):
+        pts = depth_data[c]
+        jitter = rng.uniform(-0.15, 0.15, len(pts))
+        ax.scatter(x_positions[i] + jitter, pts, color=col, s=55,
+                   alpha=0.8, edgecolors="white", linewidth=0.5, zorder=5)
+        # Mean line
+        mean_val = np.mean(pts)
+        ax.plot([x_positions[i] - 0.25, x_positions[i] + 0.25],
+                [mean_val, mean_val], color="black", lw=2, zorder=6)
+
+    ax.set_xticks(x_positions)
+    ax.set_xticklabels(labels)
     ax.set_ylabel("Max Scroll Depth (%)", fontsize=11)
     ax.set_title("Maximum Scroll Depth per Condition", fontsize=13,
                  fontweight="bold")
-    ax.set_ylim(0, 105)
-    ax.axhline(100, color="#aaa", ls="--", lw=0.8, label="Document end")
+    ax.set_ylim(0, 108)
+    ax.axhline(100, color="#aaa", ls="--", lw=0.8, label="Document end (100%)")
     ax.legend(fontsize=8)
     ax.grid(axis="y", alpha=0.3)
 
     fig.text(
         0.5, -0.03,
         f"Figure: Maximum scroll depth reached per condition (N={n}). "
-        "100 % indicates the participant scrolled to the bottom of the "
-        "document. Axes: x = condition, y = scroll depth percentage.",
+        "Each dot is one participant. Black bar = mean. "
+        "100% indicates the participant scrolled to the bottom of the document.",
         ha="center", fontsize=9, style="italic", wrap=True,
     )
-    out1 = OUTPUT_DIR / "scroll_depth_boxplot.png"
+    out1 = OUTPUT_DIR / "scroll_depth_stripplot.png"
     fig.savefig(out1, dpi=300, bbox_inches="tight")
     plt.close(fig)
     print(f"[OK] {out1}")
