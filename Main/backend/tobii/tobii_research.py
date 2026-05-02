@@ -43,7 +43,7 @@ Dissemination of this information or reproduction of this material is strictly f
 permission is obtained from Tobii AB.
 '''
 
-# Clean up so we don't export these internally used variables.
+# Clean up, don't export these internally used variables.
 del module_name
 del module_content
 del global_name
