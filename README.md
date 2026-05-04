@@ -26,6 +26,8 @@ Main/
 | npm | 10+ |
 | Tobii EyeX | Optional - study runs without it |
 
+> **Tobii Calibration:** This study was conducted using a Tobii EyeX, but any Tobii eye tracker should work. Before running the study with eye-tracking, install and run the calibration software for your specific device. For the EyeX, use the [Tobii Experience / Core Software](https://gaming.tobii.com/getstarted/?bundle=tobii-core). For other devices, download the software from the [Tobii website](https://gaming.tobii.com/getstarted/). Without calibration, gaze data will be inaccurate. Eye-tracking is automatically skipped if no device is detected.
+
 > **Note:** The study was conducted on a 1440p (2560x1440) monitor. Layout dimensions and gaze coordinate mappings are calibrated for this resolution. If running on a different display, update `SCREEN_W` and `SCREEN_H` in `Main/backend/NLP/gaze_utils.py` - all visualisation scripts import these values from there.
 
 ---
@@ -33,7 +35,7 @@ Main/
 ## Backend Setup
 
 ```bash
-cd Main/backend/NLP
+cd Main/backend/NLP  # (cd backend/NLP if in VS Code)
 python -m venv venv
 venv\Scripts\activate
 pip install -r requirements.txt
@@ -53,7 +55,7 @@ All dependencies are listed in `Main/backend/NLP/requirements.txt`. Key packages
 ## Frontend Setup
 
 ```bash
-cd Main/frontend
+cd Main/frontend  # (cd frontend if in VS Code)
 npm install
 npm start
 ```
@@ -111,13 +113,13 @@ All data is stored locally in `tos_research.db` (SQLite). Participant names are 
 
 **Backend:**
 ```bash
-cd Main/backend/NLP
+cd Main/backend/NLP  # (cd backend/NLP if in VS Code)
 pytest
 ```
 
 **Frontend:**
 ```bash
-cd Main/frontend
+cd Main/frontend  # (cd frontend if in VS Code)
 npm run test:run
 ```
 
@@ -130,7 +132,7 @@ Pre-built visualisation scripts are located in `Main/backend/NLP/dissertation_fi
 Eye-tracking visualisations (heatmaps, scanpaths, AOI overlays, fixation bubbles) are generated via the scripts in `Main/backend/NLP/visualisations/`.
 
 ```bash
-cd Main/backend/NLP
+cd Main/backend/NLP  # (cd backend/NLP if in VS Code)
 python generate_visualisations.py
 python generate_dissertation_figures.py
 ```
