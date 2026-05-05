@@ -149,8 +149,8 @@ def generate():
     for i, c in enumerate(conditions):
         if c == 1 or not cond_pcts[1] or not cond_pcts[c]:
             continue
-        _, p = sp_stats.mannwhitneyu(cond_pcts[1], cond_pcts[c],
-                                     alternative="two-sided")
+        _, p = sp_stats.wilcoxon(cond_pcts[1], cond_pcts[c],
+                                 alternative="two-sided")
         _add_significance_bracket(ax, 0, i, max_y + (i - 1) * 4, p, h=1.5)
 
     fig.text(
@@ -158,7 +158,7 @@ def generate():
         f"Figure: Comprehension test accuracy per condition (N={n}). "
         "Error bars show ± SE. Black dots are individual participants. "
         "Dashed line = chance. * p<0.05, ** p<0.01, *** p<0.001 "
-        "(Mann–Whitney U vs. C1).",
+        "(Wilcoxon signed-rank vs. C1).",
         ha="center", fontsize=9, style="italic", wrap=True,
     )
     out1 = OUTPUT_DIR / "comprehension_accuracy.png"
