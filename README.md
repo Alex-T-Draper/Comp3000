@@ -2,6 +2,10 @@
 
 A research platform that measures how different presentation formats affect user reading behaviour and comprehension of Terms of Service documents. Six presentation conditions are tested, ranging from plain text through to AI-enhanced interactive layouts, with eye-tracking, scroll analytics, and comprehension assessments collected throughout.
 
+**Author:** Alexander Trzcinski-Draper  
+**Supervisor:** Dr Haoyi Wang, University of Plymouth  
+**Module:** COMP3000 Computing Project (BSc Computer Science, 2025/26)
+
 ---
 
 ## Project Structure
